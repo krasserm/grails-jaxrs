@@ -1,0 +1,91 @@
+=Overview=
+
+*Please note that this page is currently work in progress!*
+
+This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services).
+
+
+=Prerequisites=
+
+  * A Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1/ Grails reference documentation] section 2.1. 
+
+=Obtain the plugin=
+
+Either download the plugin binary directly
+
+  * [http://grails-jaxrs.googlecode.com/files/grails-jaxrs-0.1-ea.zip grails-jaxrs-0.1-ea.zip]
+
+or build it from its sources:
+
+  * Checkout the code from Subversion via {{{svn checkout http://grails-jaxrs.googlecode.com/svn/tags/jaxrs-0.1-ea jaxrs}}}
+  * Go to the created {{{jaxrs}}} directory.
+  * Enter {{{grails test-app}}} on the command line to run the unit and integration tests
+  * Enter {{{grails package-plugin}}} on the command line to create the plugin binary
+
+The filename of the created plugin is {{{grails-jaxrs-0.1-ea.zip}}}
+
+=Create a project=
+
+To use the plugin we create a new Grails project. Change the working directory to a location where yuo want to create a new Grails project and enter 
+
+{{{grails create-app hello}}} 
+
+on the command line. This creates a new directory {{{hello}}}. Go to this directory and type 
+
+{{{grails install-plugin /path/to/grails-jaxrs-0.1-ea.zip}}} 
+
+where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs}}} plugin obtained previously.
+
+In order work with JSR 311 annotations and classes you need to add the [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] (version 1.1) to the {{{lib}}} folder of your project.
+
+=Create a resource=
+
+In the {{{hello}}} project under {{{src/groovy}}} create a new Groovy class {{{HelloResource.groovy}}}:
+
+{{{
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
+
+import org.springframework.stereotype.Component
+
+@Component
+@Path('/hello')
+class HelloResource {
+
+    @GET
+    @Produces('text/plain')
+    String greet() {
+        'Hello grails-jaxrs'
+    }
+    
+}
+}}}
+
+This implements a resource that responds to {{{HTTP GET}}} and  produces representations of content type {{{text/plain}}}. The path of the resource URL is {{{/hello}}}.
+
+=Setup the application context=
+
+Before the application can be started we need to add the resource to the Spring application context. We do this with a [http://static.springsource.org/spring/docs/2.5.x/reference/xsd-config.html#xsd-config-body-schemas-context-component-scan component scan]. A component scan looks in the classpath for beans annotated with {{{@Component}}} and adds them to the application context. Here's the application context XML file ({{{resources.xml}}}) that needs to be added to the {{{grails-app/conf/spring}}} directory of the {{{hello}}} project.
+
+{{{
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="**"/>
+
+</beans>
+}}}
+
+This scan components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource />"}}} directly to the application context.
+
+=Run the application=
+
+...
