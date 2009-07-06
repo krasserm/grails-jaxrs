@@ -1,6 +1,6 @@
 =Overview=
 
-*Please note that this page is currently work in progress!*
+*Please note that this page is currently work in progress!* See also section [#Next_steps next steps].
 
 This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services).
 
@@ -19,7 +19,7 @@ or build it from its sources:
 
   * Checkout the code from Subversion via {{{svn checkout http://grails-jaxrs.googlecode.com/svn/tags/jaxrs-0.1-ea jaxrs}}}
   * Go to the created {{{jaxrs}}} directory.
-  * Enter {{{grails test-app}}} on the command line to run the unit and integration tests
+  * Enter {{{grails test-app}}} on the command line to run the unit and integration tests (optional)
   * Enter {{{grails package-plugin}}} on the command line to create the plugin binary
 
 The filename of the created plugin is {{{grails-jaxrs-0.1-ea.zip}}}
@@ -50,7 +50,7 @@ import javax.ws.rs.Produces
 import org.springframework.stereotype.Component
 
 @Component
-@Path('/hello')
+@Path('/test')
 class HelloResource {
 
     @GET
@@ -62,7 +62,7 @@ class HelloResource {
 }
 }}}
 
-This implements a resource that responds to {{{HTTP GET}}} and  produces representations of content type {{{text/plain}}}. The path of the resource URL is {{{/hello}}}.
+This implements a resource that responds to {{{HTTP GET}}} and  produces representations of content type {{{text/plain}}}. The path of the resource URL is {{{/test}}}.
 
 =Setup the application context=
 
@@ -84,8 +84,16 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 </beans>
 }}}
 
-This scan components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource />"}}} directly to the application context.
+This scans components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource />"}}} directly to the application context.
 
 =Run the application=
+
+To start the application type 
+
+{{{grails run-app}}}
+
+on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. You should now see a '{{{Hello grails-jaxrs}}}'.
+
+=Next steps=
 
 ...
