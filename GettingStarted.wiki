@@ -4,7 +4,6 @@
 
 This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services).
 
-
 =Prerequisites=
 
   * A Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1/ Grails reference documentation] section 2.1. 
@@ -92,8 +91,17 @@ To start the application type
 
 {{{grails run-app}}}
 
-on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. You should now see a '{{{Hello grails-jaxrs}}}'.
+on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. You should now see a "Hello grails-jaxrs" in the browser.
 
 =Next steps=
 
-...
+This documentation will soon be extended to show you how to
+
+  * use Grails controller besides JAX-RS resources
+  * use Grails object relational mapping (GORM)
+  * write your own provider (reader/writer) classes
+  * use XML and JSON marshaling in resource and provider classes
+  * auto-inject Grails services into resource classes
+  * generate resource classes for domain classes
+  * deploy your application to Google App Engine
+  * ...
