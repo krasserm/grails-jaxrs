@@ -261,6 +261,8 @@ Finally we want to obtain individual notes via {{{http://localhost:8080/hello/no
 @Path('/notes')
 class NotesResource {
 
+     // ... other methods omitted
+
      @Path('/{id}')
      NoteResource getNote(@PathParam('id') String id) {
          new NoteResource(note:Note.get(id))
