@@ -17,7 +17,7 @@ Either download the latest plugin binary directly from [http://code.google.com/p
   * Enter {{{grails test-app}}} on the command line to run the unit and integration tests (optional)
   * Enter {{{grails package-plugin}}} on the command line to create the plugin binary
 
-The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version}}} is the current development version. Alternatively you may want to build the plugin from one of the [http://grails-jaxrs.googlecode.com/svn/tags tagged versions].
+The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, you may want to build the plugin from one of the [http://grails-jaxrs.googlecode.com/svn/tags tagged versions].
 
 =Create a project=
 
