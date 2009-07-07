@@ -6,7 +6,7 @@ This page helps you getting started with the JSR 311 plugin for Grails. It is as
 
 =Prerequisites=
 
-  * A Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1/ Grails reference documentation] section 2.1. 
+  * A Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. 
 
 =Obtain the plugin=
 
@@ -91,10 +91,10 @@ on the comamnd line. Then open a browser window and go to {{{http://localhost:80
 
 =Next steps=
 
-This documentation will soon [#Advanced_topics be extended] to show you how to
+This documentation will soon be extended to show you how to
 
-  * use Grails controllers besides JAX-RS resources (done)
-  * apply Grails filters to JAX-RS resources
+  * [#Configuration use Grails controllers besides JAX-RS resources]
+  * [#Applying_filters apply Grails filters to JAX-RS resources]
   * use Grails object relational mapping (GORM)
   * write your own provider (reader/writer) classes
   * use XML and JSON marshaling in resource and provider classes
@@ -119,3 +119,29 @@ we need to add the following entry to {{{grails-app/conf/Config.groovy}}}:
   * {{{org.grails.jaxrs.url.mappings=['/test', '/notes']}}}
 
 This ensures that only requests with a URL path matching {{{/test/**}}} and {{{/notes/**}}} are forwarded to the {{{JaxrsController}}}, all other requests are processed the "usual Grails way".
+
+==Applying filters==
+
+[http://grails.org/doc/1.1.1/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
+
+{{{
+class TestFilters {
+
+    def filters = {
+            
+        testUris(uri:'/test/**') {
+            before = {
+                // do some preprocessing
+            }
+            after = {
+                // do some postprocessing
+            }
+            
+        }   
+    }
+}
+}}}
+
+==Using GORM==
+
+...
