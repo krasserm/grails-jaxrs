@@ -318,7 +318,7 @@ Entity providers supply mapping services between representations and their assoc
   * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
   * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
 
-These can be used for simple use cases (and will likely change in upcoming versions of the plugin). For example, if you want to use Groovy's markup builder for custom-rendering XML responses you could write a provider like:
+These can be used for simple use cases (and will likely change in upcoming versions of the plugin). For example, if you want to use Groovy's markup builder for custom-rendering XML responses you could implement a {{{NoteWriter}}} provider class:
 
 {{{
 import groovy.xml.MarkupBuilder
@@ -337,7 +337,7 @@ import org.springframework.stereotype.Component
 @Component
 @Provider
 @Produces('text/xml')
-class FooWriter extends MessageBodyWriterSupport<Note> {
+class NoteWriter extends MessageBodyWriterSupport<Note> {
     
     void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
         def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
@@ -382,4 +382,6 @@ Content-Type: text/xml
 </note>
 }}}
 
-====
+==Service injection==
+
+...
