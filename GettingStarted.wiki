@@ -96,20 +96,6 @@ To start the application type
 
 on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. You should now see a "Hello grails-jaxrs" in the browser.
 
-=Next steps=
-
-This documentation will soon be extended to show you how to
-
-  * [#Configuration use Grails controllers besides JAX-RS resources]
-  * [#Applying_filters apply Grails filters to JAX-RS resources]
-  * [#Using_GORM use Grails object relational mapping (GORM)]
-  * [#Using_GORM use XML marshaling in resource and provider classes]
-  * [#Entity_providers write your own provider (reader/writer) classes]
-  * [#Service_injection auto-inject Grails services into resource classes]
-  * generate resource classes for domain classes (TODO)
-  * deploy your application to Google App Engine (TODO)
-  * ...
-
 =Advanced topics=
 
 ==Configuration==
@@ -423,3 +409,11 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 </beans>
 }}}
+
+=Next steps=
+
+This documentation will be extended to show you how to
+
+  * generate resource classes for domain classes
+  * deploy your application to Google App Engine
+  * ...
