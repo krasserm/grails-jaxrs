@@ -210,15 +210,93 @@ class NotesResource {
          Response.ok(Note.findAll() as XML).build()
      }
      
+}
+}}}
+
+Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request body via the {{{text}}} parameter. The text parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header with {{{Response.created(uri)}}}. The response body contains the XML representation of the note object. To create the XML representation the XML converter of Grails is used. Here's a sample HTTP request:
+
+{{{
+POST /hello/notes/ HTTP/1.1
+Content-Type: text/plain
+Host: localhost:8080
+Content-Length: 27
+
+Don't forget to learn Scala
+}}}
+
+Here's a sample HTTP response:
+
+{{{
+HTTP/1.1 201 Created
+Content-Type: text/xml
+Location: http://localhost:8080/hello/notes/1
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note id="1">
+  <text>Don't forget to learn Scala</text>
+</note>
+}}}
+
+To obtain a list of all notes send a GET request to {{{http://localhost:8080/hello/notes}}} which will call the {{{getNotes()}}} method. This method again uses the Grails XML converter to create an XML representation of the notes collection, such as 
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+  <note id="1">
+    <text>Don't forget to learn Scala</text>
+  </note>
+  <note id="2">
+    <text>Another important note</text>
+  </note>
+</list>
+}}}
+
+Finally we want to obtain individual notes via {{{http://localhost:8080/hello/notes/{id}}}} where {{id}} is in range 1..n. This can be achieved by adding a {{{getNote(String}}} method to the {{{NotesResource}}} class:
+
+{{{
+@Component
+@Path('/notes')
+class NotesResource {
+
      @Path('/{id}')
      NoteResource getNote(@PathParam('id') String id) {
          new NoteResource(note:Note.get(id))
      }
+     
 }
 }}}
 
-Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory. Let's take a closer look. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request body via the {{{text}}} parameter. The text parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is generated in the second line. We use this URL to set the {{{Location}}} response header with {{{Response.created(uri)}}}. The response body contains the XML representation of the note object. To create the XML representation the XML converter of Grails is used.
+Instead of using a fixed path we use a _path template_ where the last path segment is the variable part of the path. It is bound to the {{{id}}} parameter of the {{{getNote(String)}}} method using a {{{@PathParam}}} annotation. Instead of rendering the response directly in the {{{NotesResource}}} class we delegate rendering to the {{{NoteResource}}} class after we've loaded the note object from the database:
 
+{{{
+import static javax.ws.rs.core.Response.Status.NOT_FOUND
+ 
+import grails.converters.* 
+ 
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.core.Response
 
+class NoteResource {
+
+    Note note
+
+    @GET
+    @Produces('text/xml')
+    Response getNote() {
+        if (note) {
+            Response.ok(note as XML).build()
+        } else {
+            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
+        } 
+    }
+    
+}
+}}}
+
+If a note object with the requested id exists an XML representation is returned, otherwise, an error message is created along with a status code 404 (NOT FOUND).
 
 ...
