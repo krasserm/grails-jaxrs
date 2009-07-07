@@ -94,6 +94,7 @@ on the comamnd line. Then open a browser window and go to {{{http://localhost:80
 This documentation will soon be extended to show you how to
 
   * use Grails controllers besides JAX-RS resources
+  * apply Grails filters to JAX-RS resources
   * use Grails object relational mapping (GORM)
   * write your own provider (reader/writer) classes
   * use XML and JSON marshaling in resource and provider classes
@@ -101,3 +102,22 @@ This documentation will soon be extended to show you how to
   * generate resource classes for domain classes
   * deploy your application to Google App Engine
   * ...
+
+=Advanced topics=
+
+==Configuration==
+
+By default all requests are forwarded to the {{{JaxrsController}}} which is contained in the {{{grails-jaxrs}}} plugin. In order to use "regular" Grails controllers besides the {{{JaxrsController}}} we need to extend the URL mappings. 
+
+Instead of extending the {{{grails-app/conf/UrlMappings.groovy}}} file directly the URL mappings for the {{{JaxrsController}}} are set via the {{{org.grails.jaxrs.url.mappings}}} configuration property. The property value is a list of URL patterns. Example:
+
+Assuming that a Grails application is accessible under http://localhost:8080/hello where {{{/hello}}} is the context path and all JAX-RS resources are accessible via
+
+  * http://localhost:8080/hello/test/... and
+  * http://localhost:8080/hello/notes/...
+
+we need to add the following entry to {{{grails-app/conf/Config.groovy}}}:
+
+  * {{{org.grails.jaxrs.url.mappings=['/test', '/notes']}}}
+
+This ensures that only requests with a URL path matching {{{/test/**}}} and {{{/notes/**}}} are forwarded to the {{{JaxrsController}}}, all other requests are processed the "usual Grails way".
