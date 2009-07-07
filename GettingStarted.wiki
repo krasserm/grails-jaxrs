@@ -337,7 +337,7 @@ import org.springframework.stereotype.Component
 @Component
 @Provider
 @Produces('text/xml')
-public class FooWriter extends MessageBodyWriterSupport<Note> {
+class FooWriter extends MessageBodyWriterSupport<Note> {
     
     void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
         def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
