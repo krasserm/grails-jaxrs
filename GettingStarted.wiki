@@ -178,6 +178,10 @@ The only thing a note object stores is the note {{{text}}} (and an {{{id}}} prop
 For creating new {{{Note}}} instances i.e. note resources we POST the notes text to {{{http://localhost:8080/hello/notes}}}. This resource is implemented with a {{{NotesResource}}} class
 
 {{{
+import grails.converters.*
+ 
+import javax.ws.rs.Consumes
+import javax.ws.rs.GET
 import javax.ws.rs.Produces
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
@@ -206,6 +210,10 @@ class NotesResource {
          Response.ok(Note.findAll() as XML).build()
      }
      
+     @Path('/{id}')
+     NoteResource getNote(@PathParam('id') String id) {
+         new NoteResource(note:Note.get(id))
+     }
 }
 }}}
 
