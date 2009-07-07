@@ -271,7 +271,7 @@ class NotesResource {
 }
 }}}
 
-Instead of using a fixed path we use a _path template_ where the last path segment is the variable part of the path. It is bound to the {{{id}}} parameter of the {{{getNote(String)}}} method using a {{{@PathParam}}} annotation. Instead of rendering the response directly in the {{{NotesResource}}} class we delegate rendering to the {{{NoteResource}}} class after we've loaded the note object from the database:
+Instead of using a fixed path we use a _path template_ where the last path segment is the variable part of the path. It is bound to the {{{id}}} parameter of the {{{getNote(String)}}} method using a {{{@PathParam}}} annotation. Instead of rendering the response directly in the {{{NotesResource}}} class it is delegated to the {{{NoteResource}}} class after we've loaded the note object from the database:
 
 {{{
 import static javax.ws.rs.core.Response.Status.NOT_FOUND
@@ -299,6 +299,18 @@ class NoteResource {
 }
 }}}
 
-If a note object with the requested id exists an XML representation is returned, otherwise, an error message is created along with a status code 404 (NOT FOUND).
+If a note object with the requested id exists an XML representation is returned, otherwise, an error message is created along with a status code 404 (NOT FOUND). For example, GETing the note {{{http://localhost:8080/hello/notes/1}}} returns
 
-...
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note id="1">
+  <text>Don't forget to learn Scala</text>
+</note>
+}}}
+
+==Provider classes==
+
+Separate rendering from resource implementations ...
