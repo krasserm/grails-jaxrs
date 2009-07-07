@@ -91,9 +91,9 @@ on the comamnd line. Then open a browser window and go to {{{http://localhost:80
 
 =Next steps=
 
-This documentation will soon be extended to show you how to
+This documentation will soon [#Advanced_topics be extended] to show you how to
 
-  * use Grails controllers besides JAX-RS resources
+  * use Grails controllers besides JAX-RS resources (done)
   * apply Grails filters to JAX-RS resources
   * use Grails object relational mapping (GORM)
   * write your own provider (reader/writer) classes
