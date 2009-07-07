@@ -388,4 +388,38 @@ Content-Type: text/xml
 
 ==Service injection==
 
-...
+Services can be auto-injected into resource objects with the following annotations:
+
+  * by name with {{{javax.annotation.Resource}}}
+  * by type with {{{org.springframework.beans.factory.annotation.Autowired}}}
+
+For example, use {{{@Resource(name='sampleService')}}} to inject an instance of {{{SampleService}}}: 
+
+{{{
+@Component
+@Path('/test')
+public class HelloResource {
+
+    @Resource(name='sampleService')
+    def sampleService
+
+    // ...
+     
+}
+}}}
+
+The resource name is the name of the service bean in the application context. Grails adds services automatically to the application context where the bean name is derived from the service class name. Alternatively, add the JAX-RS resource to the application context and do the wiring manually:
+
+{{{
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean class="HelloResource">
+        <property name="sampleService" ref="sampleService" />
+    </bean>
+
+</beans>
+}}}
