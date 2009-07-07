@@ -13,7 +13,7 @@ This page helps you getting started with the JSR 311 plugin for Grails. It is as
 
   * A Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. 
 
-=Obtain the plugin=
+=Getting the plugin=
 
 Either download the latest plugin binary directly from [http://code.google.com/p/grails-jaxrs/downloads/list directly from here] or build it from its sources:
 
@@ -24,7 +24,9 @@ Either download the latest plugin binary directly from [http://code.google.com/p
 
 The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, you may want to build the plugin from one of the [http://grails-jaxrs.googlecode.com/svn/tags tagged versions].
 
-=Create a project=
+=Hello world=
+
+==Create a project==
 
 To use the plugin we create a new Grails project. Change the working directory to a location where yuo want to create a new Grails project and enter 
 
@@ -38,7 +40,7 @@ where {{{/path/to}}} needs to be replaced by the absolute or relative path to th
 
 In order work with JSR 311 annotations and classes you need to add the [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] (version 1.1) to the {{{lib}}} folder of your project.
 
-=Create a resource=
+==Create a resource==
 
 In the {{{hello}}} project under {{{src/groovy}}} create a new Groovy class {{{HelloResource.groovy}}}:
 
@@ -64,7 +66,7 @@ class HelloResource {
 
 This implements a resource that responds to {{{HTTP GET}}} and  produces representations of content type {{{text/plain}}}. The path of the resource URL is {{{/test}}}.
 
-=Setup the application context=
+==Setup the application context==
 
 Before the application can be started we need to add the resource to the Spring application context. We do this with a [http://static.springsource.org/spring/docs/2.5.x/reference/xsd-config.html#xsd-config-body-schemas-context-component-scan component scan]. A component scan looks in the classpath for beans annotated with {{{@Component}}} and adds them to the application context. Here's the application context XML file ({{{resources.xml}}}) that needs to be added to the {{{grails-app/conf/spring}}} directory of the {{{hello}}} project.
 
@@ -86,7 +88,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
 This scans components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource" />}}} directly to the application context.
 
-=Run the application=
+==Run the application==
 
 To start the application type 
 
