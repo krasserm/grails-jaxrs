@@ -1,6 +1,8 @@
 #summary A quick guide to getting started with the JSR 311 plugin for Grails.
 #labels Featured
 
+<wiki:toc />
+
 =Overview=
 
 *Please note that this page is currently work in progress!* See also section [#Next_steps next steps].
@@ -101,9 +103,9 @@ This documentation will soon be extended to show you how to
   * [#Using_GORM use Grails object relational mapping (GORM)]
   * [#Using_GORM use XML marshaling in resource and provider classes]
   * [#Entity_providers write your own provider (reader/writer) classes]
-  * auto-inject Grails services into resource classes
-  * generate resource classes for domain classes
-  * deploy your application to Google App Engine
+  * [#Service_injection auto-inject Grails services into resource classes]
+  * generate resource classes for domain classes (TODO)
+  * deploy your application to Google App Engine (TODO)
   * ...
 
 =Advanced topics=
