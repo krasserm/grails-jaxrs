@@ -217,6 +217,8 @@ class NotesResource {
 }
 }}}
 
-Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory.
+Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory. Let's take a closer look. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request body via the {{{text}}} parameter. The text parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is generated in the second line. We use this URL to set the {{{Location}}} response header with {{{Response.created(uri)}}}. The response body contains the XML representation of the note object. To create the XML representation the XML converter of Grails is used.
+
+
 
 ...
