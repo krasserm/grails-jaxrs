@@ -217,6 +217,6 @@ class NotesResource {
 }
 }}}
 
-Save this class a {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory.
+Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory.
 
 ...
