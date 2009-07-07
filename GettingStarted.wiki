@@ -10,18 +10,14 @@ This page helps you getting started with the JSR 311 plugin for Grails. It is as
 
 =Obtain the plugin=
 
-Either download the plugin binary directly
+Either download the latest plugin binary directly from [http://code.google.com/p/grails-jaxrs/downloads/list directly from here] or build it from its sources:
 
-  * [http://grails-jaxrs.googlecode.com/files/grails-jaxrs-0.1-ea.zip grails-jaxrs-0.1-ea.zip]
-
-or build it from its sources:
-
-  * Checkout the code from Subversion via {{{svn checkout http://grails-jaxrs.googlecode.com/svn/tags/jaxrs-0.1-ea jaxrs}}}
+  * Checkout the code from Subversion via {{{svn checkout http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs jaxrs}}}
   * Go to the created {{{jaxrs}}} directory.
   * Enter {{{grails test-app}}} on the command line to run the unit and integration tests (optional)
   * Enter {{{grails package-plugin}}} on the command line to create the plugin binary
 
-The filename of the created plugin is {{{grails-jaxrs-0.1-ea.zip}}}
+The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version}}} is the current development. Alternatively you may choose to build the plugin from one of the [http://grails-jaxrs.googlecode.com/svn/tags tagged versions].
 
 =Create a project=
 
@@ -31,7 +27,7 @@ To use the plugin we create a new Grails project. Change the working directory t
 
 on the command line. This creates a new directory {{{hello}}}. Go to this directory and type 
 
-{{{grails install-plugin /path/to/grails-jaxrs-0.1-ea.zip}}} 
+{{{grails install-plugin /path/to/grails-jaxrs-<version>.zip}}} 
 
 where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs}}} plugin obtained previously.
 
