@@ -118,14 +118,12 @@ we need to add the following entry to {{{grails-app/conf/Config.groovy}}}:
 
   * {{{org.grails.jaxrs.url.mappings=['/test', '/notes']}}}
 
-This ensures that only requests with a URL path matching {{{/test/...}}} and {{{/notes/...}}} are forwarded to the {{{JaxrsController}}}. More detailed, the {{{grails-jaxrs}}} plugin creates the following URL mappings when it is loaded:
+This ensures that only requests with a URL path matching {{{/test/...}}} and {{{/notes/...}}} are forwarded to the {{{JaxrsController}}}, all other requests may go to other Grails controllers. More detailed, the {{{grails-jaxrs}}} plugin creates the following URL mappings when it is loaded:
 
-  * {{{/test}}}
-  * {{{/test/**}}}
-  * {{{/notes}}}
-  * {{{/notes/**}}}
-
-All other requests are processed the "usual Grails way". 
+  * {{{"/test}"(controller:"jaxrs")}}}
+  * {{{"/test/**"(controller:"jaxrs")}}}
+  * {{{"/notes"(controller:"jaxrs")}}}
+  * {{{"/notes/**"(controller:"jaxrs")}}}
 
 ==Applying filters==
 
@@ -150,5 +148,64 @@ class TestFilters {
 }}}
 
 ==Using GORM==
+
+Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
+
+* POSTing to {{{http://localhost:8080/hello/notes}}} creates a new {{{Note}}} domain object in the database containing the actual note from the request body. The request content type is {{{text/plain}}}. The response content type is {{{text/xml}}} representing the created domain object including its identifier. The response {{{Location}}} header contains the URL of the created note resource.
+
+* GETing from {{{http://localhost:8080/hello/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{text/xml}}}.
+
+* GETing from {{{http://localhost:8080/hello/notes/{id}}}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
+
+The first step is to create the {{{Note}}} domain object. You can either do this via {{{grails create-domain-class note}}} from the command line or directly add a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
+
+{{{
+class Note {
+
+    static constraints = {
+    }
+    
+    String text
+    
+}
+}}}
+
+The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object).
+
+For creating new {{{Note}}} instances i.e. note resources we POST the notes text to {{{http://localhost:8080/hello/notes}}}. This resource is implemented with a {{{NotesResource}}} class
+
+{{{
+import javax.ws.rs.Produces
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.POST
+import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriBuilder
+
+import org.springframework.stereotype.Component
+
+@Component
+@Path('/notes')
+class NotesResource {
+
+     @POST
+     @Consumes('text/plain')
+     @Produces('text/xml')
+     Response addNote(String text) {
+         def note = new Note(text:text).save()
+         URI uri = UriBuilder.fromPath(note.id as String).build()
+         Response.created(uri).entity(note as XML).build()
+     }
+
+     @GET
+     @Produces('text/xml')
+     Response getNotes() {
+         Response.ok(Note.findAll() as XML).build()
+     }
+     
+}
+}}}
+
+Save this class a {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory.
 
 ...
