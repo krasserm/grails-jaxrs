@@ -120,7 +120,7 @@ we need to add the following entry to {{{grails-app/conf/Config.groovy}}}:
 
 This ensures that only requests with a URL path matching {{{/test/...}}} and {{{/notes/...}}} are forwarded to the {{{JaxrsController}}}, all other requests may go to other Grails controllers. More detailed, the {{{grails-jaxrs}}} plugin creates the following URL mappings when it is loaded:
 
-  * {{{"/test}"(controller:"jaxrs")}}}
+  * {{{"/test"(controller:"jaxrs")}}}
   * {{{"/test/**"(controller:"jaxrs")}}}
   * {{{"/notes"(controller:"jaxrs")}}}
   * {{{"/notes/**"(controller:"jaxrs")}}}
