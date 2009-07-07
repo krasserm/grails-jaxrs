@@ -254,7 +254,7 @@ Content-Type: text/xml
 </list>
 }}}
 
-Finally we want to obtain individual notes via {{{http://localhost:8080/hello/notes/{id`}`}}} where {{{id}}} is in range 1..n. This can be achieved by adding a {{{getNote(String}}} method to the {{{NotesResource}}} class:
+Finally we want to obtain individual notes via {{{http://localhost:8080/hello/notes/{id} }}} where {{{id}}} is in range 1..n. This can be achieved by adding a {{{getNote(String}}} method to the {{{NotesResource}}} class:
 
 {{{
 @Component
