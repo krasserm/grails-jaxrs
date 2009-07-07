@@ -100,7 +100,7 @@ This documentation will soon be extended to show you how to
   * [#Applying_filters apply Grails filters to JAX-RS resources]
   * [#Using_GORM use Grails object relational mapping (GORM)]
   * [#Using_GORM use XML marshaling in resource and provider classes]
-  * write your own provider (reader/writer) classes
+  * [#Entity_providers write your own provider (reader/writer) classes]
   * auto-inject Grails services into resource classes
   * generate resource classes for domain classes
   * deploy your application to Google App Engine
@@ -311,6 +311,75 @@ Content-Type: text/xml
 </note>
 }}}
 
-==Provider classes==
+==Entity providers==
 
-Separate rendering from resource implementations ...
+Entity providers supply mapping services between representations and their associated Java types. They are used to factor out parsing and rendering code from resource classes. The {{{grails-jaxrs}}} plugin provides abstract base classes for entity providers. 
+
+  * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
+  * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
+
+These can be used for simple use cases (and will likely change in upcoming versions of the plugin). For example, if you want to use Groovy's markup builder for custom-rendering XML responses you could write a provider like:
+
+{{{
+import groovy.xml.MarkupBuilder
+
+import java.io.OutputStreamWriter
+import javax.ws.rs.Produces
+import javax.ws.rs.ext.Provider
+
+import javax.ws.rs.core.MultivaluedMap
+
+import org.grails.jaxrs.support.MessageBodyWriterSupport
+import org.grails.jaxrs.test.domain.Foo
+
+import org.springframework.stereotype.Component
+
+@Component
+@Provider
+@Produces('text/xml')
+public class FooWriter extends MessageBodyWriterSupport<Note> {
+    
+    void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
+        def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
+        builder.note {
+            id(entity.id)
+            content(entity.text)
+        }
+        // Alternative (default rendering):
+        // entityStream << (entity as XML)
+    }
+   
+}
+}}}
+
+Having such a provider in place you can return a {{{Note}}} object directly from a resource method:
+
+{{{
+@Component
+@Path('/notes')
+class NotesResource {
+
+     // ... other methods omitted
+
+     @Path('/{id}')
+     Note getNote(@PathParam('id') String id) {
+         Note.get(id)
+     }
+     
+}
+}}}
+
+In this case the response looks like:
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <id>1</id>
+  <content>Don't forget to learn Scala</content>
+</note>
+}}}
+
+====
