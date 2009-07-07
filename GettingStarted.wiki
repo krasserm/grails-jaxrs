@@ -82,7 +82,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 </beans>
 }}}
 
-This scans components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource />"}}} directly to the application context.
+This scans components from all packages including the default package. If you don't want to use {{{context:component-scan}}} add the bean {{{<bean class="HelloResource" />}}} directly to the application context.
 
 =Run the application=
 
