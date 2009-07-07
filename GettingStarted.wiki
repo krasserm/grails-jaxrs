@@ -1,7 +1,7 @@
-#labels Featured
-=Overview=
-
 #summary A quick guide to getting started with the JSR 311 plugin for Grails.
+#labels Featured
+
+=Overview=
 
 *Please note that this page is currently work in progress!* See also section [#Next_steps next steps].
 
