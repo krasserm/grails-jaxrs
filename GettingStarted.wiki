@@ -20,7 +20,7 @@ Either download the latest plugin binary directly from [http://code.google.com/p
   * Enter {{{grails test-app}}} on the command line to run the unit and integration tests (optional)
   * Enter {{{grails package-plugin}}} on the command line to create the plugin binary
 
-The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, you may want to build the plugin from one of the [http://grails-jaxrs.googlecode.com/svn/tags tagged versions].
+The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, build the plugin from [http://grails-jaxrs.googlecode.com/svn/tags a tagged version].
 
 =Hello world=
 
@@ -36,7 +36,7 @@ on the command line. This creates a new directory {{{hello}}}. Go to this direct
 
 where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs}}} plugin obtained previously.
 
-In order work with JSR 311 annotations and classes you need to add the [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] (version 1.1) to the {{{lib}}} folder of your project.
+In order work with JSR 311 annotations and classes the [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] (version 1.1) must be added to the project's {{{lib}}} folder.
 
 ==Create a resource==
 
@@ -92,7 +92,7 @@ To start the application type
 
 {{{grails run-app}}}
 
-on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. You should now see a "Hello grails-jaxrs" in the browser.
+on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. The browser should now display a "Hello grails-jaxrs".
 
 =Advanced topics=
 
@@ -148,7 +148,7 @@ Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%2
 
   * GETing from {{{http://localhost:8080/hello/notes/{id}}}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
 
-The first step is to create the {{{Note}}} domain object. You can either do this via {{{grails create-domain-class note}}} from the command line or directly add a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
+The first step is to create the {{{Note}}} domain object. This can be either done via {{{grails create-domain-class note}}} from the command line or manually by adding a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
 
 {{{
 class Note {
@@ -306,7 +306,7 @@ Entity providers supply mapping services between representations and their assoc
   * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
   * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
 
-These can be used for simple use cases (and will likely change in upcoming versions of the plugin). For example, if you want to use Groovy's markup builder for custom-rendering XML responses you could implement a {{{NoteWriter}}} provider class like to following:
+These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses implement a {{{NoteWriter}}} provider class like to following:
 
 {{{
 import groovy.xml.MarkupBuilder
@@ -340,7 +340,7 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-Having such a provider in place you can return a {{{Note}}} object directly from a resource method:
+Having such a provider in place, resource methods can return a {{{Note}}} object directly:
 
 {{{
 @Component
@@ -410,7 +410,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 =Next steps=
 
-This documentation will be extended to show you how to
+This documentation will be extended with instructions how to
 
   * generate resource classes for domain classes
   * deploy your application to Google App Engine
