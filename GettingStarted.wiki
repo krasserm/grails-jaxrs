@@ -22,7 +22,7 @@ Either download the latest plugin binary directly from [http://code.google.com/p
 
 The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, build the plugin from [http://grails-jaxrs.googlecode.com/svn/tags a tagged version].
 
-*Update:* You can also get the plugin directly from the Grails Plugin Repository. Go to your project's root directory and enter {{{grails install-plugin jaxrs}}}. This will install the latest released version of the plugin.
+*Update:* The plugin can also be installed directly from the [http://www.grails.org/plugin/home Grails Plugin Repository]. To do so, go to your project's root directory and enter {{{grails install-plugin jaxrs}}} on the command line. This will install the latest released version of the plugin.
 
 =Hello world=
 
