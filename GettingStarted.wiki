@@ -36,7 +36,7 @@ on the command line. This creates a new directory {{{hello}}}.
 
 ==Install the plugin==
 
-Go to the create {{{hello}}} directory and enter 
+Go to the created {{{hello}}} directory and enter 
 
 {{{grails install-plugin jaxrs}}} 
 
