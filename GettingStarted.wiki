@@ -13,6 +13,8 @@ This page helps you getting started with the JSR 311 plugin for Grails. It is as
 
 =Getting the plugin=
 
+*Note:* You can skip this section if you want to get the plugin directly from the [http://www.grails.org/plugin/home Grails Plugin Repository].
+
 Either download the latest plugin binary directly from [http://code.google.com/p/grails-jaxrs/downloads/list directly from here] or build it from its sources:
 
   * Checkout the code from Subversion via {{{svn checkout http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs jaxrs}}}
@@ -22,21 +24,23 @@ Either download the latest plugin binary directly from [http://code.google.com/p
 
 The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{<version>}}} is the current development version. Alternatively, build the plugin from [http://grails-jaxrs.googlecode.com/svn/tags a tagged version].
 
-*Update:* The plugin can also be installed directly from the [http://www.grails.org/plugin/home Grails Plugin Repository]. To do so, go to your project's root directory and enter {{{grails install-plugin jaxrs}}} on the command line. This will install the latest released version of the plugin.
-
 =Hello world=
 
 ==Create a project==
 
-To use the plugin we create a new Grails project. Change the working directory to a location where yuo want to create a new Grails project and enter 
+To use the plugin we create a new Grails project. Change the working directory to a location where you want to create a new Grails project and enter 
 
 {{{grails create-app hello}}} 
 
-on the command line. This creates a new directory {{{hello}}}. Go to this directory and type 
+on the command line. This creates a new directory {{{hello}}}. Go to this directory and enter 
+
+{{{grails install-plugin jaxrs}}} 
+
+on the comamnd line. This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. If you manually downloaded the plugin enter
 
 {{{grails install-plugin /path/to/grails-jaxrs-<version>.zip}}} 
 
-where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs}}} plugin obtained previously.
+where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs}}} plugin file.
 
 In order work with JSR 311 annotations and classes the [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] (version 1.1) must be added to the project's {{{lib}}} folder.
 
