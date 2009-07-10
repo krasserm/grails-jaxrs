@@ -36,7 +36,7 @@ on the command line. This creates a new directory {{{hello}}}. Go to this direct
 
 {{{grails install-plugin jaxrs}}} 
 
-on the comamnd line. This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. If you manually downloaded the plugin enter
+on the comamnd line. This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. If you downloaded or built the plugin as described in [#Getting_the_plugin Getting the plugin] enter
 
 {{{grails install-plugin /path/to/grails-jaxrs-<version>.zip}}} 
 
