@@ -19,12 +19,9 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.Provider
 import org.grails.jaxrs.support.MessageBodyWriterSupport
-import org.springframework.stereotype.Component
-
 /**
  * @author Martin Krasser
  */
-@Component
 @Provider
 @Produces('text/plain')
 class CustomResponseEntityWriter extends MessageBodyWriterSupport<CustomResponseEntity> {

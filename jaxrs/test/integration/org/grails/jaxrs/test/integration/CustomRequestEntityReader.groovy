@@ -19,12 +19,9 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.Provider
 import org.grails.jaxrs.support.MessageBodyReaderSupport
-import org.springframework.stereotype.Component
-
 /**
  * @author Martin Krasser
  */
-@Component
 @Provider
 @Consumes('text/plain')
 class CustomRequestEntityReader extends MessageBodyReaderSupport<CustomRequestEntity> {

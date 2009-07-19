@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.test.integration
+package org.grails.jaxrs;
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-import javax.ws.rs.POSTimport javax.ws.rs.Consumes
+import javax.ws.rs.ext.Provider;
+
 /**
+ * Represents a JAX-RS {@link Provider} class in Grails.
+ * 
  * @author Martin Krasser
  */
-@Path('/test/02')
-public class TestResource02 {
+public interface GrailsProviderClass {
 
-    @POST
-    @Consumes('text/plain')
-    @Produces('text/plain')
-    CustomResponseEntity test(CustomRequestEntity requestEntity) {
-        new CustomResponseEntity(content:'response:' + requestEntity.content)
-    }
-    
 }

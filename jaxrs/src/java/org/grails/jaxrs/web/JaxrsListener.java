@@ -15,22 +15,14 @@
  */
 package org.grails.jaxrs.web;
 
-import static org.grails.jaxrs.web.JaxrsUtils.*;
+import static org.grails.jaxrs.web.JaxrsUtils.getRequiredJaxrsContext;
 
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
 
 /**
  * Initializes a Jersey servlet for request processing.  
@@ -42,67 +34,17 @@ public class JaxrsListener implements ServletContextListener {
     private static final Log LOG = LogFactory.getLog(JaxrsListener.class);
     
     public void contextDestroyed(ServletContextEvent event) {
-        // TODO: implement jersey servlet destruction
-    }
-
-    /**
-     * Initializes a Jersey servlet for request processing and stores the
-     * initialized servlet in the servlet context for later reference by the
-     * JAX-RS controller. The servlet is only accessible via the JAX-RS
-     * controller.
-     * 
-     * @see JaxrsUtils#SERVLET_NAME.
-     */
-    public void contextInitialized(ServletContextEvent event) {
-        try {
-            ServletContext context = event.getServletContext();
-            Servlet jerseyServlet = new SpringServlet();
-            jerseyServlet.init(new Config(context));
-            setJaxrsServlet(context, jerseyServlet);
-            LOG.info("JAX-RS servlet initialized");
-        } catch (ServletException e) {
-            LOG.error("Initialization of JAX-RS servlet failed", e);
-        }        
-    }
-
-    private static class Config implements ServletConfig {
-
-        private ServletContext context;
-        
-        public Config(ServletContext context) {
-            this.context = context;
-        }
-        
-        public String getInitParameter(String name) {
-            return null;
-        }
-
-        public Enumeration<String> getInitParameterNames() {
-            return new EmptyEnumeration();
-        }
-
-        public ServletContext getServletContext() {
-            return context;
-        }
-
-        public String getServletName() {
-            return SERVLET_NAME;
-        }
-        
+        getRequiredJaxrsContext(event.getServletContext()).destroy();
     }
     
-    private static class EmptyEnumeration implements Enumeration<String> {
-
-        @Override
-        public boolean hasMoreElements() {
-            return false;
+    public void contextInitialized(ServletContextEvent event) {
+        JaxrsContext jaxrsContext = getRequiredJaxrsContext(event.getServletContext());
+        jaxrsContext.setJaxrsServletContext(event.getServletContext());
+        try {
+            jaxrsContext.init();
+        } catch (ServletException e) {
+            LOG.error("Initialization of JAX-RS context failed", e);
         }
-
-        @Override
-        public String nextElement() {
-            throw new NoSuchElementException();
-        }
-        
-    }
+    }    
     
 }

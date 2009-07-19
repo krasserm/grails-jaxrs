@@ -13,23 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.test.integration
+package org.grails.jaxrs;
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-import javax.ws.rs.POSTimport javax.ws.rs.Consumes
+import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+
 /**
  * @author Martin Krasser
  */
-@Path('/test/02')
-public class TestResource02 {
+public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
 
-    @POST
-    @Consumes('text/plain')
-    @Produces('text/plain')
-    CustomResponseEntity test(CustomRequestEntity requestEntity) {
-        new CustomResponseEntity(content:'response:' + requestEntity.content)
-    }
+    public static final String TYPE = "Resource";
     
+    public ResourceArtefactHandler() {
+        super(TYPE, GrailsResourceClass.class, DefaultGrailsResourceClass.class, TYPE);
+    }
+
+    @Override
+    public boolean isArtefactClass(Class clazz) {
+        if (clazz == null) {
+            return false;
+        }
+
+        // TODO: implemented according to JSR 311 specification
+        
+        return clazz.getName().endsWith(TYPE);
+    }
+
 }
