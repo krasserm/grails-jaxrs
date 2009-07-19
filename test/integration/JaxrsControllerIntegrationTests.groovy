@@ -16,26 +16,22 @@
 
 import groovy.util.GroovyTestCase
 
-import javax.servlet.Servlet
-
-import org.grails.jaxrs.test.integration.TestEnvironment
 import org.grails.jaxrs.web.JaxrsUtils
-
-import org.springframework.mock.web.MockHttpServletResponse
-import org.springframework.mock.web.MockHttpServletRequest
+import org.grails.jaxrs.web.IntegrationTestEnvironment
 
 /**
  * @author Martin Krasser
  */
-public class JaxrsControllerIntegrationTests extends GroovyTestCase {
+class JaxrsControllerIntegrationTests extends GroovyTestCase {
 
+    static environment = new IntegrationTestEnvironment('context-integration.xml')
     static transactional = false
-
+    
     def controller
     
     void setUp() {
         controller = new JaxrsController()
-        JaxrsUtils.setJaxrsServlet(controller.servletContext, TestEnvironment.instance.jaxrsServlet)
+        controller.jaxrsContext = environment.jaxrsContext 
     }
     
     void testGetTest01() {
