@@ -40,6 +40,7 @@ public class JaxrsListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         JaxrsContext jaxrsContext = getRequiredJaxrsContext(event.getServletContext());
         jaxrsContext.setJaxrsServletContext(event.getServletContext());
+
         try {
             jaxrsContext.init();
         } catch (ServletException e) {

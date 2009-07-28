@@ -84,9 +84,13 @@
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-test-1.1.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-web-1.1.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-webflow-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.servlet-2.0-M3.jar" sourcepath="lib/org.restlet.ext.servlet-2.0-M3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.gae-2.0-M3.jar" sourcepath="lib/org.restlet.gae-2.0-M3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.lib.org.json-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-core-1.1.0-ea.jar" sourcepath="lib/jersey-core-1.1.0-ea-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-server-1.1.0-ea.jar" sourcepath="lib/jersey-server-1.1.0-ea-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-spring-1.1.0-ea.jar" sourcepath="lib/jersey-spring-1.1.0-ea-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jsr311-api-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsr311-api-1.1.jar" sourcepath="lib/jsr311-api-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.jaxrs-2.0-SNAPSHOT.jar" sourcepath="lib/org.restlet.ext.jaxrs-2.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="output" path="web-app/WEB-INF/classes"/>
 </classpath>

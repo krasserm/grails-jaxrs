@@ -43,5 +43,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
     public String getRequestURI() {
         return JaxrsUtils.getRequestUriAttribute(getRequest());
     }
+
+    @Override
+    public String getServletPath() {
+        return "";
+    }
     
 }

@@ -7,7 +7,7 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;import org.co
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp"
+            "grails-app/views/error.gsp",            "lib/*-sources.jar"
     ]        def loadAfter = ['controllers','services']    def artefacts = [            new ResourceArtefactHandler(),            new ProviderArtefactHandler()    ]
     def watchedResources = [            "file:./grails-app/resources/**/*Resource.groovy",            "file:./plugins/*/grails-app/resources/**/*Resource.groovy",            "file:./grails-app/providers/**/*Reader.groovy",            "file:./grails-app/providers/**/*Writer.groovy",            "file:./plugins/*/grails-app/providers/**/*Reader.groovy",            "file:./plugins/*/grails-app/providers/**/*Writer.groovy"    ]
     def author = "Martin Krasser"
@@ -17,14 +17,14 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;import org.co
 
     // URL to the plugin's documentation
     def documentation = 'http://code.google.com/p/grails-jaxrs/'
-
+    /**     *      */
     def doWithWebDescriptor = { xml ->        def lastListener = xml.'listener'.iterator().toList().last()
         lastListener + {
             'listener' {
                 'listener-class'(JaxrsListener.class.name)
             }
         }
-    
+        
         def firstFilter = xml.'filter'[0]
         firstFilter + {
             'filter' {
@@ -45,9 +45,8 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;import org.co
         
     }
 
-    def doWithSpring = {        // Configure the JAX-RS context         'jaxrsContext'(JaxrsContext)                // Configure default providers         "${XMLWriter.class.name}"(XMLWriter)                // Configure application-provided resources        application.resourceClasses.each { rc ->            "${rc.propertyName}"(rc.clazz) { bean ->                bean.scope = this.resourceScope                bean.autowire = true            }        }                // Configure application-provided providers        application.providerClasses.each { pc ->            "${pc.propertyName}"(pc.clazz) { bean ->                bean.scope = 'singleton'                bean.autowire = true            }        }    }    def onChange = { event ->            if (!event.ctx) {            return        }        if (application.isArtefactOfType(ResourceArtefactHandler.TYPE, event.source)) {            def resourceClass = application.addArtefact(ResourceArtefactHandler.TYPE, event.source)            beans {                "${resourceClass.propertyName}"(resourceClass.clazz) { bean ->                    bean.scope = this.resourceScope                    bean.autowire = true                }            }.registerBeans(event.ctx)        } else if (application.isArtefactOfType(ProviderArtefactHandler.TYPE, event.source)) {            def providerClass = application.addArtefact(ProviderArtefactHandler.TYPE, event.source)            beans {                "${providerClass.propertyName}"(providerClass.clazz) { bean ->                    bean.scope = 'singleton'                    bean.autowire = true                }            }.registerBeans(event.ctx)        } else {            return        }        event.ctx.getBean(JAXRS_CONTEXT_NAME).refresh()    }    def doWithApplicationContext = { applicationContext ->    }    def doWithDynamicMethods = { ctx ->
+    /**     *      */    def doWithSpring = {        // Configure the JAX-RS context         'jaxrsContext'(JaxrsContext)                // Configure default providers        "${XMLWriter.class.name}"(XMLWriter)                // Configure application-provided resources        application.resourceClasses.each { rc ->            "${rc.propertyName}"(rc.clazz) { bean ->                bean.scope = this.resourceScope                bean.autowire = true            }        }                // Configure application-provided providers        application.providerClasses.each { pc ->            "${pc.propertyName}"(pc.clazz) { bean ->                bean.scope = 'singleton'                bean.autowire = true            }        }    }    /**     *      */    def onChange = { event ->            if (!event.ctx) {            return        }        if (application.isArtefactOfType(ResourceArtefactHandler.TYPE, event.source)) {            def resourceClass = application.addArtefact(ResourceArtefactHandler.TYPE, event.source)            beans {                "${resourceClass.propertyName}"(resourceClass.clazz) { bean ->                    bean.scope = this.resourceScope                    bean.autowire = true                }            }.registerBeans(event.ctx)        } else if (application.isArtefactOfType(ProviderArtefactHandler.TYPE, event.source)) {            def providerClass = application.addArtefact(ProviderArtefactHandler.TYPE, event.source)            beans {                 "${providerClass.propertyName}"(providerClass.clazz) { bean ->                    bean.scope = 'singleton'                    bean.autowire = true                }            }.registerBeans(event.ctx)        } else {            return        }                // Setup the JaxrsConfig        doWithApplicationContext(event.ctx)                // Resfresh the JaxrsContext        event.ctx.getBean(JAXRS_CONTEXT_NAME).refresh()    }    /**     *      */    def doWithApplicationContext = { applicationContext ->        def context = applicationContext.getBean(JAXRS_CONTEXT_NAME)        def config = context.jaxrsConfig                context.jaxrsProviderName = this.providerName                config.reset()        config.classes << XMLWriter.class                application.getArtefactInfo('Resource').classesByName.values().each { clazz ->            config.classes << clazz        }        application.getArtefactInfo('Provider').classesByName.values().each { clazz ->            config.classes << clazz        }            }    def doWithDynamicMethods = { ctx ->
     }
 
     def onConfigChange = { event ->
-    }        String getResourceScope() {        def scope = ConfigurationHolder.config.org.grails.jaxrs.resource.scope        if (!scope) {            scope = 'prototype'        }        scope    }    
-}
+    }        private String getResourceScope() {        def scope = ConfigurationHolder.config.org.grails.jaxrs.resource.scope        if (!scope) {            scope = 'prototype'        }        scope    }    private String getProviderName() {        def name = ConfigurationHolder.config.org.grails.jaxrs.provider.name        if (!name) {            name = JaxrsContext.JAXRS_PROVIDER_NAME_JERSEY        }        name    }    }
