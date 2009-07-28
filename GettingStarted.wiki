@@ -424,9 +424,10 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 The next version (0.2) of the plugin will include:
 
-  * Follow Grails conventions for resources and providers by introducing the {{{Resource}}} and {{{Provider}}} artefact types.
+  * Follow Grails conventions for resources and providers by introducing the {{{Resource}}} and {{{Provider}}} artefact types. 
     * Resources under {{{grails-app/resources}}} are auto-detected, services are injected by name (as known from controllers) and resource classes can be modified at runtime.
     * Providers under {{{grails-app/providers}}} are auto-detected, services are injected by name (as known from controllers) and provider classes can be modified at runtime.
+  * No need to annotate resources and providers with {{{@Component}}} or {{{@Autowired}}} any more.
   * Support both Jersey and Restlet as JAX-RS implementation. Switching between them will be possible at runtime
   * Deployment of Grails JAX-RS applications to the Google App Engine (GAE). Issues with Restlet-based JAX-RS applications on GAE [http://restlet.tigris.org/issues/show_bug.cgi?id=818 have been recently fixed].
   * Create resource and provider classes from the command line
