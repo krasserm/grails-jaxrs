@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
 
 /**
@@ -36,21 +37,31 @@ import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
  */
 public class JaxrsContext {
 
+    public static final String JAXRS_PROVIDER_NAME_JERSEY = "jersey";
+    public static final String JAXRS_PROVIDER_NAME_RESTLET = "restlet";
+    
     /**
      * Name of the JAX-RS servlet.
      */
     public static final String SERVLET_NAME = "org.grails.jaxrs.servlet.name";
 
     private volatile Servlet jaxrsServlet;
-    
     private volatile ServletContext jaxrsServletContext;
+    private volatile JaxrsConfig jaxrsConfig;
+    private volatile String jaxrsProviderName;
     
     private JaxrsService jaxrsService;
     
     public JaxrsContext() {
+        this.jaxrsConfig = new JaxrsConfig();
         this.jaxrsService = new JaxrsServiceImpl();
+        this.jaxrsProviderName = JAXRS_PROVIDER_NAME_JERSEY;
     }
 
+    public JaxrsConfig getJaxrsConfig() {
+        return jaxrsConfig;
+    }
+    
     /**
      * Returns a service instance for processing HTTP requests.
      * 
@@ -60,6 +71,10 @@ public class JaxrsContext {
         return jaxrsService;
     }
 
+    public void setJaxrsProviderName(String jaxrsProviderName) {
+        this.jaxrsProviderName = jaxrsProviderName;
+    }
+    
     /**
      * Reloads the JAX-RS configuration made by Grails applications and
      * re-initializes the JAX-RS runtime.
@@ -75,7 +90,16 @@ public class JaxrsContext {
     }
     
     void init() throws ServletException {
-        init(new SpringServlet());
+        if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_RESTLET)) {
+            init(new RestletServlet(jaxrsConfig));
+        } else if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_JERSEY)) {
+            init(new SpringServlet());
+        } else {
+            throw new JaxrsException("Illegal provider name: " + jaxrsProviderName + ". either use "
+                    + JAXRS_PROVIDER_NAME_JERSEY + " or" 
+                    + JAXRS_PROVIDER_NAME_RESTLET + "."); 
+        }
+                
     }
     
     void init(Servlet jaxrsServlet) throws ServletException {
@@ -103,7 +127,7 @@ public class JaxrsContext {
     }
     
     private class Config implements ServletConfig {
-
+        
         public String getInitParameter(String name) {
             return null;
         }
