@@ -22,21 +22,21 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder;
 import org.grails.jaxrs.support.MessageBodyWriterSupport;
-import org.springframework.stereotype.Component;
 
 /**
  * Provider for Grails' {@link XML} converter class.
  * 
  * @author Martin Krasser
  */
-@Component
 @Provider
+@Produces("text/xml")
 public class XMLWriter extends MessageBodyWriterSupport<XML> {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
