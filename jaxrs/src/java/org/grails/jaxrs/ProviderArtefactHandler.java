@@ -37,7 +37,7 @@ public class ProviderArtefactHandler extends ArtefactHandlerAdapter {
             return false;
         }
         
-        // TODO: implemented according to JSR 311 specification
+        // TODO: implement according to JSR 311 specification
         
         return 
             (MessageBodyReader.class.isAssignableFrom(clazz)) ||

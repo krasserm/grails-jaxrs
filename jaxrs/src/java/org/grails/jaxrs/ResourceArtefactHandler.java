@@ -34,7 +34,7 @@ public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
             return false;
         }
 
-        // TODO: implemented according to JSR 311 specification
+        // TODO: implement according to JSR 311 specification
         
         return clazz.getName().endsWith(TYPE);
     }
