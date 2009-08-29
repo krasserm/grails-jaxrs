@@ -96,7 +96,7 @@ public class JaxrsContext {
             init(new SpringServlet());
         } else {
             throw new JaxrsException("Illegal provider name: " + jaxrsProviderName + ". either use "
-                    + JAXRS_PROVIDER_NAME_JERSEY + " or" 
+                    + JAXRS_PROVIDER_NAME_JERSEY + " or " 
                     + JAXRS_PROVIDER_NAME_RESTLET + "."); 
         }
                 

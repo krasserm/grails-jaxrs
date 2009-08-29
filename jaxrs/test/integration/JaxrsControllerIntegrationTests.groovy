@@ -16,40 +16,43 @@
 
 import groovy.util.GroovyTestCase
 
+import org.grails.jaxrs.test.integration.CustomRequestEntityReader
+import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
+import org.grails.jaxrs.test.integration.TestResource02
+import org.grails.jaxrs.test.integration.TestResource01
 import org.grails.jaxrs.web.JaxrsUtils
-import org.grails.jaxrs.web.IntegrationTestEnvironment
 
 /**
  * @author Martin Krasser
  */
-class JaxrsControllerIntegrationTests extends GroovyTestCase {
+abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
 
-    static environment = new IntegrationTestEnvironment('context-integration.xml')
-    static transactional = false
-    
-    def controller
-    
-    void setUp() {
-        controller = new JaxrsController()
-        controller.jaxrsContext = environment.jaxrsContext 
-    }
-    
-    void testGetTest01() {
+    static List jaxrsClasses = [
+               TestResource01.class, 
+               TestResource02.class, 
+               CustomRequestEntityReader.class, 
+               CustomResponseEntityWriter.class
+    ]
+     
+    protected void testGetTest01(def controller) {
         controller.request.method = 'GET'
+        controller.request.content = ''.bytes
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/01')
         controller.handle()
+        assertEquals(200, controller.response.status)
         assertEquals('test01', controller.response.contentAsString)
-        assertEquals('text/plain', controller.response.getHeader('Content-Type'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
     }
 
-    void testPostTest02() {
+    protected void testPostTest02(def controller) {
         controller.request.method = 'POST'
         controller.request.content = 'hello'.bytes
         controller.request.addHeader('Content-Type', 'text/plain')
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/02')
         controller.handle()
+        assertEquals(200, controller.response.status)
         assertEquals('response:hello', controller.response.contentAsString)
-        assertEquals('text/plain', controller.response.getHeader('Content-Type'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
     }
     
 }
