@@ -33,8 +33,14 @@ class IntegrationTestEnvironment {
     
     private String contextConfigLocation
     
-    IntegrationTestEnvironment(String contextConfigLocation) {
+    private String jaxrsProviderName
+    
+    private List jaxrsClasses
+    
+    IntegrationTestEnvironment(String contextConfigLocation, String jaxrsProviderName, List jaxrsClasses) {
         this.contextConfigLocation = contextConfigLocation
+        this.jaxrsProviderName = jaxrsProviderName
+        this.jaxrsClasses = jaxrsClasses
     }
     
     synchronized JaxrsContext getJaxrsContext() {
@@ -50,6 +56,9 @@ class IntegrationTestEnvironment {
 
             jaxrsContext= JaxrsUtils.getRequiredJaxrsContext(mockServletContext)
             jaxrsContext.jaxrsServletContext = mockServletContext
+            
+            jaxrsClasses.each { jaxrsContext.jaxrsConfig.classes << it }
+            jaxrsContext.jaxrsProviderName = jaxrsProviderName
             jaxrsContext.init()
         }
         jaxrsContext
