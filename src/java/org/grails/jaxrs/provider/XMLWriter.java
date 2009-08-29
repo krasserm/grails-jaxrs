@@ -33,6 +33,37 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
 /**
  * Provider for Grails' {@link XML} converter class.
  * 
+ * Message body writer that supports {@link XML} response entities. For example,
+ * to create an XML representation from a list of Grails domain objects:
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * &#064;Produces('text/xml')
+ * class NotesResource {
+ * 
+ *      &#064;GET
+ *      XML findNotes() {
+ *          Note.findAll() as XML
+ *      }
+ *      
+ * }
+ * </pre>
+ * 
+ * Alternatively, one could write
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * &#064;Produces('text/xml')
+ * class NotesResource {
+ * 
+ *      &#064;GET
+ *      Response findNotes() {
+ *          Response.ok(Note.findAll() as XML).build()
+ *      }
+ *      
+ * }
+ * </pre>
+ * 
  * @author Martin Krasser
  */
 @Provider
@@ -43,12 +74,15 @@ public class XMLWriter extends MessageBodyWriterSupport<XML> {
 
     /**
      * Renders the <code>xml</code> object to the response's
-     * <code>entityStream</code>.
+     * <code>entityStream</code> using the encoding set by the Grails
+     * application.
      * 
      * @param xml
-     *            XML converter object.
+     *            XML object.
      * @param httpHeaders
+     *            HTTP headers
      * @param entityStream
+     *            XML response entity stream.
      */
     @Override
     protected void writeTo(XML xml, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) 

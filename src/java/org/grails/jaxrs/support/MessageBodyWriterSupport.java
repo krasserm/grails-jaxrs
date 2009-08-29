@@ -40,7 +40,7 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
     private Type declaredWritingType; 
     
     public MessageBodyWriterSupport() {
-        declaredWritingType = getDeclaredWritingType(this);
+        declaredWritingType = getWriterTypeArgument(this);
     }
     
     /**

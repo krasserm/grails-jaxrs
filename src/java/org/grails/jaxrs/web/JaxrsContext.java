@@ -37,7 +37,14 @@ import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
  */
 public class JaxrsContext {
 
+    /**
+     * Name of the Jersey JAX-RS implementation. 
+     */
     public static final String JAXRS_PROVIDER_NAME_JERSEY = "jersey";
+
+    /**
+     * Name of the Restlet JAX-RS implementation. 
+     */
     public static final String JAXRS_PROVIDER_NAME_RESTLET = "restlet";
     
     /**
@@ -51,13 +58,21 @@ public class JaxrsContext {
     private volatile String jaxrsProviderName;
     
     private JaxrsService jaxrsService;
-    
+
+    /**
+     * Creates a new {@link JaxrsContext} using Jersey as JAX-RS implementation.
+     */
     public JaxrsContext() {
         this.jaxrsConfig = new JaxrsConfig();
         this.jaxrsService = new JaxrsServiceImpl();
         this.jaxrsProviderName = JAXRS_PROVIDER_NAME_JERSEY;
     }
 
+    /**
+     * Returns the JAX-RS configuration.
+     * 
+     * @return the JAX-RS configuration.
+     */
     public JaxrsConfig getJaxrsConfig() {
         return jaxrsConfig;
     }
@@ -71,12 +86,22 @@ public class JaxrsContext {
         return jaxrsService;
     }
 
+    /**
+     * Set the name of the JAX-RS provider to use. If this context is already
+     * initialized, a call to {@link JaxrsContext#refresh()} must follow for
+     * changing the JAX-RS implementation.
+     * 
+     * @param jaxrsProviderName
+     *            name of the JAX-RS implementation.
+     * @see #JAXRS_PROVIDER_NAME_JERSEY
+     * @see #JAXRS_PROVIDER_NAME_RESTLET
+     */
     public void setJaxrsProviderName(String jaxrsProviderName) {
         this.jaxrsProviderName = jaxrsProviderName;
     }
     
     /**
-     * Reloads the JAX-RS configuration made by Grails applications and
+     * Reloads the JAX-RS configuration defined by Grails applications and
      * re-initializes the JAX-RS runtime.
      * 
      * @throws ServletException
@@ -95,7 +120,7 @@ public class JaxrsContext {
         } else if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_JERSEY)) {
             init(new SpringServlet());
         } else {
-            throw new JaxrsException("Illegal provider name: " + jaxrsProviderName + ". either use "
+            throw new ServletException("Illegal provider name: " + jaxrsProviderName + ". either use "
                     + JAXRS_PROVIDER_NAME_JERSEY + " or " 
                     + JAXRS_PROVIDER_NAME_RESTLET + "."); 
         }

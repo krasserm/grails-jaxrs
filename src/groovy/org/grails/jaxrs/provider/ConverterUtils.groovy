@@ -15,30 +15,54 @@
  */
 package org.grails.jaxrs.provider
 
-import java.util.Mapimport org.codehaus.groovy.grails.commons.GrailsApplication
+import java.util.Map
+
+import grails.converters.XML
+import groovy.util.slurpersupport.GPathResult
+import org.apache.commons.logging.*
+
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.mvc.ParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
-import grails.converters.XML
-import org.apache.commons.logging.*
-import groovy.util.slurpersupport.GPathResult
 
 /**
+ * Utility class for XML to map conversions.
+ * 
  * @author Martin Krasser
  */
 class ConverterUtils {
      
      static final LOG = LogFactory.getLog(ConverterUtils.class)
 
+     /**
+      * Returns character encoding settings for the given Grails application.
+      * 
+      * @param application Grails application.
+      * @return charset name.
+      */
      static String getDefaultEncoding(GrailsApplication application) {
          def encoding = application.config.grails.converters.encoding
          // TODO: use platform encoding if application doesn't provide
          encoding ? encoding : 'UTF-8' 
      }
      
+     /**
+      * Not implemented yet.
+      */
      static jsonToMap(InputStream input, String encoding) {
          throw new UnsupportedOperationException('not implemented')
      }
      
+     /**
+      * Reads an XML stream from <code>input</code> and converts it to a map
+      * that can be used to construct a Grails domain objects (passing the map
+      * to the domain object constructor).
+      * 
+      * @param input XML input stream.
+      * @param encoding charset name.
+      * @return a map representig the input XML stream.
+      * @see org.grails.jaxrs.provider.XMLReader
+      */
      static Map xmlToMap(InputStream input, String encoding) {
          def map = [:]
          try {

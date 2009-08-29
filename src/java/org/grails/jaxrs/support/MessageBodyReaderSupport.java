@@ -40,7 +40,7 @@ public abstract class MessageBodyReaderSupport<T> implements MessageBodyReader<T
     private Type declaredReadingType;
     
     public MessageBodyReaderSupport() {
-        declaredReadingType = getDeclaredReadingType(this);
+        declaredReadingType = getReaderTypeArgument(this);
     }
     
     /** 

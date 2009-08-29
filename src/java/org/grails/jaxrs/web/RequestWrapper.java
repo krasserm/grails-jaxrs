@@ -44,6 +44,11 @@ public class RequestWrapper extends HttpServletRequestWrapper {
         return JaxrsUtils.getRequestUriAttribute(getRequest());
     }
 
+    /**
+     * Always returns the empty string.
+     * 
+     * @return an empty string.
+     */
     @Override
     public String getServletPath() {
         return "";

@@ -32,6 +32,9 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
 /**
+ * Very experimental provider to convert from Grails domain objects to XML 
+ * streams. 
+ * 
  * @author Martin Krasser
  */
 @Provider
