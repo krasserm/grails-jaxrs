@@ -32,6 +32,28 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
 import org.grails.jaxrs.support.MessageBodyReaderSupport;
 
 /**
+ * A message body reader that converts an XML entity stream to a map than can be
+ * used to construct Grails domain objects. Any JAX-RS resource method that
+ * defines a {@link Map} as parameter will be passed a map created from an
+ * XML request entity:
+ * 
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * &#064;Produces('text/xml')
+ * class NotesResource {
+ * 
+ *      &#064;POST
+ *      Response addNote(Map properties) {
+ *          // create ne Note domain object
+ *          def note = new Note(properties).save()
+ *      }
+ *      
+ * }
+ * 
+ * 
+ * </pre>
+ * 
  * @author Martin Krasser
  */
 @Provider
@@ -45,6 +67,16 @@ public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsAp
         this.grailsApplication = grailsApplication;
     }
 
+    /**
+     * Creates a map from an XML request entity stream.
+     * 
+     * @param httpHeaders
+     *            HTTP headers.
+     * @param entityStream
+     *            XML request entity stream.
+     * @return a map representation of the XML request entity stream.
+     * @see ConverterUtils#xmlToMap(InputStream, String)
+     */
     @Override
     public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream) 
         throws IOException, WebApplicationException {

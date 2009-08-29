@@ -30,6 +30,8 @@ import org.restlet.ext.servlet.ServerServlet;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Servlet that dispatches JAX-RS requests to the Restlet.
+ * 
  * @author Martin Krasser
  */
 @SuppressWarnings("serial")
@@ -37,14 +39,29 @@ public class RestletServlet extends ServerServlet {
 
     private JaxrsConfig config;
 
+    /**
+     * Creates a new {@link RestletServlet}
+     * 
+     * @param config
+     *            JAX-RS configuration of the current {@link JaxrsContext}.
+     */
     public RestletServlet(JaxrsConfig config) {
         this.config = config;
     }
     
+    /**
+     * Returns the JAX-RS configuration.
+     * 
+     * @return the JAX-RS configuration.
+     */
     public JaxrsConfig getConfig() {
         return config;
     }
 
+    /**
+     * Destroys this servlet removing all Restlet-specific attributes from the
+     * servlet context.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public void destroy() {
@@ -59,6 +76,15 @@ public class RestletServlet extends ServerServlet {
 
     }
 
+    /**
+     * Creates a {@link JaxRsApplication} for the given Restlet parent context.
+     * A custom object factory is provided to lookup JAX-RS resource and
+     * provider objects from the Spring web application context.
+     * 
+     * @param Restlet
+     *            parent context.
+     * @return a new {@link JaxRsApplication} instance.
+     */
     @Override
     protected Application createApplication(Context parentContext) {
         JaxRsApplication jaxRsApplication = new JaxRsApplication(parentContext.createChildContext());

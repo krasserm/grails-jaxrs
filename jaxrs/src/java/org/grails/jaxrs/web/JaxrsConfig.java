@@ -22,6 +22,9 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
+ * Defines the components (resource and provider classes) of a JAX-RS
+ * applications.
+ * 
  * @author Martin Krasser
  */
 public class JaxrsConfig extends Application {
@@ -31,12 +34,23 @@ public class JaxrsConfig extends Application {
     public JaxrsConfig() {
         this.jaxrsClasses = Collections.synchronizedSet(new HashSet<Class<?>>());
     }
-    
+
+    /**
+     * Returns the resource and provider classes defined by a Grails JAX-RS
+     * applications. The plugin will modify this set whenever resource or
+     * provider code changes are made in development mode.
+     * 
+     * @return a mutable, synchronized set of resource and provider classes.
+     */
     @Override
     public Set<Class<?>> getClasses() {
         return jaxrsClasses;
     }
-    
+
+    /**
+     * Resets this configuration by removing a classes from the set returned by
+     * {@link #getClasses()}
+     */
     public void reset() {
         jaxrsClasses.clear();
     }

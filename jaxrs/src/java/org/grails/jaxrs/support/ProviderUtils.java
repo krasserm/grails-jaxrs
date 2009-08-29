@@ -19,15 +19,40 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * Utility class related for {@link MessageBodyReaderSupport} and
+ * {@link MessageBodyWriterSupport}
+ * 
  * @author Martin Krasser
  */
 class ProviderUtils {
 
-    public static <T extends MessageBodyReaderSupport<?>> Type getDeclaredReadingType(T provider) {
+    /**
+     * Returns the type argument for {@link MessageBodyReaderSupport} defined by
+     * a subclass.
+     * 
+     * @param <T>
+     *            {@link MessageBodyReaderSupport} subclass.
+     * @param provider
+     *            instance of {@link MessageBodyReaderSupport} subclass.
+     * @return type argument for {@link MessageBodyReaderSupport} defined by a
+     *         subclass.
+     */
+    public static <T extends MessageBodyReaderSupport<?>> Type getReaderTypeArgument(T provider) {
         return getDeclaredProvidedType(provider.getClass());
     }
-    
-    public static <T extends MessageBodyWriterSupport<?>> Type getDeclaredWritingType(T provider) {
+
+    /**
+     * Returns the type argument for {@link MessageBodyWriterSupport} defined by
+     * a subclass.
+     * 
+     * @param <T>
+     *            {@link MessageBodyWriterSupport} subclass.
+     * @param provider
+     *            instance of {@link MessageBodyWriterSupport} subclass.
+     * @return type argument for {@link MessageBodyWriterSupport} defined by a
+     *         subclass.
+     */
+    public static <T extends MessageBodyWriterSupport<?>> Type getWriterTypeArgument(T provider) {
         return getDeclaredProvidedType(provider.getClass());
     }
     

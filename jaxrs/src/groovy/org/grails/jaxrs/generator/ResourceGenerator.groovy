@@ -21,6 +21,11 @@ import groovy.text.SimpleTemplateEngine
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.springframework.core.io.FileSystemResourceimport org.springframework.core.io.ClassPathResource
 /**
+ * Code generator that generates resource classes for Grails domain objects. 
+ * For each domain class X two resource classes are created, XResource for 
+ * operating on a single X and XCollectionResource for operating on an X 
+ * collection.
+ * 
  * @author Martin Krasser
  */
 class ResourceGenerator {
@@ -36,6 +41,13 @@ class ResourceGenerator {
          engine = new SimpleTemplateEngine()
      }
 
+     /**
+      * Generates JAX-RS resources for the given domain class to the given 
+      * destination directory.
+      * 
+      * @param domainClass Grails domain class.
+      * @param destdir destination directory.
+      */
      void generateResources(GrailsDomainClass domainClass, String destdir) {
          if (!destdir) {
              throw new IllegalArgumentException("Argument [destdir] not specified")
@@ -55,7 +67,7 @@ class ResourceGenerator {
          }
      }
      
-     void generateCollectionResource(GrailsDomainClass domainClass, String path) {
+     protected void generateCollectionResource(GrailsDomainClass domainClass, String path) {
          def destFile = new File("${path}${domainClass.shortName}CollectionResource.groovy")
          if (canWrite(destFile)) {
              destFile.parentFile.mkdirs()
@@ -66,7 +78,7 @@ class ResourceGenerator {
          }
      }
      
-     void generateResource(GrailsDomainClass domainClass, String path) {
+     protected void generateResource(GrailsDomainClass domainClass, String path) {
          def destFile = new File("${path}${domainClass.shortName}Resource.groovy")
          if (canWrite(destFile)) {
              destFile.parentFile.mkdirs()
@@ -77,7 +89,7 @@ class ResourceGenerator {
          }
      }
      
-     void generateCollectionResource(GrailsDomainClass domainClass, Writer out) {
+     protected void generateCollectionResource(GrailsDomainClass domainClass, Writer out) {
          def templateText = getResourceTemplateText("CollectionResource.groovy")
          def binding = [
              packageName : domainClass.packageName,
@@ -87,7 +99,7 @@ class ResourceGenerator {
          engine.createTemplate(templateText).make(binding).writeTo(out)
      }
     
-     void generateResource(GrailsDomainClass domainClass, Writer out) {
+     protected void generateResource(GrailsDomainClass domainClass, Writer out) {
          def templateText = getResourceTemplateText("Resource.groovy")
          def binding = [
              packageName : domainClass.packageName,
