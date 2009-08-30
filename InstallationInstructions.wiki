@@ -58,4 +58,4 @@ If you downloaded or built the plugin as described in [#Getting_the_plugin Getti
 grails install-plugin /path/to/grails-jaxrs-<version>.zip
 }}} 
 
-in the root directory of your project where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file. Also, {{{<version>}}} must be replaced by actual version of the plugin.
+in the root directory of your project where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file.
