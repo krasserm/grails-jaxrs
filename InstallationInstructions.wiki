@@ -50,7 +50,7 @@ grails install-plugin jaxrs
 
 and you're done.
 
-==From a local plugin package==
+==From a local plugin binary==
 
 If you downloaded or built the plugin as described in [#Getting_the_plugin Getting the plugin] enter
 
