@@ -1,4 +1,4 @@
-#summary Installation instructions for the grails-jaxrs plugin.
+#summary Installation instructions for the JSR 311 plugin for Grails.
 
 *Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress. 
 
