@@ -1,11 +1,23 @@
 #summary Installation instructions for the JSR 311 plugin for Grails.
 
-*Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress. 
+=Getting the plugin= 
+
+*Note:* If you want to install the plugin directly from the [http://www.grails.org/plugin/home Grails Plugin Repository] you can skip this section and go directly to [#Installing_the_plugin]. 
+
+To download a b
+
+=Installing the plugin= 
 
 = Introduction =
 
+There are several options to get and install the grails-jaxrs plugin
+
+  * From the Grails plugin repository (recommended if you want to use the latest stable release)
+  * From the project's download area and separate installation (recommended if you want to use milestone releases)
+  * From the projects sources (recommended if you want to experiment with the latest development snapshots)
+
+The options are described in more detail in the following subsections
+
+==
+
 ...
-
-= Plugin repository =
-
-The latest released version of the grails-jaxrs plugin can also be installed directly from the [http://www.grails.org/plugin/home Grails Plugin Repository].
