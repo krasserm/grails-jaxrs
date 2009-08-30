@@ -7,11 +7,9 @@
 
 ... work in progress
 
----
+=Overview (version 0.1)=
 
 The following sections describe the (old) version 0.1 of the grails-jaxrs plugin.
-
-=Overview (version 0.1)=
 
 This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services).
 
