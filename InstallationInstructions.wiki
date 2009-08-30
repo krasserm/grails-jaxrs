@@ -52,10 +52,10 @@ This will install the latest released version of the grails-jaxrs plugin.
 
 ==From a local plugin binary==
 
-If you downloaded or built the plugin as described in [#Getting_the_plugin Getting the plugin] enter
+If you downloaded or built the plugin as described in [#Getting_the_plugin Getting the plugin] go to your project's root directory and enter
 
 {{{
 grails install-plugin /path/to/grails-jaxrs-<version>.zip
 }}} 
 
-in the root directory of your project where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file.
+where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file.
