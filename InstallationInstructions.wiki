@@ -48,7 +48,7 @@ To install the plugin from the Grails plugin repository go to your project's roo
 grails install-plugin jaxrs
 }}} 
 
-and you're done.
+and you're done. This will install the latest released version of the grails-jaxrs plugin.
 
 ==From a local plugin binary==
 
