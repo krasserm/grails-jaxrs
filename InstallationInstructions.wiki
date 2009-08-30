@@ -22,7 +22,7 @@ If you want to build the plugin from its sources checkout the code from Subversi
 svn checkout http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs jaxrs
 }}}
 
-and go to the created {{{jaxrs}}} directory. Optionally run the unit and integration tests by entering 
+and go to the created {{{jaxrs}}} directory. Optionally, run the unit and integration tests by entering 
 
 {{{
 grails test-app
