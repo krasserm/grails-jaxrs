@@ -1,7 +1,5 @@
 #summary Advanced features of the JSR 311 plugin for Grails.
 
-*Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress. 
-
 = Introduction =
 
 ...
