@@ -38,7 +38,7 @@ The filename of the created plugin is {{{grails-jaxrs-<version>.zip}}} where {{{
 
 =Installing the plugin= 
 
-If you want to use the grails-jaxrs plugin in a Grails application you need to install it first. The plugin can be either installed directly from the Grails plugin repository or from a local package that has been download or built from sources before.
+If you want to use the grails-jaxrs plugin in a Grails application you need to install it first. The plugin can be either installed directly from the Grails plugin repository or from a local package that has been download before or built from the sources.
 
 ==From the Grails plugin repository==
 
