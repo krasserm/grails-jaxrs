@@ -9,9 +9,9 @@
 
 This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services). The examples in the following chapters have been tested with Grails 1.1.1. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. 
 
-==Hello world==
+=Hello world=
 
-===Create a project===
+==Create a project==
 
 To use the plugin we create a new Grails project. Change the working directory to a location where you want to create a new Grails project and enter 
 
@@ -21,7 +21,7 @@ grails create-app hello
 
 on the command line. This creates a new directory {{{hello}}}. 
 
-===Install the plugin===
+==Install the plugin==
 
 To install the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository], go to the created {{{hello}}} directory and enter 
 
@@ -31,7 +31,7 @@ grails install-plugin jaxrs
 
 This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options refer to the [InstallationInstructions installation instructions].
 
-===Create a resource===
+==Create a resource==
 
 To create a JAX-RS resource named {{{test}}} enter
 
@@ -63,7 +63,7 @@ It defines a single method that responds to HTTP GET operations. The response en
 
 Creating resources via the command line is only one option. An alternative is to create resource files by hand. Any {{{*Resource.groovy}}} file created under {{{grails-app/resources}}} is assumed to be a JAX-RS resource and auto-detected by the grails-jaxrs plugin. 
 
-===Run the application===
+==Run the application==
 
 To start the application enter 
 
@@ -73,11 +73,11 @@ grails run-app
 
 on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. The browser should now display "{{{Test}}}".
 
-===Change the code===
+==Change the code==
 
 The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that, open the {{{TestResource.groovy}}} file and change the return value of {{{getTestRepresentation()}}} to e.g. {{{Hello world}}}. Then, refresh the browser window and you should now see {{{Hello world}}}.
 
-==Generate resources==
+=Generate resources=
 
 ... work in progress
 
