@@ -27,6 +27,52 @@ grails install-plugin jaxrs
 
 This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options refer to the [InstallationInstructions installation instructions].
 
+==Create a resource==
+
+To create a JAX-RS resource enter
+
+{{{
+grails create-resource test
+}}}
+
+This will create a {{{TestResource.groovy}}} file under {{{grails-app/resources}}} and a {{{TestResourceTests.groovy}}} file under {{{test/unit}}}. The {{{TestResourceTests.groovy}}} file is a unit test template. The {{{TestResource.groovy}}} file is the generated JAX-RS resource. 
+
+{{{
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
+
+
+@Path('/test')
+class TestResource {
+
+    @GET
+    @Produces('text/plain')
+    String getTestRepresentation() {
+        'Test'
+    }
+    
+}
+}}}
+
+It defines a single method that responds to HTTP GET operations. The response entity is set to the return value of the method, {{{Test}}} in this example. The content type of the response ({{{Content-Type}}} header) is {{{text/plain}}}. The created resource is ready to use as shown in the next section.
+
+==Run the application==
+
+To start the application enter 
+
+{{{
+grails run-app
+}}}
+
+on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. The browser should now display "{{{Test}}}".
+
+==Change the code==
+
+The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that, open the {{{TestResource.groovy}}} file and change the return value of {{{getTestRepresentation()}}} to e.g. {{{Hello}}}. Then, refresh the browser window and you should now see {{{Hello}}}.
+
+==Injecting services==
+
 ... work in progress
 
 =Overview (version 0.1)=
