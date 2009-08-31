@@ -25,7 +25,7 @@ To install the plugin from the [http://www.grails.org/plugin/home Grails Plugin 
 grails install-plugin jaxrs
 }}} 
 
-on the comamnd line. This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options refer to the [InstallationInstructions].
+This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options refer to the [InstallationInstructions].
 
 ... work in progress
 
