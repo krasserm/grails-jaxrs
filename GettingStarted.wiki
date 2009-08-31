@@ -77,6 +77,10 @@ on the comamnd line. Then open a browser window and go to {{{http://localhost:80
 
 The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that, open the {{{TestResource.groovy}}} file and change the return value of {{{getTestRepresentation()}}} to e.g. {{{Hello world}}}. Then, refresh the browser window and you should now see {{{Hello world}}}.
 
+==Using Eclipse==
+
+...
+
 =Generate resources=
 
 ... work in progress
