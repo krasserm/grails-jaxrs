@@ -29,7 +29,7 @@ This will download the latest released version of the plugin from the [http://ww
 
 ==Create a resource==
 
-To create a JAX-RS resource enter
+To create a JAX-RS resource named {{{test}}} enter
 
 {{{
 grails create-resource test
