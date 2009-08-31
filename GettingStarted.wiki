@@ -1,6 +1,8 @@
 #summary A quick guide to getting started with the JSR 311 plugin for Grails.
 #labels Featured
 
+<wiki:toc/>
+
 *Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress.
 
 =Overview (version 0.2)=
