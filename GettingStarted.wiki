@@ -79,6 +79,10 @@ The grails-jaxrs plugin also support code changes at runtime i.e. without restar
 
 ==Using Eclipse==
 
+TODO: describe how to add the whole plugin to the project's classpath
+
+Obsolete:
+
 Depending on how you [http://grails.org/Eclipse+IDE+Integration setup your project in Eclipse] the classes of the grails-jaxrs plugin and its dependencies may be not on the project's classpath. This will result in compile errors of classes under {{{grails-app/resources}}}. To resolve these compile error just add this [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] to the classpath. 
 
 =Scaffolding=
