@@ -83,6 +83,18 @@ Depending on how you [http://grails.org/Eclipse+IDE+Integration setup your proje
 
 =Generate resources=
 
+The grails-jaxrs plugin also supports scaffolding. It allows you to create a RESTful service interface for one or more domain classes based on JAX-RS resource classes. The following sections walk through a very simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
+
+==Create a domain class==
+
+To create a {{{Person}}} domain class go to the project's root directory and enter
+
+{{{
+grails create-domain-class person
+}}}
+
+Open the generated {{{Person.groovy}}} file (under {{{grails-app/domain}}}) and add two properties, {{{firstName}}} and {{{lastName}}}.
+
 ... work in progress
 
 =Overview (version 0.1)=
