@@ -81,7 +81,7 @@ The grails-jaxrs plugin also support code changes at runtime i.e. without restar
 
 Depending on how you [http://grails.org/Eclipse+IDE+Integration setup your project in Eclipse] the classes of the grails-jaxrs plugin and its dependencies may be not on the project's classpath. This will result in compile errors of classes under {{{grails-app/resources}}}. To resolve these compile error just add this [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] to the classpath. 
 
-=Generate resources=
+=Scaffolding=
 
 The grails-jaxrs plugin also supports scaffolding. It allows you to create a RESTful service interface for one or more domain classes based on JAX-RS resource classes. The following sections walk through a very simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
 
@@ -94,6 +94,31 @@ grails create-domain-class person
 }}}
 
 Open the generated {{{Person.groovy}}} file (under {{{grails-app/domain}}}) and add two properties, {{{firstName}}} and {{{lastName}}}.
+
+{{{
+class Person {
+
+    static constraints = {
+    }
+    
+    String firstName
+    
+    String lastName
+    
+}
+}}}
+
+==Generate the REST API==
+
+To generate JAX-RS resources i.e. the RESTful service interface for that domain class enter
+
+{{{
+grails generate-resources person
+}}}
+
+This will create two resource classes, {{{PersonCollectionResource.groovy}}} and {{{PersonResource.groovy}}} that support HTTP GET, POST, PUT and DELETE operations. {{{PersonCollectionResource.groovy}}} implements operations for {{{Person}}} lists, {{{PersonResource.groovy}}} for individual {{{Person}}} instances. Before digging into the generated code let's take a look how to use the generated RESTful {{{Person}}} interface.
+
+==Use the REST API==
 
 ... work in progress
 
