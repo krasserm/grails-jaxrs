@@ -116,7 +116,7 @@ To generate JAX-RS resources that implement the RESTful service interface for th
 grails generate-resources person
 }}}
 
-This will create two resource classes, {{{PersonCollectionResource.groovy}}} and {{{PersonResource.groovy}}} that support HTTP POST, GET, PUT and DELETE operations for creating, reading, updating and deleting {{{Person}}} objects, respectively.. {{{PersonCollectionResource.groovy}}} is related {{{Person}}} lists, {{{PersonResource.groovy}}} is related to individual {{{Person}}} instances. Before digging into the generated code let's take a look how to use the generated RESTful {{{Person}}} interface.
+This will create two resource classes, {{{PersonCollectionResource.groovy}}} and {{{PersonResource.groovy}}} that support HTTP POST, GET, PUT and DELETE operations for creating, reading, updating and deleting {{{Person}}} objects, respectively.. {{{PersonCollectionResource.groovy}}} is related {{{Person}}} lists, {{{PersonResource.groovy}}} is related to individual {{{Person}}} instances. Before digging into the generated code let's take a look at how to use the generated RESTful {{{Person}}} interface.
 
 ==Use the REST API==
 
