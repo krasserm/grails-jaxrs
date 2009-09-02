@@ -79,25 +79,19 @@ The grails-jaxrs plugin also support code changes at runtime i.e. without restar
 
 ==Using Eclipse==
 
-Using the {{{hello}}} project with the grails-jaxrs plugin in Eclipse requires a bit more than [http://grails.org/Eclipse+IDE+Integration just importing] the {{{hello}}} project. After import, the grails-jaxrs classes are not on the classpath of the project, therefore, you'll see compile errors for generated JAX-RS resources. The remainder of the section explains you how to add the grails-jaxrs plugin to the project's classpath in Eclipse. The procedure described here worked for me but there might be better solutions. Please [http://groups.google.com/group/grails-jaxrs let us know] in case.
+Using the {{{hello}}} project with the grails-jaxrs plugin in Eclipse requires a bit more than [http://grails.org/Eclipse+IDE+Integration just importing] the {{{hello}}} project. After import, the grails-jaxrs classes are not on the classpath of the project, therefore, you'll see compile errors for generated JAX-RS resources. The best way to resolve the compile errors is to import the grails-jaxrs plugin project as a separate project in Eclipse and reference that project from the {{{hello}}} project. 
 
-During installation of the grails-jaxrs plugin it is expanded to {{{${home}/.grails/1.1.1/projects/hello/plugins/jaxrs-0.2}}} where {{{$home}}} is the user's home directory. This directory contains the plugin sources, scripts and dependent libraries.
+To checkout a released version of the grails-jaxrs project enter 
 
-  * To add the dependent libraries of the plugin, right-click on the project in the package explorer and select {{{Properties -> Java Build Path -> Libraries -> Add External JARs...}}}. In the file selection dialog go {{{${home}/.grails/1.1.1/projects/hello/plugins/jaxrs-0.2/lib}}}, select all libraries and click the {{{Open}}} button.
+{{{
+svn export http://grails-jaxrs.googlecode.com/svn/tags/jaxrs-<version> jaxrs
+}}}
 
-  * ... 
+on the command line where {{{<version>}}} must be replaced by the version of the plugin you're using. This will create a local directory {{{jaxrs}}}, the root directory of the project. If you use a development snapshot checkout the sources from {{{http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs}}}. 
 
-===Add plugin libraries===
+To import the project into Eclipse go to {{{File -> Import... -> General -> Existing Projects Into Workspace}}} and press {{{Next}}}. Then select the project's root directory and click {{{Finish}}}. You should now see a {{{jaxrs}}} project in the package explorer.
 
-
-
-...
-
-TODO: describe how to add the whole plugin to the project's classpath
-
-Obsolete:
-
-Depending on how you [http://grails.org/Eclipse+IDE+Integration setup your project in Eclipse] the classes of the grails-jaxrs plugin and its dependencies may be not on the project's classpath. This will result in compile errors of classes under {{{grails-app/resources}}}. To resolve these compile error just add this [http://download.java.net/maven/2/javax/ws/rs/jsr311-api/1.1/jsr311-api-1.1.jar JSR 311 jar file] to the classpath. 
+To add this new project as dependency to the {{{hello}}} project, right-click on the {{{hello}}} project and go to {{{Properties -> Java Build Path -> Projects -> Add...}}}. Select the {{{jaxrs}}} project from the list of projects in the workspace and press {{{OK}}}. The compile erros should now disappear.
 
 =Scaffolding=
 
