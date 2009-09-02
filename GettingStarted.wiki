@@ -79,6 +79,14 @@ The grails-jaxrs plugin also support code changes at runtime i.e. without restar
 
 ==Using Eclipse==
 
+Using the {{{hello}}} project with the grails-jaxrs plugin in Eclipse requires a bit more than just importing the {{{hello}}} project. After import, the grails-jaxrs classes are not on the classpath of the project, therefore, you'll see compile errors for generated JAX-RS resources. The remainder of the section explains you how to add the grails-jaxrs plugin to the project's classpath in Eclipse. It is assumed that you already followed the general instructions for [http://grails.org/Eclipse+IDE+Integration setting up a Grails project in Eclipse].
+
+...
+
+===Add plugin libraries===
+
+...
+
 TODO: describe how to add the whole plugin to the project's classpath
 
 Obsolete:
