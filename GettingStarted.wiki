@@ -258,7 +258,7 @@ It constructs a {{{URI}}} for the {{{Location}}} response header from the domain
 
 ===={{{readAll}}} method====
 
-The {{{readAll}}} method returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response.
+The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response.
 
 {{{
 package org.grails.jaxrs.response
@@ -292,3 +292,11 @@ class Responses {
      
 }
 }}}
+
+===={{{getResource}}} method====
+
+The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/person/{id}}}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
+
+==={{{PersonResource.groovy}}}===
+
+...
