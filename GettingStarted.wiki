@@ -214,7 +214,7 @@ class PersonCollectionResource {
 
 It is based based on JSR 311 classes and annotations and uses static methods from {{{org.grails.jaxrs.response.Responses}}}. This is a helper class provided by the plugin that implements a very simple DSL consisting of elements {{{created}}}, {{{ok}}} and {{{notFound}}}. 
 
-The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{Path('/person'}}} annotation.
+The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{@Path('/person')}}} annotation.
 
 ===={{{create}}} method====
 
