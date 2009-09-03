@@ -158,6 +158,8 @@ GETting the person lists again shows that person 1 has actually been removed.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
 
+The [AdvancedFeatures#Scaffolding scaffolding section of the advanced features page] walks through the source code of the generated JAX-RS resources.
+
 =Using Eclipse=
 
 Using the {{{hello}}} project with the grails-jaxrs plugin in Eclipse requires a bit more than [http://grails.org/Eclipse+IDE+Integration just importing] the {{{hello}}} project. After import, the grails-jaxrs classes are not on the classpath of the project, therefore, you'll see compile errors for generated JAX-RS resources. The best way to resolve the compile errors is to import the grails-jaxrs plugin project as a separate project in Eclipse and reference that project from the {{{hello}}} project. 
