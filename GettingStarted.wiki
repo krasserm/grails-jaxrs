@@ -144,11 +144,11 @@ To GET the list of created persons, open a browser and enter the URL {{{http://l
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-03.png
 
-To get the representation of a single person, specify the id in the URL. For example, to get the person with id 2 use {{{http://localhost:8080/hello/person/2}}}
+To get the representation of a single person, specify the id in the URL. For example, to get the person with id 1 use {{{http://localhost:8080/hello/person/1}}}
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-04.png
 
-...
+If you specify an id that doesn't exist, an error message and with a status code {{{404}}} is returned.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
 
