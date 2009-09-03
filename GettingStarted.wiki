@@ -176,7 +176,7 @@ http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
 
 ==Source code==
 
-=={{{PersonCollectionResource.groovy}}}==
+==={{{PersonCollectionResource.groovy}}}===
 
 Let's take a look at the source code of the generated JAX-RS resource classes. Here's the source code for {{{PersonCollectionResource.groovy}}}.
 
@@ -216,13 +216,13 @@ It is based based on JSR 311 classes and annotations and uses static methods fro
 
 The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{Path('/person'}}} annotation.
 
+===={{{create}}} method====
+
 The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML request entity is converted by the plugin into a map that can be used for the construction of the {{{Person}}} domain object. The conversion is done by the {{{org.grails.jaxrs.provider.XMLReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's the implementation of the {{{created}}} method.
 
 {{{
 package org.grails.jaxrs.response
  
-import static javax.ws.rs.core.Response.Status.NOT_FOUND
-
 import grails.converters.* 
 
 import javax.ws.rs.core.Response
@@ -254,4 +254,41 @@ class Responses {
 }
 }}}
 
-It constructs a {{{uri}}} for the {{{Location}}} response header and uses Grail's XML marshaling for rendering the response entity. 
+It constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id and uses Grail's XML marshaling for rendering the response entity.
+
+===={{{readAll}}} method====
+
+The {{{readAll}}} method returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response.
+
+{{{
+package org.grails.jaxrs.response
+ 
+import grails.converters.* 
+
+import javax.ws.rs.core.Response
+
+/**
+ * Factory methods for JAX-RS response objects. This class is used by JAX-RS
+ * resource implementations create XML responses from Grails domain objects.
+ * 
+ * ...
+ */
+class Responses {
+
+     // ...
+
+     /**
+      * Creates a response to a GET operation with status code 200 and
+      * an XML representation of the given resource as response entity.
+      * 
+      * @param resource a Grails domain object.
+      * @return JAX-RS response.
+      */
+     static Response ok(def resource) {
+         Response.ok(resource as XML).build()
+     }
+     
+     // ...
+     
+}
+}}}
