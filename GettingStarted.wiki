@@ -130,7 +130,13 @@ This will generate two resource classes, {{{PersonCollectionResource.groovy}}} a
 
 ==Use the REST API==
 
-In this section we use the [http://www.ywebb.com/eclipse-restful-http-client-plugin-http4e/ Eclipse HTTP Client] and a web browser for interacting with the RESTful {{{Person}}} service. The resource representations are in XML. 
+Start the {{{hello}}} application with
+
+{{{
+grails run-app
+}}}
+
+The following examples use the [http://www.ywebb.com/eclipse-restful-http-client-plugin-http4e/ Eclipse HTTP Client] and a web browser for interacting with the RESTful {{{Person}}} service. 
 
 New person objects can be created by POSTing to {{{http://localhost:8080/hello/person}}}. The {{{Content-Type}}} header must be set to {{{text/xml}}}. The request entity contains a person XML representation.
 
