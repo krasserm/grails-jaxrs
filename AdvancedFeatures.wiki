@@ -8,7 +8,7 @@ The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding f
 
 =={{{PersonCollectionResource.groovy}}}==
 
-Let's take a look at the source code of the generated JAX-RS resource classes. Here's the source code for {{{PersonCollectionResource.groovy}}}.
+Here's the source code for {{{PersonCollectionResource.groovy}}}.
 
 {{{
 import static org.grails.jaxrs.response.Responses.*
