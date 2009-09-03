@@ -5,7 +5,7 @@
 
 =Overview=
 
-This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services). The examples in the following chapters have been tested with Grails 1.1.1. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. The [#Using_Eclipse last section] on this page explains how to setup the examples in Eclipse.
+This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services). The examples in the following chapters have been tested with Grails 1.1.1. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. The [#Using_Eclipse Using Eclipse] section on this page explains how to setup the examples in Eclipse.
 
 =Hello world=
 
@@ -175,3 +175,7 @@ on the command line where {{{<version>}}} must be replaced by the version of the
 To import the project into Eclipse go to {{{File -> Import... -> General -> Existing Projects Into Workspace}}} and press {{{Next}}}. Then select the project's root directory and click {{{Finish}}}. You should now see a {{{jaxrs}}} project in the package explorer.
 
 To add this new project as dependency to the {{{hello}}} project, right-click on the {{{hello}}} project and go to {{{Properties -> Java Build Path -> Projects -> Add...}}}. Select the {{{jaxrs}}} project from the list of projects in the workspace and press {{{OK}}}. The compile erros should now disappear.
+
+=Next steps=
+
+  * Take a look at the [AdvancedFeatures advanced features] of the grails-jaxrs plugin.
