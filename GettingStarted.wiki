@@ -222,7 +222,7 @@ The {{{PersonCollectionResource}}} class responds to HTTP operations that are re
 
 ==={{{PersonResource.groovy}}}===
 
-Here's the source code for {{{PersonResource.groovy}}}
+Here's the source code for {{{PersonResource.groovy}}}.
 
 {{{
 import static org.grails.jaxrs.response.Responses.*
@@ -269,3 +269,5 @@ class PersonResource {
     
 }
 }}}
+
+The {{{id}}} property is set during construction of the resource and is used for database operation. This class implements the methods {{{read}}}, {{{update}}} and {{{delete}}} to handle GET, PUT and DELETE requests respectivly. It also uses GORM for database operations and relies on helper methods of {{{org.grails.jaxrs.response.Responses}}} to create repsonses via the JAX-RS API.
