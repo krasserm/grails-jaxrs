@@ -130,13 +130,25 @@ This will generate two resource classes, {{{PersonCollectionResource.groovy}}} a
 
 ==Use the REST API==
 
+In this section we use the [http://www.ywebb.com/eclipse-restful-http-client-plugin-http4e/ Eclipse HTTP Client] and a web browser for interacting with the RESTful {{{Person}}} service. The resource representations are in XML. 
+
+New person objects can be created by POSTing to {{{http://localhost:8080/hello/person}}}. The {{{Content-Type}}} header must be set to {{{text/xml}}}. The request entity contains a person XML representation.
+
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-01.png
+
+After sending the request, the server creates a new person object in the database and returns a representation of it. Note that the returned representation differs from the submitted representation by an {{{id}}} attribute in the {{{<person>}}} element. This id is also contained in the {{{Location}}} response header, the URL of the created resource. The response code is {{{201}}} ({{{CREATED}}}). We create a another person for which the server creates the id 2.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-02.png
 
+To GET the list of created persons, open a browser and enter the URL {{{http://localhost:8080/hello/person}}}. This returns an XML representation of the list of persons stored in the database.
+
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-03.png
 
+To get the representation of a single person, specify the id in the URL. For example, to get the person with id 2 use {{{http://localhost:8080/hello/person/2}}}
+
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-04.png
+
+...
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
 
