@@ -173,3 +173,85 @@ http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-08.png
 GETting the person lists again shows that person 1 has actually been removed.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
+
+==Source code==
+
+=={{{PersonCollectionResource.groovy}}}==
+
+Let's take a look at the source code of the generated JAX-RS resource classes. Here's the source code for {{{PersonCollectionResource.groovy}}}.
+
+{{{
+import static org.grails.jaxrs.response.Responses.*
+
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.POST
+import javax.ws.rs.core.Response
+
+@Path('/person')
+@Produces('text/xml')
+class PersonCollectionResource {
+
+    @POST
+    Response create(Map properties) {
+        created new Person(properties).save()
+    }
+
+    @GET
+    Response readAll() {
+        ok Person.findAll()
+    }
+    
+    @Path('/{id}')
+    PersonResource getResource(@PathParam('id') String id) {
+        new PersonResource(id:id)
+    }
+        
+}
+}}}
+
+It is based based on JSR 311 classes and annotations and uses static methods from {{{org.grails.jaxrs.response.Responses}}}. This is a helper class provided by the plugin that implements a very simple DSL consisting of elements {{{created}}}, {{{ok}}} and {{{notFound}}}. 
+
+The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{Path('/person'}}} annotation.
+
+The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML request entity is converted by the plugin into a map that can be used for the construction of the {{{Person}}} domain object. The conversion is done by the {{{org.grails.jaxrs.provider.XMLReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's the implementation of the {{{created}}} method.
+
+{{{
+package org.grails.jaxrs.response
+ 
+import static javax.ws.rs.core.Response.Status.NOT_FOUND
+
+import grails.converters.* 
+
+import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriBuilder
+
+/**
+ * Factory methods for JAX-RS response objects. This class is used by JAX-RS
+ * resource implementations create XML responses from Grails domain objects.
+ * 
+ * ...
+ */
+class Responses {
+
+     /**
+      * Creates a response to a POST operation with status code 201,
+      * an XML representation of the created resource as response entity
+      * and a Location-header with the URL of the created resource.
+      * 
+      * @param resource a Grails domain object.
+      * @return JAX-RS response.
+      */
+     static Response created(def resource) {
+         URI uri = UriBuilder.fromPath(resource.id as String).build()
+         Response.created(uri).entity(resource as XML).build()
+     }
+
+     // ...
+     
+}
+}}}
+
+It constructs a {{{uri}}} for the {{{Location}}} response header and uses Grail's XML marshaling for rendering the response entity. 
