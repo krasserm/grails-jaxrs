@@ -216,86 +216,9 @@ It is based based on JSR 311 classes and annotations and uses static methods fro
 
 The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{@Path('/person')}}} annotation.
 
-===={{{create}}} method====
-
-The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML request entity is converted by the plugin into a map that can be used for the construction of the {{{Person}}} domain object. The conversion is done by the {{{org.grails.jaxrs.provider.XMLReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's the implementation of the {{{created}}} method.
-
-{{{
-package org.grails.jaxrs.response
- 
-import grails.converters.* 
-
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.UriBuilder
-
-/**
- * Factory methods for JAX-RS response objects. This class is used by JAX-RS
- * resource implementations create XML responses from Grails domain objects.
- * 
- * ...
- */
-class Responses {
-
-     /**
-      * Creates a response to a POST operation with status code 201,
-      * an XML representation of the created resource as response entity
-      * and a Location-header with the URL of the created resource.
-      * 
-      * @param resource a Grails domain object.
-      * @return JAX-RS response.
-      */
-     static Response created(def resource) {
-         URI uri = UriBuilder.fromPath(resource.id as String).build()
-         Response.created(uri).entity(resource as XML).build()
-     }
-
-     // ...
-     
-}
-}}}
-
-It constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id and uses Grail's XML marshaling for rendering the response entity.
-
-===={{{readAll}}} method====
-
-The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response.
-
-{{{
-package org.grails.jaxrs.response
- 
-import grails.converters.* 
-
-import javax.ws.rs.core.Response
-
-/**
- * Factory methods for JAX-RS response objects. This class is used by JAX-RS
- * resource implementations create XML responses from Grails domain objects.
- * 
- * ...
- */
-class Responses {
-
-     // ...
-
-     /**
-      * Creates a response to a GET operation with status code 200 and
-      * an XML representation of the given resource as response entity.
-      * 
-      * @param resource a Grails domain object.
-      * @return JAX-RS response.
-      */
-     static Response ok(def resource) {
-         Response.ok(resource as XML).build()
-     }
-     
-     // ...
-     
-}
-}}}
-
-===={{{getResource}}} method====
-
-The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/person/{id}}}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
+  * The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML request entity is converted by the plugin into a map that can be used for the construction of the {{{Person}}} domain object. The conversion is done by the {{{org.grails.jaxrs.provider.XMLReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code]. The method constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id and uses Grail's XML marshaling for rendering the response entity.
+  * The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code].
+  * The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/person/{id}}}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
 
 ==={{{PersonResource.groovy}}}===
 
