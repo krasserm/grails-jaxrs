@@ -164,6 +164,6 @@ Finally, we delete person 1 by sending a DELETE request to {{{http://localhost:8
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-08.png
 
-GETting the person lists again shows that person 1 was actually removed.
+GETting the person lists again shows that person 1 has actually been removed.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
