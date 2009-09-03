@@ -148,7 +148,7 @@ To get the representation of a single person, specify the id in the URL. For exa
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-04.png
 
-If you specify an id that doesn't exist, an error message and with a status code {{{404}}} is returned.
+If you try to get a person that doesn't exist, an error message (with a status code {{{404}}}) is returned.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
 
