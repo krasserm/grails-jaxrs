@@ -4,7 +4,7 @@
 
 =Scaffolding=
 
-The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding feature in version 0.2 is still *early access*. For an introductory example to scaffolding refer to the [GettingStarted#Scaffolding scaffolding section of the getting started guide]. The following subsections walk through the generated example code. 
+The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding feature in version 0.2 is still *early access*. For an introductory scaffolding example refer to the [GettingStarted#Scaffolding scaffolding section of the getting started guide]. The following subsections walk through the generated example code. 
 
 =={{{PersonCollectionResource.groovy}}}==
 
