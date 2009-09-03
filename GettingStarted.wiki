@@ -152,10 +152,18 @@ If you try to get a person that doesn't exist, an error message (with a status c
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
 
+In the next step we update the first name of person 1 by PUTting a new representation to {{{http://localhost:8080/hello/person/1}}}. The response is a new representation of the updated person.
+
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-06.png
+
+GETting the person list again shows the update of person 1.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-07.png
 
+Finally, we delete person 1 by sending a DELETE request to {{{http://localhost:8080/hello/person/1}}}.
+
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-08.png
+
+GETting the person lists again shows that person 1 was actually removed.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
