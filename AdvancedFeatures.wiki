@@ -1,5 +1,315 @@
 #summary Advanced features of the JSR 311 plugin for Grails.
 
-= Introduction =
+*Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress.
 
-...
+==Configuration==
+
+By default all requests are forwarded to the {{{JaxrsController}}} which is contained in the {{{grails-jaxrs}}} plugin. In order to use "regular" Grails controllers besides the {{{JaxrsController}}} we need to extend the URL mappings. 
+
+Instead of extending the {{{grails-app/conf/UrlMappings.groovy}}} file directly the URL mappings for the {{{JaxrsController}}} are set via the {{{org.grails.jaxrs.url.mappings}}} configuration property. The property value is a list of URL patterns. For example, assuming that a Grails application is accessible under http://localhost:8080/hello where {{{/hello}}} is the context path and all JAX-RS resources are accessible via
+
+  * http://localhost:8080/hello/test/... and
+  * http://localhost:8080/hello/notes/...
+
+we need to add the following entry to {{{grails-app/conf/Config.groovy}}}:
+
+  * {{{org.grails.jaxrs.url.mappings=['/test', '/notes']}}}
+
+This ensures that only requests with a URL path matching {{{/test/...}}} and {{{/notes/...}}} are forwarded to the {{{JaxrsController}}}, all other requests may go to other Grails controllers. More detailed, the {{{grails-jaxrs}}} plugin creates the following URL mappings when it is loaded:
+
+  * {{{"/test"(controller:"jaxrs")}}}
+  * {{{"/test/**"(controller:"jaxrs")}}}
+  * {{{"/notes"(controller:"jaxrs")}}}
+  * {{{"/notes/**"(controller:"jaxrs")}}}
+
+==Applying filters==
+
+[http://grails.org/doc/1.1.1/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
+
+{{{
+class TestFilters {
+
+    def filters = {
+            
+        testUris(uri:'/test/**') {
+            before = {
+                // do some preprocessing
+            }
+            after = {
+                // do some postprocessing
+            }
+            
+        }   
+    }
+}
+}}}
+
+==Using GORM==
+
+Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
+
+  * POSTing to {{{http://localhost:8080/hello/notes}}} creates a new {{{Note}}} domain object in the database containing the actual note from the request body. The request content type is {{{text/plain}}}. The response content type is {{{text/xml}}} representing the created domain object including its identifier. The response {{{Location}}} header contains the URL of the created note resource.
+
+  * GETing from {{{http://localhost:8080/hello/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{text/xml}}}.
+
+  * GETing from {{{http://localhost:8080/hello/notes/{id}}}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
+
+The first step is to create the {{{Note}}} domain object. This can be either done via {{{grails create-domain-class note}}} from the command line or manually by adding a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
+
+{{{
+class Note {
+
+    static constraints = {
+    }
+    
+    String text
+    
+}
+}}}
+
+The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object).
+
+For creating new {{{Note}}} instances i.e. note resources we POST the notes text to {{{http://localhost:8080/hello/notes}}}. This resource is implemented with a {{{NotesResource}}} class
+
+{{{
+import grails.converters.*
+ 
+import javax.ws.rs.Consumes
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.POST
+import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriBuilder
+
+import org.springframework.stereotype.Component
+
+@Component
+@Path('/notes')
+class NotesResource {
+
+     @POST
+     @Consumes('text/plain')
+     @Produces('text/xml')
+     Response addNote(String text) {
+         def note = new Note(text:text).save()
+         URI uri = UriBuilder.fromPath(note.id as String).build()
+         Response.created(uri).entity(note as XML).build()
+     }
+
+     @GET
+     @Produces('text/xml')
+     Response getNotes() {
+         Response.ok(Note.findAll() as XML).build()
+     }
+     
+}
+}}}
+
+Save this class as {{{NotesResource.groovy}}} in the {{{src/groovy}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request body via the {{{text}}} parameter. The text parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header with {{{Response.created(uri)}}}. The response body contains the XML representation of the note object. To create the XML representation the XML converter of Grails is used. Here's a sample HTTP request:
+
+{{{
+POST /hello/notes/ HTTP/1.1
+Content-Type: text/plain
+Host: localhost:8080
+Content-Length: 27
+
+Don't forget to learn Scala
+}}}
+
+Here's a sample HTTP response:
+
+{{{
+HTTP/1.1 201 Created
+Content-Type: text/xml
+Location: http://localhost:8080/hello/notes/1
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note id="1">
+  <text>Don't forget to learn Scala</text>
+</note>
+}}}
+
+To obtain a list of all notes send a GET request to {{{http://localhost:8080/hello/notes}}} which will call the {{{getNotes()}}} method. This method again uses the Grails XML converter to create an XML representation of the notes collection, such as 
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+  <note id="1">
+    <text>Don't forget to learn Scala</text>
+  </note>
+  <note id="2">
+    <text>Another important note</text>
+  </note>
+</list>
+}}}
+
+Finally we want to obtain individual notes via {{{http://localhost:8080/hello/notes/{id} }}} where {{{id}}} is in range 1..n. This can be achieved by adding a {{{getNote(String}}} method to the {{{NotesResource}}} class:
+
+{{{
+@Component
+@Path('/notes')
+class NotesResource {
+
+     // ... other methods omitted
+
+     @Path('/{id}')
+     NoteResource getNote(@PathParam('id') String id) {
+         new NoteResource(note:Note.get(id))
+     }
+     
+}
+}}}
+
+Instead of using a fixed path we use a _path template_ where the last path segment is the variable part of the path. It is bound to the {{{id}}} parameter of the {{{getNote(String)}}} method using a {{{@PathParam}}} annotation. Instead of rendering the response directly in the {{{NotesResource}}} class it is delegated to the {{{NoteResource}}} class after we've loaded the note object from the database:
+
+{{{
+import static javax.ws.rs.core.Response.Status.NOT_FOUND
+ 
+import grails.converters.* 
+ 
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.core.Response
+
+class NoteResource {
+
+    Note note
+
+    @GET
+    @Produces('text/xml')
+    Response getNote() {
+        if (note) {
+            Response.ok(note as XML).build()
+        } else {
+            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
+        } 
+    }
+    
+}
+}}}
+
+If a note object with the requested id exists an XML representation is returned, otherwise, an error message is created along with a status code 404 (NOT FOUND). For example, GETing the note {{{http://localhost:8080/hello/notes/1}}} returns
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note id="1">
+  <text>Don't forget to learn Scala</text>
+</note>
+}}}
+
+==Entity providers==
+
+Entity providers supply mapping services between representations and their associated Java types. They are used to factor out parsing and rendering code from resource classes. The {{{grails-jaxrs}}} plugin provides abstract base classes for entity providers. 
+
+  * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
+  * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
+
+These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses implement a {{{NoteWriter}}} provider class like to following:
+
+{{{
+import groovy.xml.MarkupBuilder
+
+import java.io.OutputStreamWriter
+import javax.ws.rs.Produces
+import javax.ws.rs.ext.Provider
+
+import javax.ws.rs.core.MultivaluedMap
+
+import org.grails.jaxrs.support.MessageBodyWriterSupport
+import org.grails.jaxrs.test.domain.Foo
+
+import org.springframework.stereotype.Component
+
+@Component
+@Provider
+@Produces('text/xml')
+class NoteWriter extends MessageBodyWriterSupport<Note> {
+    
+    void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
+        def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
+        builder.note {
+            id(entity.id)
+            content(entity.text)
+        }
+        // Alternative (default rendering):
+        // entityStream << (entity as XML)
+    }
+   
+}
+}}}
+
+Having such a provider in place, resource methods can return a {{{Note}}} object directly:
+
+{{{
+@Component
+@Path('/notes')
+class NotesResource {
+
+     // ... other methods omitted
+
+     @Path('/{id}')
+     Note getNote(@PathParam('id') String id) {
+         Note.get(id)
+     }
+     
+}
+}}}
+
+In this case the response looks like:
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <id>1</id>
+  <content>Don't forget to learn Scala</content>
+</note>
+}}}
+
+==Service injection==
+
+Services can be auto-injected into resource objects with the following annotations:
+
+  * by name with {{{javax.annotation.Resource}}}
+  * by type with {{{org.springframework.beans.factory.annotation.Autowired}}}
+
+For example, use {{{@Resource(name='sampleService')}}} to inject an instance of {{{SampleService}}}: 
+
+{{{
+@Component
+@Path('/test')
+public class HelloResource {
+
+    @Resource(name='sampleService')
+    def sampleService
+
+    // ...
+     
+}
+}}}
+
+The resource name is the name of the service bean in the application context. Grails adds services automatically to the application context where the bean name is derived from the service class name. Alternatively, add the JAX-RS resource to the application context and do the wiring manually:
+
+{{{
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean class="HelloResource">
+        <property name="sampleService" ref="sampleService" />
+    </bean>
+
+</beans>
+}}}
