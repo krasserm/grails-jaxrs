@@ -130,4 +130,4 @@ This will generate two resource classes, {{{PersonCollectionResource.groovy}}} a
 
 ==Use the REST API==
 
-... work in progress
+http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-01.png
