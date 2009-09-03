@@ -222,4 +222,50 @@ The {{{PersonCollectionResource}}} class responds to HTTP operations that are re
 
 ==={{{PersonResource.groovy}}}===
 
-...
+Here's the source code for {{{PersonResource.groovy}}}
+
+{{{
+import static org.grails.jaxrs.response.Responses.*
+
+import javax.ws.rs.DELETE
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.PUT
+import javax.ws.rs.core.Response
+
+@Produces('text/xml')
+class PersonResource {
+    
+    def id
+    
+    @GET
+    Response read() {
+        def obj = Person.get(id)
+        if (obj) {
+            ok obj
+        } else {
+            notFound Person.class, id
+        }
+    }
+    
+    @PUT
+    Response update(Map properties) {
+        def obj = Person.get(id)
+        if (obj) {
+            obj.properties = properties 
+            ok obj
+        } else {
+            notFound Person.class, id
+        }
+    }
+    
+    @DELETE
+    void delete() {
+        def obj = Person.get(id)
+        if (obj) { 
+            obj.delete()
+        }
+    }
+    
+}
+}}}
