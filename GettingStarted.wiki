@@ -3,8 +3,6 @@
 
 <wiki:toc/>
 
-*Important note*: This page still describes version 0.1 of the plugin. Documentation for version 0.2 is work in progress.
-
 =Overview (version 0.2)=
 
 This page helps you getting started with the JSR 311 plugin for Grails. It is assumed that you have a basic understanding of [http://www.grails.org Grails] and the [http://jcp.org/en/jsr/detail?id=311 JSR 311] (JAX-RS: The Java API for RESTful Web Services). The examples in the following chapters have been tested with Grails 1.1.1. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1]. 
