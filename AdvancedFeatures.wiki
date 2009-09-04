@@ -72,42 +72,35 @@ class TestFilters {
 
 =Service injection=
 
-*TODO*: update to version 0.2
-
-Services can be auto-injected into resource objects with the following annotations:
-
-  * by name with {{{javax.annotation.Resource}}}
-  * by type with {{{org.springframework.beans.factory.annotation.Autowired}}}
-
-For example, use {{{@Resource(name='sampleService')}}} to inject an instance of {{{SampleService}}}: 
+Services can be auto-injected into resource and [#Entity_providers provider] objects by name. Assuming we have a service class named {{{TestService.groovy}}} in {{{grails-app/services}}}
 
 {{{
-@Component
-@Path('/test')
-public class HelloResource {
+class TestService {
 
-    @Resource(name='sampleService')
-    def sampleService
-
-    // ...
-     
+     String greet(String name) {
+         'Hello ' + (name ? name : 'unknown')
+     }
+    
 }
 }}}
 
-The resource name is the name of the service bean in the application context. Grails adds services automatically to the application context where the bean name is derived from the service class name. Alternatively, add the JAX-RS resource to the application context and do the wiring manually:
+then we can auto-inject it by defining a {{{testService}}} property like in the following resource class.
 
 {{{
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+// imports omitted ...
 
-    <bean class="HelloResource">
-        <property name="sampleService" ref="sampleService" />
-    </bean>
+@Path('/test')
+class TestResource {
 
-</beans>
+    def testService // injected
+    
+    @GET
+    @Produces('text/plain')
+    String getTestRepresentation(@QueryParam('name') String name) {
+        testService.greet(name)
+    }
+    
+}
 }}}
 
 =Scaffolding=
