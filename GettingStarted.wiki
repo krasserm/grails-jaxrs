@@ -94,7 +94,7 @@ class TestResource {
 }
 }}}
 
-When you save the changes the plugin re-initializes the JAX-RS runtime (see also console output). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window.
+When you save the changes the plugin re-initializes the JAX-RS runtime (see also console output). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window. If you additionally want to factor out the greeting logic into a Grails service, refer to the [AdvancedFeatures#Service_injection service injection] section for instructions.
 
 =Scaffolding=
 
