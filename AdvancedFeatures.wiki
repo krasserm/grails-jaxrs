@@ -210,7 +210,7 @@ The {{{id}}} property is set during construction of the resource and is used for
 
 =Using GORM=
 
-*Hint*: the example described in this section can be implemented much easier using [GettingStarted#Scaffolding Scaffolding]. Most of the code presented here can be generated since version 0.2 of grails-jaxrs. The following example nevertheless provides useful information how to implement simple RESTful service interfaces by hand (i.e. without code generation).
+*Hint*: the example described in this section can be implemented much easier using [#Scaffolding Scaffolding]. Most of the code presented here can be generated since version 0.2 of grails-jaxrs. The following example nevertheless provides useful information how to implement simple RESTful service interfaces by hand (i.e. without code generation).
 
 Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
 
