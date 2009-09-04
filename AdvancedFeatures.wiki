@@ -72,6 +72,8 @@ class TestFilters {
 
 =Service injection=
 
+*TODO*: update to version 0.2
+
 Services can be auto-injected into resource objects with the following annotations:
 
   * by name with {{{javax.annotation.Resource}}}
