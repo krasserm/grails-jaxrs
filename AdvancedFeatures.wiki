@@ -410,6 +410,8 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly in the response object:
 
 {{{
+...
+
 class NoteResource {
 
     Note note
