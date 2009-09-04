@@ -94,7 +94,7 @@ class TestResource {
 }
 }}}
 
-When you save the changes the plugin re-initializes the JAX-RS runtime (some output is written to the console). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window.
+When you save the changes the plugin re-initializes the JAX-RS runtime (see also console output). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window.
 
 =Scaffolding=
 
