@@ -47,12 +47,10 @@ public abstract class MessageBodyReaderSupport<T> implements MessageBodyReader<T
      * Returns <code>true</code> if <code>type</code> argument is identical to
      * this class type parameter.  
      */
-    @Override
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return declaredReadingType == type;
     }
 
-    @Override
     public T readFrom(Class<T> type, Type genericType,
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap<String, String> httpHeaders, InputStream entityStream)

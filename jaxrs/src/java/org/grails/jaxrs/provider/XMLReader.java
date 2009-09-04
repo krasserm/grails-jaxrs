@@ -62,7 +62,6 @@ public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsAp
 
     private GrailsApplication grailsApplication;
     
-    @Override
     public void setGrailsApplication(GrailsApplication grailsApplication) {
         this.grailsApplication = grailsApplication;
     }

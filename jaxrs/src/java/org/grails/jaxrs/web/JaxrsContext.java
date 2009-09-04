@@ -143,7 +143,6 @@ public class JaxrsContext {
     
     private class JaxrsServiceImpl implements JaxrsService {
 
-        @Override
         public void process(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
             jaxrsServlet.service(request, response);
