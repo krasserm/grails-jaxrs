@@ -375,23 +375,19 @@ Entity providers supply mapping services between representations and their assoc
   * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
   * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
 
-These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses implement a {{{NoteWriter}}} provider class like to following:
+These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like to following:
 
 {{{
 import groovy.xml.MarkupBuilder
 
 import java.io.OutputStreamWriter
+
 import javax.ws.rs.Produces
+import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.Provider
 
-import javax.ws.rs.core.MultivaluedMap
-
 import org.grails.jaxrs.support.MessageBodyWriterSupport
-import org.grails.jaxrs.test.domain.Foo
 
-import org.springframework.stereotype.Component
-
-@Component
 @Provider
 @Produces('text/xml')
 class NoteWriter extends MessageBodyWriterSupport<Note> {
@@ -409,10 +405,9 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-Having such a provider in place, resource methods can return a {{{Note}}} object directly:
+When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly:
 
 {{{
-@Component
 @Path('/notes')
 class NotesResource {
 
