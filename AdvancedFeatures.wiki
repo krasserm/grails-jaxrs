@@ -405,18 +405,24 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly:
+When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly in the response object:
 
 {{{
-@Path('/notes')
-class NotesResource {
+class NoteResource {
 
-     // ... other methods omitted
+    Note note
 
-     @Path('/{id}')
-     Note getNote(@PathParam('id') String id) {
-         Note.get(id)
-     }
+    @GET
+    @Produces('text/xml')
+    Response getNote() {
+        if (note) {
+            // custom XML rendering done by provider (NoteWriter)
+            Response.ok(note).build()
+            //Response.ok(note as XML).build()
+        } else {
+            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
+        } 
+    }
      
 }
 }}}
