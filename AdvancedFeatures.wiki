@@ -218,7 +218,7 @@ Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%2
 
   * GETing from {{{http://localhost:8080/hello/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{text/xml}}}.
 
-  * GETing from {{{http://localhost:8080/hello/notes/{id}}}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
+  * GETing from {{{http://localhost:8080/hello/notes/{id} }}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
 
 The first step is to create the {{{Note}}} domain object. This can be either done via {{{grails create-domain-class note}}} from the command line or manually by adding a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
 
