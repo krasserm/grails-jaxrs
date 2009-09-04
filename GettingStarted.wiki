@@ -73,7 +73,28 @@ on the comamnd line. Then open a browser window and go to {{{http://localhost:80
 
 ==Change the code==
 
-The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that, open the {{{TestResource.groovy}}} file and change the return value of {{{getTestRepresentation()}}} to e.g. {{{Hello world}}}. Then, refresh the browser window and you should now see {{{Hello world}}}.
+The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that we let add a {{{name}}} parameter to the {{{getTestRepresentation}}} method and bind it to a {{{name}}} query parameter using the JAX-RS {{{@QueryParam}}} annotation. The created response will vary depending on the {{{name}}} query parameter. Here's the modified source code.
+
+{{{
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
+import javax.ws.rs.QueryParam
+
+
+@Path('/test')
+class TestResource {
+
+    @GET
+    @Produces('text/plain')
+    String getTestRepresentation(@QueryParam('name') String name) {
+        "Hello ${name ? name : 'unknown'}"
+    }
+    
+}
+}}}
+
+When you save the changes the plugin re-initializes the JAX-RS runtime (some output is written to the console). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window.
 
 =Scaffolding=
 
