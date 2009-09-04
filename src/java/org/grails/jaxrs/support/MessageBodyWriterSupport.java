@@ -46,7 +46,6 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
     /**
      * Always returns <code>-1</code>.
      */
-    @Override
     public long getSize(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return -1;
     }
@@ -55,12 +54,10 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
      * Returns <code>true</code> if <code>type</code> argument is identical to
      * this class type parameter.  
      */
-    @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return declaredWritingType == type;
     }
 
-    @Override
     public void writeTo(T t, Class<?> type, Type genericType,
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap<String, Object> httpHeaders,

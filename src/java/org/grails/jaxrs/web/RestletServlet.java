@@ -101,7 +101,6 @@ public class RestletServlet extends ServerServlet {
             this.applicationContext = getRequiredWebApplicationContext(servletContext);
         }
 
-        @Override
         @SuppressWarnings("unchecked")
         public <T> T getInstance(Class<T> jaxRsClass) throws InstantiateException {
             // TODO: make this implementation more robust (plus improved performance)
