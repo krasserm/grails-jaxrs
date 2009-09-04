@@ -304,7 +304,7 @@ Content-Type: text/xml
 </note>
 }}}
 
-==Service injection==
+=Service injection=
 
 Services can be auto-injected into resource objects with the following annotations:
 
