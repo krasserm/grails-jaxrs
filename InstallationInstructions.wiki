@@ -59,3 +59,7 @@ grails install-plugin /path/to/grails-jaxrs-<version>.zip
 }}} 
 
 where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file.
+
+=Upgrade notes=
+
+...
