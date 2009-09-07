@@ -370,7 +370,7 @@ Entity providers supply mapping services between representations and their assoc
   * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
   * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
 
-These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like to following:
+These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like following:
 
 {{{
 import groovy.xml.MarkupBuilder
