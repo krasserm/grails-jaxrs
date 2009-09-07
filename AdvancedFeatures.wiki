@@ -457,4 +457,3 @@ google.appengine.application="<application-name>"
   # Enter the URL {{{http://localhost:8080/test?name=Martin}}} into your browser and the browser window should display {{{Hello Martin}}}.
   # Package the plugin with {{{grails app-engine package}}}
   # ... (not finished yet).
-  # Deploy the applic
