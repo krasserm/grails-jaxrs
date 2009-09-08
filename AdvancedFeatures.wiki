@@ -448,11 +448,17 @@ This section describes how to get the [GettingStarted#Hello_world hello world] e
 {{{
 org.grails.jaxrs.url.mappings=['/test']
 org.grails.jaxrs.provider.name='restlet'
-# replace <application-name> with actual App Engine application name
+# replace <application-name> with the 
+# actual App Engine application name
 google.appengine.application="<application-name>" 
 }}}
 
-  # Set the application version to 1 with {{{grails set-version 1}}}
+  # Set the application version to 1 with 
+
+{{{
+grails set-version 1
+}}}
+
   # Run the application locally with {{{grails app-engine run}}}
   # Enter the URL {{{http://localhost:8080/test?name=Martin}}} into your browser and the browser window should display {{{Hello Martin}}}.
   # Package the plugin with {{{grails app-engine package}}}
