@@ -452,13 +452,10 @@ org.grails.jaxrs.provider.name='restlet'
 # actual App Engine application name
 google.appengine.application="<application-name>" 
 }}}
-
   * Set the application version to 1 with 
-
 {{{
 grails set-version 1
 }}}
-
   * Run the application locally with {{{grails app-engine run}}}
   * Enter the URL {{{http://localhost:8080/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}.
   * Package the plugin with {{{grails app-engine package}}}
