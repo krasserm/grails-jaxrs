@@ -462,12 +462,12 @@ grails set-version 1
   * Run the application locally with {{{grails app-engine run}}}
   * Enter the URL {{{http://localhost:8080/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}.
   * Package the plugin with {{{grails app-engine package}}}
-  * Deploy the application with the {{{appcfg}}} command-line tool from your [App Engine SDK]. 
-  ** On Linux, enter 
+  * Deploy the application with the {{{appcfg}}} command-line tool from your [http://code.google.com/appengine/downloads.html App Engine SDK]. 
+    * On Linux, enter 
 {{{
 ...
 }}}
-  ** On Windows, enter 
+    * On Windows, enter 
 {{{
 ...
 }}}
