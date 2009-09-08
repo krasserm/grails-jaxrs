@@ -441,9 +441,9 @@ Content-Type: text/xml
 
 This section describes how to get the [GettingStarted#Hello_world hello world] example running on Google App Engine.
 
-  # Install the [http://grails.org/plugin/app-engine Grails AppEngine plugin]
-  # Create a Grails application and JAX-RS resource as described in the [GettingStarted#Hello_world hello world] example
-  # Add the following entries to {{{grails-app/conf/Config.groovy}}}
+  * Install the [http://grails.org/plugin/app-engine Grails AppEngine plugin]
+  * Create a Grails application and JAX-RS resource as described in the [GettingStarted#Hello_world hello world] example
+  * Add the following entries to {{{grails-app/conf/Config.groovy}}}
 
 {{{
 org.grails.jaxrs.url.mappings=['/test']
@@ -453,13 +453,21 @@ org.grails.jaxrs.provider.name='restlet'
 google.appengine.application="<application-name>" 
 }}}
 
-  # Set the application version to 1 with 
+  * Set the application version to 1 with 
 
 {{{
 grails set-version 1
 }}}
 
-  # Run the application locally with {{{grails app-engine run}}}
-  # Enter the URL {{{http://localhost:8080/test?name=Martin}}} into your browser and the browser window should display {{{Hello Martin}}}.
-  # Package the plugin with {{{grails app-engine package}}}
-  # ... (not finished yet).
+  * Run the application locally with {{{grails app-engine run}}}
+  * Enter the URL {{{http://localhost:8080/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}.
+  * Package the plugin with {{{grails app-engine package}}}
+  * Deploy the application with the {{{appcfg}}} command-line tool from your [App Engine SDK]. 
+  ** On Linux, enter 
+{{{
+...
+}}}
+  ** On Windows, enter 
+{{{
+...
+}}}
