@@ -21,8 +21,8 @@ This ensures that only requests with a URL path matching {{{/test/...}}} and {{{
 
   * {{{"/test"(controller:"jaxrs")}}}
   * {{{"/test/**"(controller:"jaxrs")}}}
-  * {{{"/notes"(controller:"jaxrs")}}}
-  * {{{"/notes/**"(controller:"jaxrs")}}}
+  * {{{"/person"(controller:"jaxrs")}}}
+  * {{{"/person/**"(controller:"jaxrs")}}}
 
 ==JAX-RS implementation==
 
