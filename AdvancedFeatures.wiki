@@ -439,12 +439,11 @@ Content-Type: text/xml
 
 =Google App Engine=
 
-This section describes how to get the [GettingStarted#Hello_world hello world] example running on Google App Engine.
+This section describes how to get the [GettingStarted#Hello_world hello world] example running on Google App Engine. 
 
-  * Install the [http://grails.org/plugin/app-engine Grails AppEngine plugin]
-  * Create a Grails application and JAX-RS resource as described in the [GettingStarted#Hello_world hello world] example
+  * Install the [http://grails.org/plugin/app-engine Grails AppEngine plugin].
+  * Create a Grails application and JAX-RS resource as described in the [GettingStarted#Hello_world hello world] example.
   * Add the following entries to {{{grails-app/conf/Config.groovy}}}
-
 {{{
 org.grails.jaxrs.url.mappings=['/test']
 org.grails.jaxrs.provider.name='restlet'
@@ -452,19 +451,24 @@ org.grails.jaxrs.provider.name='restlet'
 # actual App Engine application name
 google.appengine.application="<application-name>" 
 }}}
+  * Open a shell at the root directory of the hello world application.
   * Set the application version to 1 with 
 {{{
 grails set-version 1
 }}}
-  * Run the application locally with {{{grails app-engine run}}}
+  * Run the application locally with {{{grails app-engine run}}}.
   * Enter the URL {{{http://localhost:8080/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}.
-  * Package the plugin with {{{grails app-engine package}}}
+  * Package the plugin with {{{grails app-engine package}}}.
   * Deploy the application with the {{{appcfg}}} command-line tool from your [http://code.google.com/appengine/downloads.html App Engine SDK]. 
     * On Linux, enter 
 {{{
-...
+$APPENGINE_HOME/bin/appcfg.sh update ./target/war
 }}}
     * On Windows, enter 
 {{{
-...
+%APPENGINE_HOME%\bin\appcfg.cmd update .\target\war
 }}}
+  * When prompted enter email and password to authenticate at Google App Engine.
+  * Once deployment is done go enter the URL {{{http://<application-name>.appspot.com/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}. It may take 10-20 seconds for Google App Engine to initialize the Grails application the first time. Subsequent requests are served much faster.
+
+Deployments of applications that use GORM have not been tested yet but should be possible with the Grails {{{gorm-jpa}}} plugin. In order to use the plugin make sure that you choose JPA for persistence when installing the Grails {{{app-engine}}} plugin. Initial tests on Windows resulted in classpath issues after installation of the {{{gorm-jpa}}} plugin. I'll post a message to the [http://groups.google.com/group/grails-jaxrs grails-jaxrs] group as soon as there are updates.
