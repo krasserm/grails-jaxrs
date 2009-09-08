@@ -1,4 +1,5 @@
 #summary Advanced features of the JSR 311 plugin for Grails.
+#labels Featured
 
 <wiki:toc/>
 
