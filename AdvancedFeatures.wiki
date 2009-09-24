@@ -448,9 +448,9 @@ This section describes how to get the [GettingStarted#Hello_world hello world] e
 {{{
 org.grails.jaxrs.url.mappings=['/test']
 org.grails.jaxrs.provider.name='restlet'
-# replace <application-name> with the 
-# actual App Engine application name
-google.appengine.application="<application-name>" 
+// replace <application-name> with the 
+// actual App Engine application name
+google.appengine.application='<application-name>'
 }}}
   * Open a shell at the root directory of the hello world application.
   * Set the application version to 1 with 
