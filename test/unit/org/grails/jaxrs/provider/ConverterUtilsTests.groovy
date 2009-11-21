@@ -1,4 +1,4 @@
-import java.io.ByteArrayInputStream/*
+package org.grails.jaxrs.providerimport java.io.ByteArrayInputStream/*
  * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");

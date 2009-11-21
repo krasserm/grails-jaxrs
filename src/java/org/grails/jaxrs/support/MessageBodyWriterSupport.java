@@ -56,6 +56,13 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
      */
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return declaredWritingType == type;
+        
+        //
+        // EXPERIMENTAL: see http://code.google.com/p/grails-jaxrs/issues/detail?id=6
+        //
+        //return 
+        //    declaredWritingType.equals(type) ||
+        //    declaredWritingType.equals(genericType);
     }
 
     public void writeTo(T t, Class<?> type, Type genericType,

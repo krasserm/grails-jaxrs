@@ -133,8 +133,10 @@ public class JaxrsContext {
     }
     
     void destroy() {
-        jaxrsServlet.destroy();
-        jaxrsServlet = null;
+        if (jaxrsServlet != null) {
+            jaxrsServlet.destroy();
+            jaxrsServlet = null;
+        }
     }
     
     void setJaxrsServletContext(ServletContext jaxrsServletContext) {

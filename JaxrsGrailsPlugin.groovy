@@ -9,7 +9,7 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;import org.co
     def pluginExcludes = [
             "grails-app/domain/*",            "grails-app/providers/*",            "grails-app/resources/*",            "grails-app/views/error.gsp",            "lib/*-sources.jar"
     ]        def loadAfter = ['controllers','services']    def artefacts = [            new ResourceArtefactHandler(),            new ProviderArtefactHandler()    ]
-    def watchedResources = [            "file:./grails-app/resources/**/*Resource.groovy",            "file:./plugins/*/grails-app/resources/**/*Resource.groovy",            "file:./grails-app/providers/**/*Reader.groovy",            "file:./grails-app/providers/**/*Writer.groovy",            "file:./plugins/*/grails-app/providers/**/*Reader.groovy",            "file:./plugins/*/grails-app/providers/**/*Writer.groovy"    ]
+    def watchedResources = [            "file:./grails-app/resources/**/*Resource.groovy",            "file:./grails-app/providers/**/*Reader.groovy",            "file:./grails-app/providers/**/*Writer.groovy",            "file:./plugins/*/grails-app/resources/**/*Resource.groovy",            "file:./plugins/*/grails-app/providers/**/*Reader.groovy",            "file:./plugins/*/grails-app/providers/**/*Writer.groovy"    ]
     def author = "Martin Krasser"
     def authorEmail = "krasserm@googlemail.com"
     def title = "JSR 311 plugin"

@@ -15,13 +15,18 @@
  */
 package org.grails.jaxrs;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+import org.grails.jaxrs.JaxrsClasses;
 
 /**
  * @author Martin Krasser
  */
 public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
 
+    private static final Log LOG = LogFactory.getLog(ResourceArtefactHandler.class);
+    
     public static final String TYPE = "Resource";
     
     public ResourceArtefactHandler() {
@@ -33,10 +38,11 @@ public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
         if (clazz == null) {
             return false;
         }
-
-        // TODO: implement according to JSR 311 specification
-        
-        return clazz.getName().endsWith(TYPE);
+        boolean match = JaxrsClasses.isJaxrsResource(clazz);
+        if (match) {
+            LOG.info("Detected JAX-RS resource: " + clazz.getName());
+        }
+        return match;
     }
 
 }
