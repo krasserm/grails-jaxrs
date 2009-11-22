@@ -31,10 +31,44 @@ import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigu
 import org.grails.jaxrs.support.MessageBodyWriterSupport;
 
 /**
+ * Provider for Grails' {@link JSON} converter class.
+ * 
+ * Message body writer that supports {@link JSON} response entities. For
+ * example, to create a JSON representation from a list of Grails domain
+ * objects:
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * &#064;Produces('text/x-json') // or 'application/json'
+ * class NotesResource {
+ * 
+ *      &#064;GET
+ *      XML findNotes() {
+ *          Note.findAll() as JSON
+ *      }
+ *      
+ * }
+ * </pre>
+ * 
+ * Alternatively, one could write
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * &#064;Produces('text/x-json') // or 'application/json'
+ * class NotesResource {
+ * 
+ *      &#064;GET
+ *      Response findNotes() {
+ *          Response.ok(Note.findAll() as JSON).build()
+ *      }
+ *      
+ * }
+ * </pre>
+ * 
  * @author Martin Krasser
  */
 @Provider
-@Produces({"text/json", "application/json"})
+@Produces({"text/x-json", "application/json"})
 public class JSONWriter extends MessageBodyWriterSupport<JSON> {
 
     public static final String DEFAULT_CHARSET = "UTF-8";

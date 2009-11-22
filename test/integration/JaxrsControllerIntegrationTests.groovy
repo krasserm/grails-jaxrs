@@ -16,10 +16,13 @@
 
 import groovy.util.GroovyTestCase
 
+import org.grails.jaxrs.provider.JSONWriter
+import org.grails.jaxrs.provider.JSONReader
 import org.grails.jaxrs.test.integration.CustomRequestEntityReader
 import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
-import org.grails.jaxrs.test.integration.TestResource02
 import org.grails.jaxrs.test.integration.TestResource01
+import org.grails.jaxrs.test.integration.TestResource02
+import org.grails.jaxrs.test.integration.TestResource03
 import org.grails.jaxrs.web.JaxrsUtils
 
 /**
@@ -30,8 +33,10 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
     static List jaxrsClasses = [
                TestResource01.class, 
                TestResource02.class, 
+               TestResource03.class, 
                CustomRequestEntityReader.class, 
-               CustomResponseEntityWriter.class
+               CustomResponseEntityWriter.class,
+               JSONReader.class,               JSONWriter.class
     ]
      
     protected void testGetTest01(def controller) {
@@ -53,6 +58,19 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertEquals(200, controller.response.status)
         assertEquals('response:hello', controller.response.contentAsString)
         assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
+    }
+    
+    protected void testPostTest03(def controller) {
+        controller.request.method = 'POST'
+        controller.request.content = '{"class":"TestPerson","age":38,"name":"mike"}'.bytes
+        controller.request.addHeader('Content-Type', 'application/json')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/03')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        println controller.response.contentAsString
+        assertTrue(controller.response.contentAsString.contains('"age":39'))
+        assertTrue(controller.response.contentAsString.contains('"name":"ekim"'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
     }
     
 }

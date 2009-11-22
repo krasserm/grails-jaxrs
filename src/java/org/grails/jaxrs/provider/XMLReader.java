@@ -34,8 +34,9 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
 /**
  * A message body reader that converts an XML entity stream to a map than can be
  * used to construct Grails domain objects. Any JAX-RS resource method that
- * defines a {@link Map} as parameter will be passed a map created from an
- * XML request entity:
+ * defines a {@link Map} as parameter and consumes either <code>text/xml</code>
+ * or <code>application/xml</code> will be passed a map created from an XML
+ * request entity:
  * 
  * 
  * <pre>
@@ -44,6 +45,7 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
  * class NotesResource {
  * 
  *      &#064;POST
+ *      &#064;Consumes('text/xml')
  *      Response addNote(Map properties) {
  *          // create ne Note domain object
  *          def note = new Note(properties).save()
@@ -57,7 +59,7 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
  * @author Martin Krasser
  */
 @Provider
-@Consumes("text/xml")
+@Consumes({"text/xml", "application/xml"})
 public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsApplicationAware {
 
     private GrailsApplication grailsApplication;

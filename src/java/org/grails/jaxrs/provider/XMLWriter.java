@@ -38,7 +38,7 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
  * 
  * <pre>
  * &#064;Path('/notes')
- * &#064;Produces('text/xml')
+ * &#064;Produces('text/xml') // or 'application/xml'
  * class NotesResource {
  * 
  *      &#064;GET
@@ -53,7 +53,7 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
  * 
  * <pre>
  * &#064;Path('/notes')
- * &#064;Produces('text/xml')
+ * &#064;Produces('text/xml') // or 'application/xml'
  * class NotesResource {
  * 
  *      &#064;GET

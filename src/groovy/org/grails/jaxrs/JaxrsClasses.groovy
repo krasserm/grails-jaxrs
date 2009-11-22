@@ -16,6 +16,9 @@
 package org.grails.jaxrs
 
 /**
+ * Provides condition methods to determine whether a given class is a valid
+ * JAX-RS class.
+ * 
  * @author Martin Krasser
  */
 class JaxrsClasses {
@@ -25,6 +28,15 @@ class JaxrsClasses {
     static def jaxrsMethodCondition     = {method     -> method.declaredAnnotations.any jaxrsAnnotationCondition}
     static def jaxrsMethodsCondition    = {clazz      -> clazz.declaredMethods.any jaxrsMethodCondition}
 
+    /**
+     * Returns <code>true</code> if the given class is a valid JAX-RS class,
+     * <code>false</code> otherwise. A class in considered a JAX-RS class if
+     * there is either a JAX-RS annotation present on class-level or on 
+     * method-level.
+     * 
+     * @param clazz class to be checked.
+     * @return 
+     */
     static boolean isJaxrsResource(Class clazz) {
         jaxrsClassCondition(clazz) || jaxrsMethodsCondition(clazz)
     }

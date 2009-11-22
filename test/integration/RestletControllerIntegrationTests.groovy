@@ -41,4 +41,8 @@ public class RestletControllerIntegrationTests extends JaxrsControllerIntegratio
         testPostTest02(controller)
     }
     
+    void testPostTest03() {
+        testPostTest03(controller)
+    }
+    
 }

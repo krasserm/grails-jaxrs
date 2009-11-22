@@ -41,4 +41,8 @@ public class JerseyControllerIntegrationTests extends JaxrsControllerIntegration
         testPostTest02(controller)
     }
     
+    void testPostTest03() {
+        testPostTest03(controller)
+    }
+    
 }
