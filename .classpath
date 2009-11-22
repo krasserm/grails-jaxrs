@@ -83,7 +83,7 @@
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-scripts-1.1.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-spring-1.1.1.jar" sourcepath="/GRAILS_SOURCE/src/commons"/>
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-test-1.1.1.jar"/>
-	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-web-1.1.1.jar" sourcepath="/GRAILS_SOURCE/src/groovy"/>
+	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-web-1.1.1.jar" sourcepath="/GRAILS_SOURCE/src/web"/>
 	<classpathentry kind="var" path="GRAILS_HOME/dist/grails-webflow-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.restlet.lib.org.json-2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsr311-api-1.1.jar" sourcepath="lib/jsr311-api-1.1-sources.jar"/>
