@@ -39,11 +39,4 @@ public class TestResource03 {
         return person as JSON
     }
     
-//    @POST
-//    @Consumes('text/plain')
-//    @Produces('text/plain')
-//    String testPerson(String s) {
-//        s + 'x'
-//    }
-    
 }
