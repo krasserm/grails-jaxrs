@@ -67,7 +67,7 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
  * @author Martin Krasser
  */
 @Provider
-@Produces("text/xml")
+@Produces({"text/xml", "application/xml"})
 public class XMLWriter extends MessageBodyWriterSupport<XML> {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
