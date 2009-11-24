@@ -23,29 +23,34 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider
 
+import grails.converters.JSON
+
 import org.codehaus.groovy.grails.commons.GrailsApplication;
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
 
 /**
- * Very experimental provider to convert from XML streams to Grails domain 
- * objects. 
+ * Provider to convert from XML or JSON streams to Grails domain objects. 
  * 
  * @author Martin Krasser
  */
 @Provider
+@Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication
     
     boolean isReadable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
-        grailsApplication.isDomainClass(type);
+        grailsApplication.isDomainClass(type) && (
+                ProviderUtils.xmlType(mediaType) || 
+                ProviderUtils.jsonType(mediaType))
     }
 
     Object readFrom(Class type, Type genericType,
@@ -56,8 +61,14 @@ class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplication
         // TODO: obtain encoding from HTTP header and/or XML document
         String encoding = getDefaultEncoding(grailsApplication);
 
-        // Construct domain object from xml map obtained from entity stream
-        type.metaClass.invokeConstructor(xmlToMap(entityStream, encoding))
+        if (ProviderUtils.xmlType(mediaType)) {
+            // Construct domain object from xml map obtained from entity stream
+            return type.metaClass.invokeConstructor(xmlToMap(entityStream, encoding))
+        } else { // JSON
+            // Construct domain object from json map obtained from entity stream
+            return type.metaClass.invokeConstructor(JSON.parse(entityStream, encoding))
+        }
+        
     }
 
 }
