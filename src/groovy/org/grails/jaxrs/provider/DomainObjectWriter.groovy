@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.io.OutputStreamWriter
+import java.io.OutputStreamWriterimport javax.ws.rs.Producesimport grails.converters.JSON
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -38,6 +38,7 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * @author Martin Krasser
  */
 @Provider
+@Produces(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication;
@@ -49,17 +50,33 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
 
     boolean isWriteable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
-        grailsApplication.isDomainClass(type)
+        grailsApplication.isDomainClass(type) && (xmlType(mediaType) || jsonType(mediaType))
     }
 
     void writeTo(Object t, Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, OutputStream entityStream) 
             throws IOException, WebApplicationException {
-        def xml = new XML(t)
-        def out = new OutputStreamWriter(entityStream)
-        xml.render(out)
-        out.flush()
+        def writer = new OutputStreamWriter(entityStream)
+        def converter = null
+        if (xmlType(mediaType)) {
+            converter = new XML(t)
+            converter.render(writer)
+            writer.flush()
+        } else {
+            converter = new JSON(t)
+            converter.render(writer)
+        }
+    }
+ 
+    private static def xmlType = { mediaType ->
+        mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE) ||
+        mediaType.isCompatible(MediaType.TEXT_XML_TYPE)
     }
     
+    private static def jsonType = { mediaType ->
+        mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE) ||
+        mediaType.isCompatible(new MediaType('text', 'x-json'))
+    }
+
 }
