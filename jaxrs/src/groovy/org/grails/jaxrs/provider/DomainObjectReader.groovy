@@ -15,25 +15,26 @@
  */
 package org.grails.jaxrs.provider
 
-import static org.grails.jaxrs.provider.ConverterUtils.getDefaultEncoding;
-import static org.grails.jaxrs.provider.ConverterUtils.xmlToMap;
+import static org.grails.jaxrs.provider.ConverterUtils.getDefaultEncoding
+import static org.grails.jaxrs.provider.ConverterUtils.xmlToMap
+import static org.grails.jaxrs.provider.ProviderUtils.*
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import java.io.IOException
+import java.io.InputStream
+import java.lang.annotation.Annotation
+import java.lang.reflect.Type
 
 import javax.ws.rs.Consumes
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.WebApplicationException
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.MultivaluedMap
+import javax.ws.rs.ext.MessageBodyReader
 import javax.ws.rs.ext.Provider
 
 import grails.converters.JSON
 
-import org.codehaus.groovy.grails.commons.GrailsApplication;
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
 /**
  * Provider to convert from XML or JSON streams to Grails domain objects. 
@@ -48,9 +49,14 @@ class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplication
     
     boolean isReadable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
+        
+        // TODO: include check whether to
+        // - handle domain objects at all
+        // (use grailsApplication to obtain config)
+        
         grailsApplication.isDomainClass(type) && (
-                ProviderUtils.xmlType(mediaType) || 
-                ProviderUtils.jsonType(mediaType))
+                isXmlType(mediaType) || 
+                isJsonType(mediaType))
     }
 
     Object readFrom(Class type, Type genericType,
@@ -61,7 +67,7 @@ class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplication
         // TODO: obtain encoding from HTTP header and/or XML document
         String encoding = getDefaultEncoding(grailsApplication);
 
-        if (ProviderUtils.xmlType(mediaType)) {
+        if (isXmlType(mediaType)) {
             // Construct domain object from xml map obtained from entity stream
             return type.metaClass.invokeConstructor(xmlToMap(entityStream, encoding))
         } else { // JSON
