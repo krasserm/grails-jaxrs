@@ -21,12 +21,18 @@ import javax.ws.rs.core.MediaType
  */
 class ProviderUtils {
 
-     static def xmlType = { mediaType ->
+     /**
+      * Checks <code>mediaType</code> for XML compatibility
+      */
+     static boolean isXmlType(MediaType mediaType) {
          mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE) ||
          mediaType.isCompatible(MediaType.TEXT_XML_TYPE)
      }
      
-     static def jsonType = { mediaType ->
+     /**
+      * Checks <code>mediaType</code> for JSON compatibility
+      */
+     static boolean isJsonType(MediaType mediaType) {
          mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE) ||
          mediaType.isCompatible(new MediaType('text', 'x-json'))
      }

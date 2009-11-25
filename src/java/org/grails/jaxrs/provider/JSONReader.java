@@ -69,16 +69,6 @@ public class JSONReader extends MessageBodyReaderSupport<Map> implements GrailsA
         this.grailsApplication = grailsApplication;
     }
 
-    /**
-     * Creates a map from an XML request entity stream.
-     * 
-     * @param httpHeaders
-     *            HTTP headers.
-     * @param entityStream
-     *            XML request entity stream.
-     * @return a map representation of the XML request entity stream.
-     * @see ConverterUtils#xmlToMap(InputStream, String)
-     */
     @Override
     public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream) 
         throws IOException, WebApplicationException {
