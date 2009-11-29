@@ -26,23 +26,10 @@ public class RestletControllerIntegrationTests extends JaxrsControllerIntegratio
     static environment = new IntegrationTestEnvironment('context-integration.xml', 'restlet', jaxrsClasses) 
     static transactional = false
      
-    def controller
-     
     void setUp() {
+        super.setUp()
         controller = new JaxrsController()
         controller.jaxrsContext = environment.jaxrsContext 
     }
      
-    void testGetTest01() {
-        testGetTest01(controller)
-    }
-    
-    void testPostTest02() {
-        testPostTest02(controller)
-    }
-    
-    void testPostTest03() {
-        testPostTest03(controller)
-    }
-    
 }

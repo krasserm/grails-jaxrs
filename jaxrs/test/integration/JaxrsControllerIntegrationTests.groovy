@@ -16,6 +16,10 @@
 
 import groovy.util.GroovyTestCase
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
+import org.grails.jaxrs.provider.DomainObjectReader
+import org.grails.jaxrs.provider.DomainObjectWriter
 import org.grails.jaxrs.provider.JSONWriter
 import org.grails.jaxrs.provider.JSONReader
 import org.grails.jaxrs.test.integration.CustomRequestEntityReader
@@ -23,6 +27,7 @@ import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
 import org.grails.jaxrs.test.integration.TestResource01
 import org.grails.jaxrs.test.integration.TestResource02
 import org.grails.jaxrs.test.integration.TestResource03
+import org.grails.jaxrs.test.integration.TestResource04
 import org.grails.jaxrs.web.JaxrsUtils
 
 /**
@@ -31,15 +36,24 @@ import org.grails.jaxrs.web.JaxrsUtils
 abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
 
     static List jaxrsClasses = [
-               TestResource01.class, 
-               TestResource02.class, 
-               TestResource03.class, 
-               CustomRequestEntityReader.class, 
-               CustomResponseEntityWriter.class,
-               JSONReader.class,               JSONWriter.class
+           TestResource01.class, 
+           TestResource02.class, 
+           TestResource03.class, 
+           TestResource04.class, 
+           CustomRequestEntityReader.class, 
+           CustomResponseEntityWriter.class,
+           JSONReader.class,           JSONWriter.class,
+           DomainObjectReader.class,
+           DomainObjectWriter.class
     ]
-     
-    protected void testGetTest01(def controller) {
+
+    def controller
+    
+    void setUp() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = false
+    }
+    
+    void testGet01() {
         controller.request.method = 'GET'
         controller.request.content = ''.bytes
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/01')
@@ -49,7 +63,7 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
     }
 
-    protected void testPostTest02(def controller) {
+    void testPost02() {
         controller.request.method = 'POST'
         controller.request.content = 'hello'.bytes
         controller.request.addHeader('Content-Type', 'text/plain')
@@ -60,16 +74,116 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
     }
     
-    protected void testPostTest03(def controller) {
+    void testPost03() {
         controller.request.method = 'POST'
         controller.request.content = '{"class":"TestPerson","age":38,"name":"mike"}'.bytes
         controller.request.addHeader('Content-Type', 'application/json')
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/03')
         controller.handle()
         assertEquals(200, controller.response.status)
-        println controller.response.contentAsString
         assertTrue(controller.response.contentAsString.contains('"age":39'))
         assertTrue(controller.response.contentAsString.contains('"name":"ekim"'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    void testRoundtrip04XmlSingle() {
+        controller.request.method = 'POST'
+        controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
+        controller.request.addHeader('Content-Type', 'application/xml')
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('<name>semaj</name>'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/xml'))
+    }
+    
+    void testRoundtrip04JsonSingle() {
+        controller.request.method = 'POST'
+        controller.request.content = '{"class":"TestPerson","age":25,"name":"james"}'.bytes
+        controller.request.addHeader('Content-Type', 'application/json')
+        controller.request.addHeader('Accept', 'application/json')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('"age":26'))
+        assertTrue(controller.response.contentAsString.contains('"name":"semaj"'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    void testGet04XmlCollectionGeneric() {
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/generic')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('<list>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n1</name>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n2</name>'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/xml'))
+    }
+    
+    void testGet04XmlCollectionGenericGenericOnly() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        testGet04XmlCollectionGeneric()
+    }
+    
+    void testGet04XmlCollectionRaw() {
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/raw')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('<list>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n1</name>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n2</name>'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/xml'))
+    }
+    
+    void testGet04XmlCollectionRawGenericOnly() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/raw')
+        controller.handle()
+        assertEquals(500, controller.response.status)
+    }
+    
+    void testGet04XmlCollectionObject() {
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/object')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('<list>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n1</name>'))
+        assertTrue(controller.response.contentAsString.contains('<name>n2</name>'))
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('application/xml'))
+    }
+    
+    void testGet04XmlCollectionObjectGenericOnly() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/object')
+        controller.handle()
+        assertEquals(500, controller.response.status)
+    }
+    
+    void testGet04JsonCollectionGeneric() {
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        controller.request.addHeader('Accept', 'application/json')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/multi/generic')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertTrue(controller.response.contentAsString.contains('"name":"n1"'))
+        assertTrue(controller.response.contentAsString.contains('"name":"n2"'))
         assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
     }
     

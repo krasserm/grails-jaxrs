@@ -49,14 +49,7 @@ class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplication
     
     boolean isReadable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
-        
-        // TODO: include check whether to
-        // - handle domain objects at all
-        // (use grailsApplication to obtain config)
-        
-        grailsApplication.isDomainClass(type) && (
-                isXmlType(mediaType) || 
-                isJsonType(mediaType))
+        return grailsApplication.isDomainClass(type) && (isXmlType(mediaType) || isJsonType(mediaType))
     }
 
     Object readFrom(Class type, Type genericType,

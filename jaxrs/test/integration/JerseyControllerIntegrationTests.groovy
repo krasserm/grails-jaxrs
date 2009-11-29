@@ -17,7 +17,7 @@
 import static JaxrsControllerIntegrationTests.jaxrsClasses
  
 import org.grails.jaxrs.web.IntegrationTestEnvironment
- 
+
 /**
  * @author Martin Krasser
  */
@@ -26,23 +26,10 @@ public class JerseyControllerIntegrationTests extends JaxrsControllerIntegration
     static environment = new IntegrationTestEnvironment('context-integration.xml', 'jersey', jaxrsClasses) 
     static transactional = false
     
-    def controller
-    
     void setUp() {
+        super.setUp()
         controller = new JaxrsController()
         controller.jaxrsContext = environment.jaxrsContext 
-    }
-    
-    void testGetTest01() {
-        testGetTest01(controller)
-    }
-    
-    void testPostTest02() {
-        testPostTest02(controller)
-    }
-    
-    void testPostTest03() {
-        testPostTest03(controller)
     }
     
 }

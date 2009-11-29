@@ -7,18 +7,28 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/context 
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <bean id="grailsApplication" class="org.codehaus.groovy.grails.commons.DefaultGrailsApplication" />
+    <bean id="grailsApplication" factory-method="getInstance"
+        class="org.grails.jaxrs.test.integration.TestGrailsApplication">
+    </bean>
+    
     <bean id="jaxrsContext" class="org.grails.jaxrs.web.JaxrsContext" />
 
     <bean class="org.grails.jaxrs.test.integration.TestResource01" />
     <bean class="org.grails.jaxrs.test.integration.TestResource02" />
     <bean class="org.grails.jaxrs.test.integration.TestResource03" />
+    <bean class="org.grails.jaxrs.test.integration.TestResource04" />
 
     <bean class="org.grails.jaxrs.test.integration.CustomResponseEntityWriter" />
     <bean class="org.grails.jaxrs.test.integration.CustomRequestEntityReader" />
     
     <bean class="org.grails.jaxrs.provider.JSONWriter" />
     <bean class="org.grails.jaxrs.provider.JSONReader">
+        <property name="grailsApplication" ref="grailsApplication" />
+    </bean>
+    <bean class="org.grails.jaxrs.provider.DomainObjectWriter">
+        <property name="grailsApplication" ref="grailsApplication" />
+    </bean>
+    <bean class="org.grails.jaxrs.provider.DomainObjectReader">
         <property name="grailsApplication" ref="grailsApplication" />
     </bean>
 
