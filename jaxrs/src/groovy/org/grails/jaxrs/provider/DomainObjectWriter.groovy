@@ -64,6 +64,10 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
     boolean isWriteable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
         
+        if (ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable) {
+            return false
+        }
+        
         boolean compatibleMediaType = isXmlType(mediaType) || isJsonType(mediaType)
         boolean requireGenericCollections =
             ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections

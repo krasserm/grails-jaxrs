@@ -33,6 +33,7 @@ import javax.ws.rs.ext.Provider
 
 import grails.converters.JSON
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
@@ -56,6 +57,10 @@ class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplication
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, InputStream entityStream)
             throws IOException, WebApplicationException {
+        
+        if (ConfigurationHolder.config.org.grails.jaxrs.doreader.disable) {
+            return false
+        }
         
         // TODO: obtain encoding from HTTP header and/or XML document
         String encoding = getDefaultEncoding(grailsApplication);
