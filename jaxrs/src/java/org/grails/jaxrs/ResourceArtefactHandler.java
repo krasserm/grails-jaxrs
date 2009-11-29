@@ -33,6 +33,13 @@ public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
         super(TYPE, GrailsResourceClass.class, DefaultGrailsResourceClass.class, TYPE);
     }
 
+    /**
+     * Returns <code>true</code> if the <code>clazz</code> contains at least one
+     * JAX-RS annotation on class-level or method-level.
+     * 
+     * @param clazz
+     * @return <code>true</code> if the class is a JAX-RS resource.
+     */
     @Override
     public boolean isArtefactClass(Class clazz) {
         if (clazz == null) {

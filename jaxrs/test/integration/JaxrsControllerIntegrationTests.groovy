@@ -189,7 +189,7 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
     }
     
-    void testGet04ReaderDisabled() {
+    void testPost04ReaderDisabled() {
         ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = true
         controller.request.method = 'POST'
         controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
@@ -207,7 +207,7 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         }
     }
     
-    void testGet04WriterDisabled() {
+    void testPost04WriterDisabled() {
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = true
         controller.request.method = 'POST'
         controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
@@ -216,6 +216,17 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
         controller.handle()
         assertEquals(500, controller.response.status)
+    }
+    
+    void testPost04DefaultResponse() {
+        controller.request.method = 'POST'
+        controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
+        controller.request.addHeader('Content-Type', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        println 'default: ' + controller.response.contentAsString
+        println 'content: ' + controller.response.getHeader('Content-Type')
     }
     
 }

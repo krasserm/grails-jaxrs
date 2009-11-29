@@ -42,7 +42,51 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder;
 
 /**
- * Provider to convert from Grails domain objects to XML or JSON streams.
+ * A message body writer that converts Grails domain objects to XML or JSON 
+ * entity streams. The expected response content type is specified by the
+ * <code>Accept</code> request header. Supported content types by this 
+ * provider are <code>text/xml</code>, <code>application/xml</code>, 
+ * <code>text/x-json</code> or <code>application/json</code>. Assuming 
+ * <code>Note</code> is a Grails domain class. This provider supports usage of 
+ * resource methods such as:
+ * 
+ * <pre>
+ * &#064;Path('/notes')
+ * class NotesResource {
+ * 
+ *      &#064;GET
+ *      &#064;Produces(['application/xml','application/json'])
+ *      Note getNote(...) {
+ *          Note note = ... // e.g. load a note object from database.
+ *          return note
+ *      }
+ *      
+ *      &#064;GET
+ *      &#064;Produces(['application/xml','application/json'])
+ *      Collection&lt;Note&gt; getNotes(...) {
+ *          def notes = ... // e.g. load list of note objects from database.
+ *          return notes
+ *      }
+ *      
+ *      &#064;GET
+ *      &#064;Produces(['application/xml','application/json'])
+ *      def getNotes(...) {
+ *          def notes = ... // e.g. load list of note objects from database.
+ *          return notes
+ *      }
+ *      
+ * }
+ * 
+ * 
+ * </pre>
+ * 
+ * This provider can be disabled by setting 
+ * <code>org.grails.jaxrs.dowriter.disable</code> to <code>true</code> in the 
+ * application config. If this provider should only support resource methods
+ * that declare a generic collection as response type, where the generic type
+ * must be a Grails domain class, then set
+ * <code>org.grails.jaxrs.dowriter.require.generic.collections</code> to
+ * <code>true</code> in the application config. 
  * 
  * @author Martin Krasser
  */
@@ -61,6 +105,12 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
         -1
     }
 
+    /**
+     * Returns <code>true</code> if <code>type</code> is a Grails domain class 
+     * or domain class collection and the <code>mediaType</code> is one of 
+     * <code>text/xml</code>, <code>application/xml</code>, 
+     * <code>text/x-json</code> or <code>application/json</code>.
+     */
     boolean isWriteable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
         
@@ -86,6 +136,10 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
         return false;
     }
 
+     /**
+      * Creates anXML or JSON response entity stream from a Grails domain 
+      * object.
+      */
     void writeTo(Object t, Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, OutputStream entityStream) 
