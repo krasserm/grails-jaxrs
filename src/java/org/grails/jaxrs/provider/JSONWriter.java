@@ -73,6 +73,18 @@ public class JSONWriter extends MessageBodyWriterSupport<JSON> {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
+    /**
+     * Renders the <code>json</code> object to the response's
+     * <code>entityStream</code> using the encoding set by the Grails
+     * application.
+     * 
+     * @param json
+     *            JSON object.
+     * @param httpHeaders
+     *            HTTP headers
+     * @param entityStream
+     *            JSON response entity stream.
+     */
     @Override
     protected void writeTo(JSON json, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) 
         throws IOException, WebApplicationException {

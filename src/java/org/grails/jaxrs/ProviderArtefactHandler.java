@@ -31,6 +31,13 @@ public class ProviderArtefactHandler extends ArtefactHandlerAdapter {
         super(TYPE, GrailsProviderClass.class, DefaultGrailsProviderClass.class, TYPE);
     }
 
+    /**
+     * Returns <code>true</code> if the <code>clazz</code> either implements
+     * {@link MessageBodyReader} or {@link MessageBodyWriter}.
+     * 
+     * @param clazz
+     * @return <code>true</code> if the class is a JAX-RS provider.
+     */
     @Override
     public boolean isArtefactClass(Class clazz) {
         if (clazz == null) {

@@ -22,7 +22,11 @@ import javax.ws.rs.core.MediaType
 class ProviderUtils {
 
      /**
-      * Checks <code>mediaType</code> for XML compatibility
+      * Checks <code>mediaType</code> for XML compatibility.
+      * 
+      * @param mediaType
+      * @return <code>true</code> if <code>mediaType</code> is compatible with
+      * either <code>text/xml</code> or <code>application/xml</code>.
       */
      static boolean isXmlType(MediaType mediaType) {
          mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE) ||
@@ -30,7 +34,11 @@ class ProviderUtils {
      }
      
      /**
-      * Checks <code>mediaType</code> for JSON compatibility
+      * Checks <code>mediaType</code> for JSON compatibility.
+      * 
+      * @param mediaType
+      * @return <code>true</code> if <code>mediaType</code> is compatible with
+      * either <code>text/x-json</code> or <code>application/json</code>.
       */
      static boolean isJsonType(MediaType mediaType) {
          mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE) ||
