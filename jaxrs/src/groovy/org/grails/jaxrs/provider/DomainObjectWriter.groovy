@@ -15,6 +15,7 @@
  */
 package org.grails.jaxrs.provider
 
+import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
 import static org.grails.jaxrs.provider.ProviderUtils.*
 
 import java.io.IOException
@@ -34,9 +35,11 @@ import grails.converters.XML
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder;
 
 /**
  * Provider to convert from Grails domain objects to XML or JSON streams.
@@ -48,6 +51,8 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplicationAware {
 
     private static final Log LOG = LogFactory.getLog(DomainObjectWriter.class);
+
+    public static final String DEFAULT_CHARSET = "UTF-8";
 
     GrailsApplication grailsApplication;
     
@@ -81,13 +86,16 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, OutputStream entityStream) 
             throws IOException, WebApplicationException {
-        def writer = new OutputStreamWriter(entityStream)
+        def writer = null
         def converter = null
+
         if (isXmlType(mediaType)) {
+            writer = newWriter(entityStream, getConverterConfiguration(XML.class).encoding)
             converter = new XML(t)
             converter.render(writer)
             writer.flush()
         } else { // JSON
+            writer = newWriter(entityStream, getConverterConfiguration(JSON.class).encoding)
             converter = new JSON(t)
             converter.render(writer)
         }
@@ -101,6 +109,14 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
             return false
         }
         return grailsApplication.isDomainClass(genericType.actualTypeArguments[0])
+    }
+    
+    private Writer newWriter(def stream, def charset) {
+        if (charset) {
+            return new OutputStreamWriter(stream, charset)
+        } else {
+            return new OutputStreamWriter(stream, DEFAULT_CHARSET)
+        }
     }
     
 }
