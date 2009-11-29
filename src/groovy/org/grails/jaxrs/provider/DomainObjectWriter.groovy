@@ -34,6 +34,7 @@ import grails.converters.XML
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
@@ -58,25 +59,20 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
     boolean isWriteable(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType) {
         
-        // TODO: include check whether to
-        // - handle domain objects at all
-        // - handle domain object collections
-        // (use grailsApplication to obtain config)
-        
-        boolean compatibleMediaType = 
-            isXmlType(mediaType) || 
-            isJsonType(mediaType)
-                
-        if (Collection.class.isAssignableFrom(type)) {
+        boolean compatibleMediaType = isXmlType(mediaType) || isJsonType(mediaType)
+        boolean requireGenericCollections =
+            ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections
+
+        if (Collection.class.isAssignableFrom(type) && !requireGenericCollections) {
             // A potential domain object collection. This check ignores
             // eventual type parameter declarations for reasons of 
             // simplicity. It is expected that returned collections
             // from resource methods always contains domain objects.
             return compatibleMediaType
-        }
-        if (grailsApplication.isDomainClass(type) && compatibleMediaType) {
-            // Single domain class matched 
-            return true
+        } else if (genericType instanceof ParameterizedType) {
+            return isDomainObjectCollectionType(genericType)
+        } else if (grailsApplication.isDomainClass(type)) {
+            return compatibleMediaType
         }
         return false;
     }
@@ -97,4 +93,14 @@ class DomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplication
         }
     }
  
+    private boolean isDomainObjectCollectionType(ParameterizedType genericType) {
+        if (!Collection.class.isAssignableFrom(genericType.rawType)) {
+            return false
+        }
+        if (genericType.actualTypeArguments.length == 0) {
+            return false
+        }
+        return grailsApplication.isDomainClass(genericType.actualTypeArguments[0])
+    }
+    
 }

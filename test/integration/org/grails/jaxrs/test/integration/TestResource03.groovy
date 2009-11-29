@@ -32,7 +32,6 @@ public class TestResource03 {
     @Consumes('application/json')
     @Produces('application/json')
     JSON testPerson(Map params) {
-        params.remove 'class' // only needed for testing
         def person = new TestPerson(params)
         person.name = person.name.reverse()
         person.age = person.age + 1

@@ -24,4 +24,7 @@ class TestPerson {
     
     int age
     
+    // only needed for testing
+    void setClass(def obj) {}
+    
 }
