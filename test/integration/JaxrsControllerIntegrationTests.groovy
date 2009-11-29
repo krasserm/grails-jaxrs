@@ -51,6 +51,8 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
     
     void setUp() {
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = false
+        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
     }
     
     void testGet01() {
@@ -185,6 +187,35 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertTrue(controller.response.contentAsString.contains('"name":"n1"'))
         assertTrue(controller.response.contentAsString.contains('"name":"n2"'))
         assertTrue(controller.response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    void testGet04ReaderDisabled() {
+        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = true
+        controller.request.method = 'POST'
+        controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
+        controller.request.addHeader('Content-Type', 'application/xml')
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
+        try {
+            // Resource method exists but XML string cannot be converted
+            // to TestPerson instance:
+            controller.handle()
+            // status 500 returned by Restlet
+            assertEquals(500, controller.response.status)
+        } catch (IllegalArgumentException e) {
+            // exception thrown by Jersey 
+        }
+    }
+    
+    void testGet04WriterDisabled() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = true
+        controller.request.method = 'POST'
+        controller.request.content = '<testPerson><name>james</name></testPerson>'.bytes
+        controller.request.addHeader('Content-Type', 'application/xml')
+        controller.request.addHeader('Accept', 'application/xml')
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
+        controller.handle()
+        assertEquals(500, controller.response.status)
     }
     
 }
