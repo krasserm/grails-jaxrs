@@ -17,7 +17,9 @@ package org.grails.jaxrs;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+
 import org.grails.jaxrs.JaxrsClasses;
 
 /**
@@ -35,7 +37,8 @@ public class ResourceArtefactHandler extends ArtefactHandlerAdapter {
 
     /**
      * Returns <code>true</code> if the <code>clazz</code> contains at least one
-     * JAX-RS annotation on class-level or method-level.
+     * JAX-RS annotation on class-level or method-level and none of the provider
+     * interfaces is implemented.
      * 
      * @param clazz
      * @return <code>true</code> if the class is a JAX-RS resource.

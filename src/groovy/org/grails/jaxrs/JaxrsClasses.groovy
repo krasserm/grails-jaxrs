@@ -15,7 +15,9 @@
  */
 package org.grails.jaxrs
 
-/**
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.MessageBodyReaderimport javax.ws.rs.ext.MessageBodyWriter
+/**
  * Provides condition methods to determine whether a given class is a valid
  * JAX-RS class.
  * 
@@ -32,13 +34,28 @@ class JaxrsClasses {
      * Returns <code>true</code> if the given class is a valid JAX-RS class,
      * <code>false</code> otherwise. A class in considered a JAX-RS class if
      * there is either a JAX-RS annotation present on class-level or on 
-     * method-level.
+     * method-level and none of the JAX-RS provider interfaces is implemented.
      * 
      * @param clazz class to be checked.
      * @return 
      */
     static boolean isJaxrsResource(Class clazz) {
-        jaxrsClassCondition(clazz) || jaxrsMethodsCondition(clazz)
+        !isJaxrsProvider(clazz) &&
+        (jaxrsClassCondition(clazz) || jaxrsMethodsCondition(clazz))
     }
-    
+
+     /**
+      * Returns <code>true</code> if the <code>clazz</code> either implements
+      * {@link MessageBodyReader}, {@link MessageBodyWriter} or
+      * {@link ExceptionMapper}.
+      * 
+      * @param clazz
+      * @return <code>true</code> if the class is a JAX-RS provider.
+      */
+    static boolean isJaxrsProvider(Class clazz) {
+        (MessageBodyReader.class.isAssignableFrom(clazz)) ||
+        (MessageBodyWriter.class.isAssignableFrom(clazz)) ||
+        (ExceptionMapper.class.isAssignableFrom(clazz))
+    }
+     
 }

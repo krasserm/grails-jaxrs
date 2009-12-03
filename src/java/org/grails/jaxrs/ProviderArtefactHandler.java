@@ -15,16 +15,23 @@
  */
 package org.grails.jaxrs;
 
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+
+import org.grails.jaxrs.JaxrsClasses;
 
 /**
  * @author Martin Krasser
  */
 public class ProviderArtefactHandler extends ArtefactHandlerAdapter {
 
+    private static final Log LOG = LogFactory.getLog(ProviderArtefactHandler.class);
+    
     public static final String TYPE = "Provider";
     
     public ProviderArtefactHandler() {
@@ -33,7 +40,8 @@ public class ProviderArtefactHandler extends ArtefactHandlerAdapter {
 
     /**
      * Returns <code>true</code> if the <code>clazz</code> either implements
-     * {@link MessageBodyReader} or {@link MessageBodyWriter}.
+     * {@link MessageBodyReader}, {@link MessageBodyWriter} or
+     * {@link ExceptionMapper}.
      * 
      * @param clazz
      * @return <code>true</code> if the class is a JAX-RS provider.
@@ -43,12 +51,11 @@ public class ProviderArtefactHandler extends ArtefactHandlerAdapter {
         if (clazz == null) {
             return false;
         }
-        
-        // TODO: implement according to JSR 311 specification
-        
-        return 
-            (MessageBodyReader.class.isAssignableFrom(clazz)) ||
-            (MessageBodyWriter.class.isAssignableFrom(clazz));
+        boolean match = JaxrsClasses.isJaxrsProvider(clazz);
+        if (match) {
+            LOG.info("Detected JAX-RS provider: " + clazz.getName());
+        }
+        return match;
     }
 
 }
