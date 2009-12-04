@@ -40,22 +40,44 @@ class JaxrsClasses {
      * @return 
      */
     static boolean isJaxrsResource(Class clazz) {
-        !isJaxrsProvider(clazz) &&
-        (jaxrsClassCondition(clazz) || jaxrsMethodsCondition(clazz))
+        !isJaxrsProvider(clazz) && walkJaxrsResource(clazz,  JaxrsClasses.&isJaxrsNode ) 
     }
 
-     /**
-      * Returns <code>true</code> if the <code>clazz</code> either implements
-      * {@link MessageBodyReader}, {@link MessageBodyWriter} or
-      * {@link ExceptionMapper}.
-      * 
-      * @param clazz
-      * @return <code>true</code> if the class is a JAX-RS provider.
-      */
+    static boolean isJaxrsNode(Class clazz) {
+        jaxrsClassCondition(clazz) || jaxrsMethodsCondition(clazz)
+    }
+     
+    /**
+     * Returns <code>true</code> if the <code>clazz</code> either implements
+     * {@link MessageBodyReader}, {@link MessageBodyWriter} or
+     * {@link ExceptionMapper}.
+     * 
+     * @param clazz
+     * @return <code>true</code> if the class is a JAX-RS provider.
+     */
     static boolean isJaxrsProvider(Class clazz) {
         (MessageBodyReader.class.isAssignableFrom(clazz)) ||
         (MessageBodyWriter.class.isAssignableFrom(clazz)) ||
         (ExceptionMapper.class.isAssignableFrom(clazz))
     }
-     
-}
+    
+    /**
+     * Walks up the class and interface hierarchy applying of <code>clazz</code>
+     * applying <code>visitor</code> as predicate. Whenever the visitor
+     * returns <code>true</code> the walk is stopped and <code>true</code> is
+     * returned by this method, <code>false</code> otherwise.
+     * 
+     * @param clazz class from where the hierarchy walk is started.
+     * @param visitor visitor applied to each element in the hierarchy.
+     */
+    private static boolean walkJaxrsResource(def clazz, Closure visitor) {
+        if (!clazz) {
+            return false
+        }
+        return (visitor(clazz) 
+                || walkJaxrsResource(clazz.superclass, visitor) 
+                || clazz.interfaces.any {walkJaxrsResource(it, visitor)})
+        
+    }
+
+ }
