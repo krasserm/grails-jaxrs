@@ -60,13 +60,8 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * 
  * </pre>
  * 
- * This provider can be disabled by setting 
- * <code>org.grails.jaxrs.doreader.disable</code> to <code>true</code> in the 
- * application config.
- * 
  * @author Martin Krasser
  */
-@Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 abstract class AbstractDomainObjectReader implements MessageBodyReader<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication
