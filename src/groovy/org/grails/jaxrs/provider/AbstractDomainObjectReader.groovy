@@ -28,7 +28,6 @@ import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.MessageBodyReader
-import javax.ws.rs.ext.Provider
 
 import grails.converters.JSON
 
@@ -67,6 +66,7 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * 
  * @author Martin Krasser
  */
+@Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 abstract class AbstractDomainObjectReader implements MessageBodyReader<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication

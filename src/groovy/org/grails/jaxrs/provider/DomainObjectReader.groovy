@@ -48,7 +48,6 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * @author Martin Krasser
  */
 @Provider
-@Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 class DomainObjectReader extends AbstractDomainObjectReader {
 
     // TODO: cleanup imports
