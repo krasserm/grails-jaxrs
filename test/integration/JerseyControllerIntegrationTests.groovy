@@ -18,15 +18,31 @@ import static JaxrsControllerIntegrationTests.jaxrsClasses
  
 import org.grails.jaxrs.web.IntegrationTestEnvironment
 
+// EXPERIMENTAL
+import org.grails.jaxrs.provider.DomainObjectReader
+import org.grails.jaxrs.provider.DomainObjectWriter
+import org.grails.jaxrs.provider.JSONWriter
+import org.grails.jaxrs.provider.JSONReader
+import org.grails.jaxrs.test.integration.CustomRequestEntityReader
+import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
+import org.grails.jaxrs.test.integration.TestResource01
+import org.grails.jaxrs.test.integration.TestResource02
+import org.grails.jaxrs.test.integration.TestResource03
+import org.grails.jaxrs.test.integration.TestResource04
+
+
 /**
  * @author Martin Krasser
  */
 public class JerseyControllerIntegrationTests extends JaxrsControllerIntegrationTests {
 
-    static environment = new IntegrationTestEnvironment('context-integration.xml', 'jersey', jaxrsClasses) 
     static transactional = false
+    static environment  
     
     void setUp() {
+        if (!environment) {
+            environment = new IntegrationTestEnvironment('context-integration.xml', 'jersey', jaxrsClasses)
+        }
         super.setUp()
         controller = new JaxrsController()
         controller.jaxrsContext = environment.jaxrsContext 

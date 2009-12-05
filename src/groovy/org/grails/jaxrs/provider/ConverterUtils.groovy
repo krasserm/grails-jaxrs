@@ -15,9 +15,13 @@
  */
 package org.grails.jaxrs.provider
 
+import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
+
 import java.util.Map
 
+import grails.converters.JSON
 import grails.converters.XML
+
 import groovy.util.slurpersupport.GPathResult
 import org.apache.commons.logging.*
 
@@ -44,6 +48,30 @@ class ConverterUtils {
          def encoding = application.config.grails.converters.encoding
          // TODO: use platform encoding if application doesn't provide
          encoding ? encoding : 'UTF-8' 
+     }
+     
+     /**
+      * Returns the default XML converter character encoding for the given
+      * Grails application. 
+      */
+     static String getDefaultXMLEncoding(GrailsApplication application) {
+         def encoding = getConverterConfiguration(XML.class).encoding
+         if (!encoding) {
+             return getDefaultEncoding(application)
+         }
+         encoding
+     }
+     
+     /**
+      * Returns the default JSON converter character encoding for the given
+      * Grails application. 
+      */
+     static String getDefaultJSONEncoding(GrailsApplication application) {
+         def encoding = getConverterConfiguration(JSON.class).encoding
+         if (!encoding) {
+             return getDefaultEncoding(application)
+         }
+         encoding
      }
      
      /**

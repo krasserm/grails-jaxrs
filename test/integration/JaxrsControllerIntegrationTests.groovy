@@ -196,15 +196,8 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         controller.request.addHeader('Content-Type', 'application/xml')
         controller.request.addHeader('Accept', 'application/xml')
         JaxrsUtils.setRequestUriAttribute(controller.request, '/test/04/single')
-        try {
-            // Resource method exists but XML string cannot be converted
-            // to TestPerson instance:
-            controller.handle()
-            // status 500 returned by Restlet
-            assertEquals(500, controller.response.status)
-        } catch (IllegalArgumentException e) {
-            // exception thrown by Jersey 
-        }
+        controller.handle()
+        assertEquals(415, controller.response.status)
     }
     
     void testPost04WriterDisabled() {

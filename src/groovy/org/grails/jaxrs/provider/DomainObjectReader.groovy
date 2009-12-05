@@ -38,77 +38,23 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
 /**
- * A message body reader that converts an XML or JSON entity streams to a domain
- * object. The request content type must be specified by the 
- * <code>Content-Type</code> HTTP header. Supported content types by this 
- * provider are <code>text/xml</code>, <code>application/xml</code>, 
- * <code>text/x-json</code> or <code>application/json</code>. Assuming 
- * <code>Note</code> is a Grails domain class. This provider supports usage of 
- * resource methods such as:
- * 
- * <pre>
- * &#064;Path('/notes')
- * class NotesResource {
- * 
- *      &#064;POST
- *      &#064;Consumes(['application/xml','application/json'])
- *      Response addNote(Note note) {
- *          note.save()
- *          // ...
- *      }
- *      
- * }
- * 
- * 
- * </pre>
- * 
- * This provider can be disabled by setting 
+ * A concrete domain object reader that provides the same functionality as
+ * {@link AbstractDomainObjectReader}. It can be  disabled by setting 
  * <code>org.grails.jaxrs.doreader.disable</code> to <code>true</code> in the 
  * application config.
  * 
+ * @see AbstractDomainObjectReader
+ *  
  * @author Martin Krasser
  */
 @Provider
 @Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
-class DomainObjectReader implements MessageBodyReader<Object>, GrailsApplicationAware {
+class DomainObjectReader extends AbstractDomainObjectReader {
 
-    GrailsApplication grailsApplication
+    // TODO: cleanup imports
+     
+    protected boolean isEnabled() {
+        !ConfigurationHolder.config.org.grails.jaxrs.doreader.disable
+    }
     
-    /**
-     * Returns <code>true</code> if <code>type</code> is a Grails domain class 
-     * and the request content type is one of <code>text/xml</code>, 
-     * <code>application/xml</code>, <code>text/x-json</code> or 
-     * <code>application/json</code>.
-     */
-    boolean isReadable(Class type, Type genericType,
-            Annotation[] annotations, MediaType mediaType) {
-        return grailsApplication.isDomainClass(type) && (isXmlType(mediaType) || isJsonType(mediaType))
-    }
-
-     /**
-      * Creates a Grails domain object from an XML or JSON request entity 
-      * stream.
-      */
-    Object readFrom(Class type, Type genericType,
-            Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap httpHeaders, InputStream entityStream)
-            throws IOException, WebApplicationException {
-        
-        if (ConfigurationHolder.config.org.grails.jaxrs.doreader.disable) {
-            return false
-        }
-        
-        // TODO: obtain encoding from HTTP header and/or XML document
-        String encoding = getDefaultEncoding(grailsApplication);
-
-        if (isXmlType(mediaType)) {
-            // Construct domain object from xml map obtained from entity stream
-            return type.metaClass.invokeConstructor(xmlToMap(entityStream, encoding))
-        } else { // JSON
-            // Construct domain object from json map obtained from entity stream
-            return type.metaClass.invokeConstructor(JSON.parse(entityStream, encoding))
-        }
-        
-    }
-
 }
