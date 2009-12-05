@@ -15,31 +15,14 @@
  */
 package org.grails.jaxrs.provider
 
-import static org.grails.jaxrs.provider.ConverterUtils.getDefaultEncoding
-import static org.grails.jaxrs.provider.ConverterUtils.xmlToMap
-import static org.grails.jaxrs.provider.ProviderUtils.*
-
-import java.io.IOException
-import java.io.InputStream
-import java.lang.annotation.Annotation
-import java.lang.reflect.Type
-
 import javax.ws.rs.Consumes
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.MultivaluedMap
-import javax.ws.rs.ext.MessageBodyReader
 import javax.ws.rs.ext.Provider
 
-import grails.converters.JSON
-
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
 /**
  * A concrete domain object reader that provides the same functionality as
- * {@link AbstractDomainObjectReader}. It can be  disabled by setting 
+ * {@link AbstractDomainObjectReader}. It can be disabled by setting 
  * <code>org.grails.jaxrs.doreader.disable</code> to <code>true</code> in the 
  * application config.
  * 
@@ -48,6 +31,7 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * @author Martin Krasser
  */
 @Provider
+@Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 class DomainObjectReader extends AbstractDomainObjectReader {
 
     // TODO: cleanup imports
