@@ -3,7 +3,7 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
 
-@Path('/@resource.path@')
+@Path('/api/@resource.path@')
 class @artifact.name@ {
 
     @GET
