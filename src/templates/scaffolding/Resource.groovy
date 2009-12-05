@@ -25,12 +25,12 @@ class ${resourceName}Resource {
     }
     
     @PUT
-    Response update(Map properties) {
+    Response update(${resourceName} dto) {
         def obj = ${resourceName}.get(id)
         if (!obj) {
             throw new DomainObjectNotFoundException(${resourceName}.class, id)
         }
-        obj.properties = properties 
+        obj.properties = dto.properties 
         ok obj
     }
     

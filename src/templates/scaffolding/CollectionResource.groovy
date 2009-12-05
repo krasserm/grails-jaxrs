@@ -8,14 +8,14 @@ import javax.ws.rs.PathParam
 import javax.ws.rs.POST
 import javax.ws.rs.core.Response
 
-@Path('/${resourcePath}')
+@Path('/api/${resourcePath}')
 @Consumes(['application/xml','application/json'])
 @Produces(['application/xml','application/json'])
 class ${resourceName}CollectionResource {
 
     @POST
-    Response create(Map properties) {
-        created new ${resourceName}(properties).save()
+    Response create(${resourceName} dto) {
+        created dto.save()
     }
 
     @GET
