@@ -23,10 +23,13 @@ import org.grails.jaxrs.web.IntegrationTestEnvironment
  */
 public class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
 
-    static environment = new IntegrationTestEnvironment('context-integration.xml', 'restlet', jaxrsClasses) 
     static transactional = false
+    static environment 
      
     void setUp() {
+        if (!environment) {
+            environment = new IntegrationTestEnvironment('context-integration.xml', 'restlet', jaxrsClasses)
+        }
         super.setUp()
         controller = new JaxrsController()
         controller.jaxrsContext = environment.jaxrsContext 
