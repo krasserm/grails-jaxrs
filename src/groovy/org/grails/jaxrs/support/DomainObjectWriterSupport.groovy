@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.provider
+package org.grails.jaxrs.support
 
 import static org.grails.jaxrs.provider.ConverterUtils.*
 import static org.grails.jaxrs.provider.ProviderUtils.*
@@ -79,7 +79,7 @@ import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigu
  * 
  * @author Martin Krasser
  */
-abstract class AbstractDomainObjectWriter implements MessageBodyWriter<Object>, GrailsApplicationAware {
+abstract class DomainObjectWriterSupport implements MessageBodyWriter<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication;
     

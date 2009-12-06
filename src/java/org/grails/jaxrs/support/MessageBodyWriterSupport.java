@@ -15,7 +15,7 @@
  */
 package org.grails.jaxrs.support;
 
-import static org.grails.jaxrs.support.ProviderUtils.*;
+import static org.grails.jaxrs.provider.ProviderUtils.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
