@@ -20,6 +20,8 @@ import javax.ws.rs.ext.Provider
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
+import org.grails.jaxrs.support.DomainObjectWriterSupport
+
 /**
  * A concrete domain object writer that provides the same functionality as
  * {@link AbstractDomainObjectWriter}. It can be disabled by setting 
@@ -36,7 +38,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  */
 @Provider
 @Produces(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
-class DomainObjectWriter extends AbstractDomainObjectWriter implements MessageBodyWriter<Object> {
+class DomainObjectWriter extends DomainObjectWriterSupport implements MessageBodyWriter<Object> {
 
     /*
      * NOTICE: a bug in Restlet requires to implement the MessageBodyWriter

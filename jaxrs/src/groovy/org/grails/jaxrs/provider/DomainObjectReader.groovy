@@ -18,6 +18,8 @@ package org.grails.jaxrs.provider
 import javax.ws.rs.Consumes
 import javax.ws.rs.ext.Provider
 
+import org.grails.jaxrs.support.DomainObjectReaderSupport
+
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 /**
@@ -32,7 +34,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  */
 @Provider
 @Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
-class DomainObjectReader extends AbstractDomainObjectReader {
+class DomainObjectReader extends DomainObjectReaderSupport {
 
     // TODO: cleanup imports
      

@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.support;
+package org.grails.jaxrs.provider;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import javax.ws.rs.core.MediaType;
+
+import org.grails.jaxrs.support.MessageBodyReaderSupport;
+import org.grails.jaxrs.support.MessageBodyWriterSupport;
 
 /**
  * Utility class related for {@link MessageBodyReaderSupport} and
@@ -24,7 +29,7 @@ import java.lang.reflect.Type;
  * 
  * @author Martin Krasser
  */
-class ProviderUtils {
+public class ProviderUtils {
 
     /**
      * Returns the type argument for {@link MessageBodyReaderSupport} defined by
@@ -56,6 +61,32 @@ class ProviderUtils {
         return getDeclaredProvidedType(provider.getClass());
     }
     
+    /**
+     * Checks <code>mediaType</code> for XML compatibility.
+     * 
+     * @param mediaType
+     * @return <code>true</code> if <code>mediaType</code> is compatible with
+     *         either <code>text/xml</code> or <code>application/xml</code>.
+     */
+    public static boolean isXmlType(MediaType mediaType) {
+        return 
+            mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE) ||
+            mediaType.isCompatible(MediaType.TEXT_XML_TYPE);
+    }
+    
+    /**
+     * Checks <code>mediaType</code> for JSON compatibility.
+     * 
+     * @param mediaType
+     * @return <code>true</code> if <code>mediaType</code> is compatible with
+     *         either <code>text/x-json</code> or <code>application/json</code>.
+     */
+    public static boolean isJsonType(MediaType mediaType) {
+        return 
+            mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE) ||
+            mediaType.isCompatible(new MediaType("text", "x-json"));
+    }
+
     private static Type getDeclaredProvidedType(Class<?> provider) {
         Class<?> clazz = provider;
         while (true) {

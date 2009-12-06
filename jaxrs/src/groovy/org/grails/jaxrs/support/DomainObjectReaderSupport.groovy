@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.provider
+package org.grails.jaxrs.support
 
 import static org.grails.jaxrs.provider.ConverterUtils.*
 import static org.grails.jaxrs.provider.ProviderUtils.*
@@ -62,7 +62,7 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * 
  * @author Martin Krasser
  */
-abstract class AbstractDomainObjectReader implements MessageBodyReader<Object>, GrailsApplicationAware {
+abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, GrailsApplicationAware {
 
     GrailsApplication grailsApplication
     
