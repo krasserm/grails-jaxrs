@@ -15,7 +15,7 @@
  */
 package org.grails.jaxrs.support;
 
-import static org.grails.jaxrs.provider.ProviderUtils.*;
+import static org.grails.jaxrs.support.ProviderUtils.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,10 +37,10 @@ import javax.ws.rs.ext.MessageBodyWriter;
  */
 public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T> {
 
-    private Type declaredWritingType; 
+    private Class<?> typeArgument; 
     
     public MessageBodyWriterSupport() {
-        declaredWritingType = getWriterTypeArgument(this);
+        typeArgument = getWriterTypeArgument(this);
     }
     
     /**
@@ -55,7 +55,7 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
      * this class type parameter.  
      */
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return declaredWritingType == type;
+        return typeArgument == type;
         
         //
         // EXPERIMENTAL: see http://code.google.com/p/grails-jaxrs/issues/detail?id=6

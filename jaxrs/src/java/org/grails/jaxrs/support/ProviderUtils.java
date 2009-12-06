@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.provider;
+package org.grails.jaxrs.support;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import javax.ws.rs.core.MediaType;
 
-import org.grails.jaxrs.support.MessageBodyReaderSupport;
-import org.grails.jaxrs.support.MessageBodyWriterSupport;
 
 /**
  * Utility class related for {@link MessageBodyReaderSupport} and
@@ -42,8 +40,8 @@ public class ProviderUtils {
      * @return type argument for {@link MessageBodyReaderSupport} defined by a
      *         subclass.
      */
-    public static <T extends MessageBodyReaderSupport<?>> Type getReaderTypeArgument(T provider) {
-        return getDeclaredProvidedType(provider.getClass());
+    public static <T extends MessageBodyReaderSupport<?>> Class getReaderTypeArgument(T provider) {
+        return getTypeArgument(provider.getClass());
     }
 
     /**
@@ -57,8 +55,8 @@ public class ProviderUtils {
      * @return type argument for {@link MessageBodyWriterSupport} defined by a
      *         subclass.
      */
-    public static <T extends MessageBodyWriterSupport<?>> Type getWriterTypeArgument(T provider) {
-        return getDeclaredProvidedType(provider.getClass());
+    public static <T extends MessageBodyWriterSupport<?>> Class getWriterTypeArgument(T provider) {
+        return getTypeArgument(provider.getClass());
     }
     
     /**
@@ -87,13 +85,15 @@ public class ProviderUtils {
             mediaType.isCompatible(new MediaType("text", "x-json"));
     }
 
-    private static Type getDeclaredProvidedType(Class<?> provider) {
+    private static Class getTypeArgument(Class<?> provider) {
         Class<?> clazz = provider;
+        Type type = null;
         while (true) {
             Type t = clazz.getGenericSuperclass();
             if (t instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType)t;
-                return pt.getActualTypeArguments()[0];
+                type = pt.getActualTypeArguments()[0];
+                break;
             }
             clazz = clazz.getSuperclass();
             // Should never end here
@@ -101,5 +101,13 @@ public class ProviderUtils {
                 return null;
             }
         }
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedTypeArg = (ParameterizedType)type;
+            type = parameterizedTypeArg.getRawType(); 
+        }
+        if (!Class.class.isInstance(type)) {
+            throw new IllegalTypeException("Unsupported type argument: " + type + ". Must be a class or interface.");
+        }
+        return (Class)type;
     }
 }
