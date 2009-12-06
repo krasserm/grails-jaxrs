@@ -34,29 +34,29 @@ class JaxrsClassesTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void testIsJaxrsResource() {        assertTrue(JaxrsClasses.isJaxrsResource(A.class))
-        assertTrue(JaxrsClasses.isJaxrsResource(B.class))
-        assertTrue(JaxrsClasses.isJaxrsResource(C.class))
-        assertFalse(JaxrsClasses.isJaxrsResource(D.class))
-        assertFalse(JaxrsClasses.isJaxrsResource(E.class))
+    void testIsJaxrsResource() {        assertTrue(JaxrsClasses.isJaxrsResource(TestA.class))
+        assertTrue(JaxrsClasses.isJaxrsResource(TestB.class))
+        assertTrue(JaxrsClasses.isJaxrsResource(TestC.class))
+        assertFalse(JaxrsClasses.isJaxrsResource(TestD.class))
+        assertFalse(JaxrsClasses.isJaxrsResource(TestE.class))
     }
     
     void testIsJaxrsResourceInherit() {
-        assertTrue(JaxrsClasses.isJaxrsResource(H1B.class))
-        assertFalse(JaxrsClasses.isJaxrsResource(H2B.class))
-        assertTrue(JaxrsClasses.isJaxrsResource(H1B.class))
+        assertTrue(JaxrsClasses.isJaxrsResource(TestH1B.class))
+        assertFalse(JaxrsClasses.isJaxrsResource(TestH2B.class))
+        assertTrue(JaxrsClasses.isJaxrsResource(TestH1B.class))
     }
     
 }
 
-@Path('/a') class A { @GET String a() {'a'} }@Path('/b') class B { String b() {'b'} }class C { @GET String c() {'c'} }class D { String d() {'d'} }
-abstract class E implements MessageBodyReader { @GET String e() {'e'} }
+@Path('/a') class TestA { @GET String a() {'a'} }@Path('/b') class TestB { String b() {'b'} }class TestC { @GET String c() {'c'} }class TestD { String d() {'d'} }
+abstract class TestE implements MessageBodyReader { @GET String e() {'e'} }
 
-@Path('/a') class H1A {}
-class H1B extends H1A {}
+@Path('/a') class TestH1A {}
+class TestH1B extends TestH1A {}
 
-class H2A {}
-class H2B extends H2A {}
+class TestH2A {}
+class TestH2B extends TestH2A {}
 
-@Path('/a') interface H3A {}
-class H3B implements H3A {}
+@Path('/a') interface TestH3A {}
+class TestH3B implements TestH3A {}

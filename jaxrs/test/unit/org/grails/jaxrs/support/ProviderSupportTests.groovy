@@ -32,9 +32,9 @@ class ProviderSupportTests extends GrailsUnitTestCase {
     ProviderSupport providerC
          protected void setUp() {
         super.setUp()
-        providerA = new ProviderA() 
-        providerB = new ProviderB() 
-        providerC = new ProviderC() 
+        providerA = new TestProviderA() 
+        providerB = new TestProviderB() 
+        providerC = new TestProviderC() 
     }
 
     protected void tearDown() {
@@ -42,25 +42,25 @@ class ProviderSupportTests extends GrailsUnitTestCase {
     }
 
     void testProviderA() {
-        assertTrue(providerA.isSupported(X.class, null, null, null))
-        assertTrue(providerA.isSupported(Y.class, null, null, null))
+        assertTrue(providerA.isSupported(TestX.class, null, null, null))
+        assertTrue(providerA.isSupported(TestY.class, null, null, null))
         assertFalse(providerA.isSupported(ArrayList.class, null, null, null))
     }
 
     void testProviderB() {
-        assertFalse(providerB.isSupported(X.class, null, null, null))
-        assertTrue(providerB.isSupported(Y.class, null, null, null))
+        assertFalse(providerB.isSupported(TestX.class, null, null, null))
+        assertTrue(providerB.isSupported(TestY.class, null, null, null))
         assertFalse(providerB.isSupported(ArrayList.class, null, null, null))
     }
 
     void testProviderC() {
-        assertFalse(providerC.isSupported(X.class, null, null, null))
-        assertFalse(providerC.isSupported(Y.class, null, null, null))
+        assertFalse(providerC.isSupported(TestX.class, null, null, null))
+        assertFalse(providerC.isSupported(TestY.class, null, null, null))
         assertTrue(providerC.isSupported(ArrayList.class, null, null, null))
     }
 
 }
-class X {}class Y extends X {}class ProviderBase<T> extends MessageBodyWriterSupport<T> {    protected void writeTo(T t, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) {        // noop    }}class ProviderA extends ProviderBase<X> {}
-class ProviderB extends ProviderBase<Y> {}
-class ProviderC extends ProviderBase<List<X>> {}
+class TestX {}class TestY extends TestX {}class TestProviderBase<T> extends MessageBodyWriterSupport<T> {    protected void writeTo(T t, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) {        // noop    }}class TestProviderA extends TestProviderBase<TestX> {}
+class TestProviderB extends TestProviderBase<TestY> {}
+class TestProviderC extends TestProviderBase<List<TestX>> {}
 
