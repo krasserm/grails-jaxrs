@@ -35,12 +35,10 @@ import javax.ws.rs.ext.MessageBodyWriter;
  * 
  * @author Martin Krasser
  */
-public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T> {
+public abstract class MessageBodyWriterSupport<T> extends ProviderSupport implements MessageBodyWriter<T> {
 
-    private Class<?> typeArgument; 
-    
     public MessageBodyWriterSupport() {
-        typeArgument = getWriterTypeArgument(this);
+        setTypeArgument(getWriterTypeArgument(this));
     }
     
     /**
@@ -50,19 +48,11 @@ public abstract class MessageBodyWriterSupport<T> implements MessageBodyWriter<T
         return -1;
     }
 
-    /** 
-     * Returns <code>true</code> if <code>type</code> argument is identical to
-     * this class type parameter.  
+    /**
+     * @see #isSupported(Class, Type, Annotation[], MediaType)
      */
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return typeArgument == type;
-        
-        //
-        // EXPERIMENTAL: see http://code.google.com/p/grails-jaxrs/issues/detail?id=6
-        //
-        //return 
-        //    declaredWritingType.equals(type) ||
-        //    declaredWritingType.equals(genericType);
+        return isSupported(type, genericType, annotations, mediaType);
     }
 
     public void writeTo(T t, Class<?> type, Type genericType,

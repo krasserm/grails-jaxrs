@@ -35,20 +35,17 @@ import javax.ws.rs.ext.MessageBodyReader;
  * 
  * @author Martin Krasser
  */
-public abstract class MessageBodyReaderSupport<T> implements MessageBodyReader<T> {
+public abstract class MessageBodyReaderSupport<T> extends ProviderSupport implements MessageBodyReader<T> {
 
-    private Class<?> typeArgument;
-    
     public MessageBodyReaderSupport() {
-        typeArgument = getReaderTypeArgument(this);
+        setTypeArgument(getReaderTypeArgument(this));
     }
-    
-    /** 
-     * Returns <code>true</code> if <code>type</code> argument is identical to
-     * this class type parameter.  
+
+    /**
+     * @see #isSupported(Class, Type, Annotation[], MediaType)
      */
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return typeArgument == type;
+        return isSupported(type, genericType, annotations, mediaType);
     }
 
     public T readFrom(Class<T> type, Type genericType,
