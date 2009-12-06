@@ -30,7 +30,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication;
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
 import org.grails.jaxrs.support.MessageBodyReaderSupport;
 
-import static org.grails.jaxrs.provider.ConverterUtils.getDefaultEncoding;
+import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
 
 /**
  * A message body reader that converts a JSON entity stream to a map than can be

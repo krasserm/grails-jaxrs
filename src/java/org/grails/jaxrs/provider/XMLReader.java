@@ -15,8 +15,8 @@
  */
 package org.grails.jaxrs.provider;
 
-import static org.grails.jaxrs.provider.ConverterUtils.getDefaultEncoding;
-import static org.grails.jaxrs.provider.ConverterUtils.xmlToMap;
+import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
+import static org.grails.jaxrs.support.ConverterUtils.xmlToMap;
 
 import java.io.IOException;
 import java.io.InputStream;

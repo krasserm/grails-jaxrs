@@ -15,7 +15,7 @@
  */
 package org.grails.jaxrs.support;
 
-import static org.grails.jaxrs.provider.ProviderUtils.*;
+import static org.grails.jaxrs.support.ProviderUtils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +37,10 @@ import javax.ws.rs.ext.MessageBodyReader;
  */
 public abstract class MessageBodyReaderSupport<T> implements MessageBodyReader<T> {
 
-    private Type declaredReadingType;
+    private Class<?> typeArgument;
     
     public MessageBodyReaderSupport() {
-        declaredReadingType = getReaderTypeArgument(this);
+        typeArgument = getReaderTypeArgument(this);
     }
     
     /** 
@@ -48,7 +48,7 @@ public abstract class MessageBodyReaderSupport<T> implements MessageBodyReader<T
      * this class type parameter.  
      */
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return declaredReadingType == type;
+        return typeArgument == type;
     }
 
     public T readFrom(Class<T> type, Type genericType,
