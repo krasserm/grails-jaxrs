@@ -121,7 +121,7 @@ then we can auto-inject it by defining a {{{testService}}} property like in the 
 {{{
 // imports omitted ...
 
-@Path('/test')
+@Path('/api/test')
 class TestResource {
 
     def testService // injected
