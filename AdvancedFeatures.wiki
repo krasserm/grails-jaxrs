@@ -303,7 +303,7 @@ class NotesResource {
 }
 }}}
 
-Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The created note object is the response entity. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request:
+Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The created note object is the response entity. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request
 
 {{{
 POST /hello/notes/ HTTP/1.1
@@ -314,18 +314,22 @@ Content-Length: 27
 Don't forget to learn Scala
 }}}
 
-Here's a sample HTTP response:
+and the response
 
 {{{
 HTTP/1.1 201 Created
-Content-Type: text/xml
-Location: http://localhost:8080/hello/notes/1
+Content-Type: application/xml
+Location: http://localhost:8080/hello/api/notes/1
+Transfer-Encoding: chunked
+Server: Jetty(6.1.14)
 
 <?xml version="1.0" encoding="UTF-8"?>
 <note id="1">
   <text>Don't forget to learn Scala</text>
 </note>
 }}}
+
+TODO: continue here ...
 
 To obtain a list of all notes send a GET request to {{{http://localhost:8080/hello/notes}}} which will call the {{{getNotes()}}} method. This method again uses the Grails XML converter to create an XML representation of the notes collection, such as 
 
