@@ -98,7 +98,7 @@ When you save the changes the plugin re-initializes the JAX-RS runtime (see also
 
 =Scaffolding=
 
-The grails-jaxrs plugin also supports scaffolding. It allows you to create a RESTful service interface for one or more domain classes based on JAX-RS resource classes. The following sections walk through a very simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
+The grails-jaxrs plugin also supports scaffolding. It allows you to create a RESTful service interface for one or more domain classes based on JAX-RS resource classes. The following sections walk through a simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
 
 ==Create a domain class==
 
@@ -131,7 +131,7 @@ To generate JAX-RS resources that implement the RESTful service interface for th
 grails generate-resources person
 }}}
 
-This will generate two resource classes, {{{PersonCollectionResource.groovy}}} and {{{PersonResource.groovy}}} that support HTTP POST, GET, PUT and DELETE operations for creating, reading, updating and deleting {{{Person}}} objects, respectively. {{{PersonCollectionResource.groovy}}} is related {{{Person}}} lists, {{{PersonResource.groovy}}} is related to individual {{{Person}}} instances. Let's take a look at how to use the generated RESTful {{{Person}}} interface.
+This will generate two resource classes, {{{PersonCollectionResource.groovy}}} and {{{PersonResource.groovy}}} that support HTTP POST, GET, PUT and DELETE operations for creating, reading, updating and deleting {{{Person}}} objects, respectively. {{{PersonCollectionResource.groovy}}} is related to {{{Person}}} lists, {{{PersonResource.groovy}}} is related to individual {{{Person}}} instances. Let's take a look at how to use the generated RESTful service interface.
 
 ==Use the REST API==
 
