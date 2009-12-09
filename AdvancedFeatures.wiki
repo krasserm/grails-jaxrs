@@ -68,20 +68,28 @@ org.grails.jaxrs.resource.scope='singleton'
 
 ==Domain object providers==
 
-From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section.
+From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section. Here, only the configuration options are summarized. The grails-jaxrs plugin comes with two domain object providers:
 
-TODO: continue here ...
+  * {{{org.grails.jaxrs.provider.DomainObjectReader}}}
+  * {{{org.grails.jaxrs.provider.DomainObjectWriter}}}
+
+These can selectively be disabled by using the following configuration properties in {{{grails-app/conf/Config.groovy}}}.
+
+  * {{{org.grails.jaxrs.doreader.disable}}}
+  * {{{org.grails.jaxrs.dowriter.disable}}}
+
+Setting these properties to {{{true}}} will disable the default domain object providers. Another {{{DomainObjectWriter}}} configuration option, {{{org.grails.jaxrs.dowriter.require.generic.collections}}} is explained in the [#Entity_providers entity providers] section.
 
 =Applying filters=
 
-[http://grails.org/doc/1.1.1/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
+[http://grails.org/doc/1.1.2/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/api/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
 
 {{{
 class TestFilters {
 
     def filters = {
             
-        testUris(uri:'/test/**') {
+        testUris(uri:'/api/test/**') {
             before = {
                 // do some preprocessing
             }
