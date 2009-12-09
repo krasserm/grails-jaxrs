@@ -181,9 +181,9 @@ It is based based on JSR 311 classes and annotations and uses static methods fro
 
 The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/api/person}}} where the {{{/api/person}}} path is defined by the class-level {{{@Path('/api/person')}}} annotation. 
 
-  * The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.2/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML or JSON request entity is converted by the plugin to a {{{Person}}} domain object and passed to the method via the {{{dto}}} parameter. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code]. The method constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id. The {{{Person}}} object, which is the {{{Response}}} entity, is converted to an XML or JSON representation, depending on the {{{Accept}}} HTTP request header. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectWriter}}}.
-  * TODO: continue here ... The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code].
-  * The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/person/{id} }}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
+  * The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.2/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML or JSON request entity is converted by the plugin to a {{{Person}}} domain object and passed to the method via the {{{dto}}} parameter. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed to the {{{created}}} method which creates a response from it using the JAX-RS API. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code]. The method constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id. The {{{Person}}} object, which is the {{{Response}}} entity, is converted to an XML or JSON representation, depending on the {{{Accept}}} HTTP request header. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectWriter}}}.
+  * The {{{readAll}}} method responds to GET requests and returns an XML or JSON representation of a person list. Again we use GORM to get all person objects from the database and pass that list as argument to the {{{ok}}} method. This method uses the JAX-RS API to create a response. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code].
+  * The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/api/person/{id} }}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
 
 =={{{PersonResource.groovy}}}==
 
@@ -192,13 +192,17 @@ Here's the source code for {{{PersonResource.groovy}}}.
 {{{
 import static org.grails.jaxrs.response.Responses.*
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.Produces
 import javax.ws.rs.PUT
 import javax.ws.rs.core.Response
 
-@Produces('text/xml')
+import org.grails.jaxrs.provider.DomainObjectNotFoundException
+
+@Consumes(['application/xml','application/json'])
+@Produces(['application/xml','application/json'])
 class PersonResource {
     
     def id
@@ -206,22 +210,20 @@ class PersonResource {
     @GET
     Response read() {
         def obj = Person.get(id)
-        if (obj) {
-            ok obj
-        } else {
-            notFound Person.class, id
+        if (!obj) {
+            throw new DomainObjectNotFoundException(Person.class, id)
         }
+        ok obj
     }
     
     @PUT
-    Response update(Map properties) {
+    Response update(Person dto) {
         def obj = Person.get(id)
-        if (obj) {
-            obj.properties = properties 
-            ok obj
-        } else {
-            notFound Person.class, id
+        if (!obj) {
+            throw new DomainObjectNotFoundException(Person.class, id)
         }
+        obj.properties = dto.properties 
+        ok obj
     }
     
     @DELETE
@@ -235,7 +237,9 @@ class PersonResource {
 }
 }}}
 
-The {{{id}}} property is set during construction of the resource and is used for database operation. This class implements the methods {{{read}}}, {{{update}}} and {{{delete}}} to handle GET, PUT and DELETE requests, respectivly. It also uses GORM for database operations and relies on helper methods of {{{org.grails.jaxrs.response.Responses}}} to create repsonses via the JAX-RS API.
+The {{{id}}} property is set during construction of the resource and is used for database operations. This class implements the methods {{{read}}}, {{{update}}} and {{{delete}}} to handle GET, PUT and DELETE requests, respectivly. It also uses GORM for database operations and relies on helper methods of {{{org.grails.jaxrs.response.Responses}}} to create repsonses via the JAX-RS API.
+
+If there's no person with given {{{id}}} in the database, a {{{DomainObjectNotFoundException}}} is thrown. This exception class generates a custom {{{404}}} response using the JAX-RS API. [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/provider/DomainObjectNotFoundException.groovy See source code for details].
 
 =Using GORM=
 
