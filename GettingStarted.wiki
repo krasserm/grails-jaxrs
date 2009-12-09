@@ -196,19 +196,19 @@ Server: Jetty(6.1.14)
 {"class":"Person","id":"2","firstName":"Fabien","lastName":"Barel"}
 }}}
 
-Content negotiation via {{{Content-Type}}} and  {{{Accept}}} headers works for other HTTP methods as well. To GET the list of created persons, open a browser and enter the URL {{{http://localhost:8080/hello/api/person}}}. This returns an XML representation of the list of persons stored in the database.
-
-TODO: continue here (explain accept header set by firefox).
+Content negotiation via {{{Content-Type}}} and  {{{Accept}}} headers works for other HTTP methods as well. To GET a list of created persons, open a browser (Firefox in our example) and enter the URL {{{http://localhost:8080/hello/api/person}}}. This returns an XML representation of the list of persons stored in the database.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-03.png
 
-To get the representation of a single person, specify the id in the URL. For example, to get the person with id 1 use {{{http://localhost:8080/hello/person/1}}}
+An XML representation is returned because Firefox sets an {{{Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8}}} request header. To get the representation of a single person, specify the id in the URL. For example, to get the person with id 1 use {{{http://localhost:8080/hello/person/1}}}
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-04.png
 
 If you try to get a person that doesn't exist, an error message (with a status code {{{404}}}) is returned.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
+
+TODO: continue here ...
 
 In the next step we update the first name of person 1 by PUTting a new representation to {{{http://localhost:8080/hello/person/1}}}. The response is a new representation of the updated person.
 
