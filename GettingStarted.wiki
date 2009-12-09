@@ -27,7 +27,7 @@ To install the plugin from the [http://www.grails.org/plugin/home Grails Plugin 
 grails install-plugin jaxrs
 }}} 
 
-This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options refer to the [InstallationInstructions installation instructions].
+This will download the latest released version of the plugin from the [http://www.grails.org/plugin/home Grails Plugin Repository]. For further installation options, such as installing a development snapshot, refer to the [InstallationInstructions installation instructions].
 
 ==Create a resource==
 
@@ -45,7 +45,7 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
 
-@Path('/test')
+@Path('/api/test')
 class TestResource {
 
     @GET
@@ -57,9 +57,9 @@ class TestResource {
 }
 }}}
 
-It defines a single method that responds to HTTP GET operations. The response entity is set to the return value of the method, {{{Test}}} in this example. The content type of the response ({{{Content-Type}}} header) is {{{text/plain}}}. The created resource is ready to use as shown in the next section.
+It defines a single method that responds to HTTP GET operations. The HTTP response contains the return value of this method, {{{Test}}} in this example. The content type of the response ({{{Content-Type}}} header) is {{{text/plain}}}. The created resource is ready to use as shown in the next section.
 
-Creating resources via the command line is only one option. An alternative is to create resource files by hand. Any {{{*Resource.groovy}}} file created under {{{grails-app/resources}}} is assumed to be a JAX-RS resource and auto-detected by the grails-jaxrs plugin. 
+Creating resources via the command line is only one option. An alternative is to create resource files by hand. Any {{{*Resource.groovy}}} file created under {{{grails-app/resources}}} is assumed to be a JAX-RS resource and auto-detected by the grails-jaxrs plugin. These resources are checked for the presence of JAX-RS annotations as defined by JAX-RS 1.0 specification, section 3.1. Resources that aren't properly annotated are ignored by the plugin. 
 
 ==Run the application==
 
@@ -69,11 +69,11 @@ To start the application enter
 grails run-app
 }}}
 
-on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/test}}}. The browser should now display "{{{Test}}}".
+on the comamnd line. Then open a browser window and go to {{{http://localhost:8080/hello/api/test}}}. The browser should now display "{{{Test}}}".
 
 ==Change the code==
 
-The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that we let add a {{{name}}} parameter to the {{{getTestRepresentation}}} method and bind it to a {{{name}}} query parameter using the JAX-RS {{{@QueryParam}}} annotation. The created response will vary depending on the {{{name}}} query parameter. Here's the modified source code.
+The grails-jaxrs plugin also support code changes at runtime i.e. without restarting the server. To demonstrate that we let add a {{{name}}} parameter to the {{{getTestRepresentation}}} method and bind it to a {{{name}}} query parameter using the JAX-RS {{{@QueryParam}}} annotation. The HTTP response entity will vary depending on the {{{name}}} query parameter. Here's the modified source code.
 
 {{{
 import javax.ws.rs.GET
@@ -82,7 +82,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.QueryParam
 
 
-@Path('/test')
+@Path('/api/test')
 class TestResource {
 
     @GET
@@ -94,7 +94,7 @@ class TestResource {
 }
 }}}
 
-When you save the changes the plugin re-initializes the JAX-RS runtime (see also console output). Go to {{{http://localhost:8080/hello/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window. If you additionally want to factor out the greeting logic into a Grails service, refer to the [AdvancedFeatures#Service_injection service injection] section for instructions.
+When you save the changes the plugin re-initializes the JAX-RS runtime (see also console output). Go to {{{http://localhost:8080/hello/api/test?name=Martin}}} and you should see {{{Hello Martin}}} in the browser window. If you additionally want to factor out the greeting logic into a Grails service, refer to the [AdvancedFeatures#Service_injection service injection] section for instructions.
 
 =Scaffolding=
 
