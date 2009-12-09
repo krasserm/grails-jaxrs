@@ -137,7 +137,7 @@ class TestResource {
 
 =Scaffolding=
 
-The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding feature in version 0.2 is still *early access*. For an introductory scaffolding example refer to the [GettingStarted#Scaffolding scaffolding section of the getting started guide]. The following subsections walk through the generated example code. 
+The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding feature in version 0.3 is still *early access*. For an introductory scaffolding example refer to the [GettingStarted#Scaffolding scaffolding section of the getting started guide]. The following subsections walk through the generated example code. 
 
 =={{{PersonCollectionResource.groovy}}}==
 
@@ -146,6 +146,7 @@ Here's the source code for {{{PersonCollectionResource.groovy}}}.
 {{{
 import static org.grails.jaxrs.response.Responses.*
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.Produces
 import javax.ws.rs.Path
@@ -153,13 +154,14 @@ import javax.ws.rs.PathParam
 import javax.ws.rs.POST
 import javax.ws.rs.core.Response
 
-@Path('/person')
-@Produces('text/xml')
+@Path('/api/person')
+@Consumes(['application/xml','application/json'])
+@Produces(['application/xml','application/json'])
 class PersonCollectionResource {
 
     @POST
-    Response create(Map properties) {
-        created new Person(properties).save()
+    Response create(Person dto) {
+        created dto.save()
     }
 
     @GET
@@ -175,12 +177,12 @@ class PersonCollectionResource {
 }
 }}}
 
-It is based based on JSR 311 classes and annotations and uses static methods from {{{org.grails.jaxrs.response.Responses}}}. This is a helper class provided by the plugin that implements a very simple DSL consisting of elements {{{created}}}, {{{ok}}} and {{{notFound}}}. 
+It is based based on JSR 311 classes and annotations and uses static methods from {{{org.grails.jaxrs.response.Responses}}}. This is a helper class provided by the plugin that implements a very simple DSL consisting of elements {{{created}}} and {{{ok}}}. Supported content types for requests and responses are {{{application/xml}}} and ´{{{application/json}}}. This is given by the class-level {{{@Consumes}}} and {{{@Produces}}} annotations.
 
-The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/person}}} where the {{{/person}}} path is defined by the class-level {{{@Path('/person')}}} annotation.
+The {{{PersonCollectionResource}}} class responds to HTTP operations that are releated to person lists. The URL of the person list is {{{http://localhost:8080/hello/api/person}}} where the {{{/api/person}}} path is defined by the class-level {{{@Path('/api/person')}}} annotation. 
 
-  * The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML request entity is converted by the plugin into a map that can be used for the construction of a {{{Person}}} domain object. The conversion is done by the {{{org.grails.jaxrs.provider.XMLReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code]. The method constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id and uses Grail's XML marshaling for rendering the response entity.
-  * The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code].
+  * The {{{create}}} method responds to POST requests by storing a new {{{Person}}} object in the database using [http://grails.org/doc/1.1.2/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM]. The XML or JSON request entity is converted by the plugin to a {{{Person}}} domain object and passed to the method via the {{{dto}}} parameter. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectReader}}}, a JAX-RS provider implemented by the plugin. The persisted domain object is passed as argument to the {{{created}}} method which creates a response from the domain object using the JAX-RS API. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code]. The method constructs a {{{URI}}} for the {{{Location}}} response header from the domain object id. The {{{Person}}} object, which is the {{{Response}}} entity, is converted to an XML or JSON representation, depending on the {{{Accept}}} HTTP request header. The conversion is done by the {{{org.grails.jaxrs.provider.DomainObjectWriter}}}.
+  * TODO: continue here ... The {{{readAll}}} method responds to GET requests and returns an XML representation of a person list. Again we use GORM to get all person object from the database and pass that list as argument to the {{{ok}}} method. This method again uses the JAX-RS API to create the response. Here's a [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/response/Responses.groovy link to the source code].
   * The {{{getResource}}} method creates another JAX-RS resource whenever a request to the URI template {{{http://localhost:8080/hello/person/{id} }}} is made. The {{{id}}} path parameter in the template is bound to the {{{id}}} parameter of the {{{getResource}}} method. The created JAX-RS {{{PersonResource}}} is then used by the JAX-RS runtime to handle the request to the person with the given id. 
 
 =={{{PersonResource.groovy}}}==
