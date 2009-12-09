@@ -66,6 +66,12 @@ Since this is the default you can omit this entry as well. On the other hand, if
 org.grails.jaxrs.resource.scope='singleton'
 }}}
 
+==Domain object providers==
+
+From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_provider entity provider] section.
+
+TODO: continue here ...
+
 =Applying filters=
 
 [http://grails.org/doc/1.1.1/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
