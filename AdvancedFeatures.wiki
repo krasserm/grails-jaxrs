@@ -239,7 +239,7 @@ class PersonResource {
 
 The {{{id}}} property is set during construction of the resource and is used for database operations. This class implements the methods {{{read}}}, {{{update}}} and {{{delete}}} to handle GET, PUT and DELETE requests, respectivly. It also uses GORM for database operations and relies on helper methods of {{{org.grails.jaxrs.response.Responses}}} to create repsonses via the JAX-RS API.
 
-If there's no person with given {{{id}}} in the database, a {{{DomainObjectNotFoundException}}} is thrown. This exception class generates a custom {{{404}}} response using the JAX-RS API. [http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/provider/DomainObjectNotFoundException.groovy See source code for details].
+If there's no person with given {{{id}}} in the database, a {{{DomainObjectNotFoundException}}} is thrown. This exception class generates a custom {{{404}}} response using the JAX-RS API ([http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/provider/DomainObjectNotFoundException.groovy see source code for details]).
 
 =Using GORM=
 
