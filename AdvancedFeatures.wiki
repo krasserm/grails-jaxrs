@@ -42,13 +42,15 @@ Custom mappings replace the default {{{/api/**}}} mapping. If the default mappin
 
 ==JAX-RS implementation==
 
-The grails-jaxrs plugin allows to choose between [https://jersey.dev.java.net/ Jersey] (version 1.1.1-ea) and [http://www.restlet.org/ Restlet] (version 2.0-m4) as JAX-RS implementations. By default, Jersey is used. If you want to use Restlet instead, add the following line to {{{grails-app/conf/Config.groovy}}}.
+The grails-jaxrs plugin allows to choose between [https://jersey.dev.java.net/ Jersey] (version 1.1.4.1) and [http://www.restlet.org/ Restlet] (version 2.0-M6) as JAX-RS implementations. By default, Jersey is used. If you want to use Restlet instead, add the following line to {{{grails-app/conf/Config.groovy}}}.
 
 {{{
 org.grails.jaxrs.provider.name='restlet'
 }}}
 
-Restlet was added because it supports deployments to [http://code.google.com/appengine/ Google App Engine] (GAE). Jersey currently doesn't run on GAE.
+Restlet was added because it supports deployments to [http://code.google.com/appengine/ Google App Engine] (GAE). For instructions how to deploy a grails-jaxrs application to Google App Engine refer to the [#Google_App_Engine Google App Engine] section. 
+
+The main obstacle for deploying Jersey to Google App Engine was missing support for JAXB in the past. This has been resolved with the App Engine SDK 1.2.8. However, attempts to deploy Jersey to Google App Engine revealed other issues. We plan to resolve these issues in upcoming versions of this plugin.
 
 ==JAX-RS resource scope==
 
