@@ -68,7 +68,7 @@ org.grails.jaxrs.resource.scope='singleton'
 
 ==Domain object providers==
 
-From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_provider entity provider] section.
+From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section.
 
 TODO: continue here ...
 
