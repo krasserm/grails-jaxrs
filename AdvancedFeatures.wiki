@@ -266,9 +266,7 @@ class Note {
 }
 }}}
 
-The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object).
-
-For storing new {{{Note}}} objects in the database, we create a {{{NotesResource}}} class that can handle POST requests to {{{http://localhost:8080/hello/api/notes}}}.
+The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object). For inserting new {{{Note}}} objects into the database, we create a {{{NotesResource}}} class that can handle POST requests to {{{http://localhost:8080/hello/api/notes}}}.
 
 {{{
 import javax.ws.rs.Consumes
@@ -303,7 +301,7 @@ class NotesResource {
 }
 }}}
 
-Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The created note object is the response entity. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request
+Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The response entity is the created note object. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request
 
 {{{
 POST /hello/notes/ HTTP/1.1
