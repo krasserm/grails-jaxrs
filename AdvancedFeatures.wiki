@@ -245,13 +245,13 @@ If there's no person with given {{{id}}} in the database, a {{{DomainObjectNotFo
 
 *Hint*: the example described in this section can be implemented much easier using [#Scaffolding Scaffolding]. Most of the code presented here can be generated since version 0.2 of grails-jaxrs. The following example nevertheless provides useful information how to implement simple RESTful service interfaces by hand (i.e. without code generation).
 
-Usage of [http://grails.org/doc/1.1.1/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
+Usage of [http://grails.org/doc/1.1.2/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
 
-  * POSTing to {{{http://localhost:8080/hello/notes}}} creates a new {{{Note}}} domain object in the database containing the actual note from the request body. The request content type is {{{text/plain}}}. The response content type is {{{text/xml}}} representing the created domain object including its identifier. The response {{{Location}}} header contains the URL of the created note resource.
+  * POSTing to {{{http://localhost:8080/hello/api/notes}}} creates a new {{{Note}}} domain object in the database containing the actual note from the request entity. The request content type is {{{text/plain}}}. The response entity contains a representation of the created {{{Note}}} object. The response content type is {{{application/xml}}} or {{{application/json}}} depending on the {{{Accept}}} request header. The {{{Location}}} response header value is the URL of the created note resource.
 
-  * GETing from {{{http://localhost:8080/hello/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{text/xml}}}.
+  * GETing from {{{http://localhost:8080/hello/api/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{application/xml}}} or {{{application/json}}} depending on the {{{Accept}}} request header. 
 
-  * GETing from {{{http://localhost:8080/hello/notes/{id} }}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
+  * GETing from {{{http://localhost:8080/hello/api/notes/{id} }}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
 
 The first step is to create the {{{Note}}} domain object. This can be either done via {{{grails create-domain-class note}}} from the command line or manually by adding a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
 
@@ -268,11 +268,9 @@ class Note {
 
 The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object).
 
-For creating new {{{Note}}} instances i.e. note resources we POST the notes text to {{{http://localhost:8080/hello/notes}}}. This resource is implemented with a {{{NotesResource}}} class
+For storing new {{{Note}}} objects in the database, we create a {{{NotesResource}}} class that can handle POST requests to {{{http://localhost:8080/hello/api/notes}}}.
 
 {{{
-import grails.converters.*
- 
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.Produces
@@ -282,28 +280,30 @@ import javax.ws.rs.POST
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriBuilder
 
-@Path('/notes')
+@Path('/api/notes')
 class NotesResource {
 
      @POST
      @Consumes('text/plain')
-     @Produces('text/xml')
+     @Produces(['application/xml', 'application/json'])
      Response addNote(String text) {
          def note = new Note(text:text).save()
          URI uri = UriBuilder.fromPath(note.id as String).build()
-         Response.created(uri).entity(note as XML).build()
+         Response.created(uri).entity(note).build()
      }
 
      @GET
-     @Produces('text/xml')
+     @Produces(['application/xml', 'application/json'])
      Response getNotes() {
-         Response.ok(Note.findAll() as XML).build()
+         Response.ok(Note.findAll()).build()
      }
+     
+     // ... other methods omitted
      
 }
 }}}
 
-Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request body via the {{{text}}} parameter. The text parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header with {{{Response.created(uri)}}}. The response body contains the XML representation of the note object. To create the XML representation the XML converter of Grails is used. Here's a sample HTTP request:
+Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The created note object is the response entity. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request:
 
 {{{
 POST /hello/notes/ HTTP/1.1
