@@ -98,7 +98,7 @@ When you save the changes the plugin re-initializes the JAX-RS runtime (see also
 
 =Scaffolding=
 
-The grails-jaxrs plugin also supports scaffolding. It allows you to create a RESTful service interface for one or more domain classes based on JAX-RS resource classes. The following sections walk through a simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
+The grails-jaxrs plugin also supports scaffolding. It allows you to generate a RESTful service interface for one or more domain classes based on JAX-RS resource classes. Supported representation formats are XML and JSON. The following sections walk through a simple example. Please note that the scaffolding feature of the plugin is still *early-access*.
 
 ==Create a domain class==
 
@@ -141,17 +141,64 @@ Start the {{{hello}}} application with
 grails run-app
 }}}
 
-The following examples use the [http://www.ywebb.com/eclipse-restful-http-client-plugin-http4e/ Eclipse HTTP Client] and a web browser for interacting with the RESTful {{{Person}}} service. 
+New person objects can be created by POSTing to {{{http://localhost:8080/hello/person}}}. The following request POSTs an XML representation of a person object. 
 
-New person objects can be created by POSTing to {{{http://localhost:8080/hello/person}}}. The {{{Content-Type}}} header must be set to {{{text/xml}}}. The request entity contains a person XML representation.
+{{{
+POST /hello/api/person HTTP/1.1
+Content-Type: application/xml
+Accept: application/xml
+Host: localhost:8080
+Content-Length: 82
 
-http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-01.png
+<person>
+  <firstName>Sam</firstName>
+  <lastName>Hill</lastName>
+</person>
+}}}
 
-After sending the request, the server creates a new person object in the database and returns a representation of it. Note that the returned representation differs from the submitted representation by an {{{id}}} attribute in the {{{<person>}}} element. This id is also contained in the {{{Location}}} response header, the URL of the created resource. The response code is {{{201}}} ({{{CREATED}}}). We create a another person for which the server creates the id 2.
 
-http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-02.png
+The {{{Content-Type}}} header must be set either to {{{application/xml}}} or {{{text/xml}}}. After sending the request, the server creates a new person object in the database and returns an XML representation of it. 
 
-To GET the list of created persons, open a browser and enter the URL {{{http://localhost:8080/hello/person}}}. This returns an XML representation of the list of persons stored in the database.
+{{{
+HTTP/1.1 201 Created
+Content-Type: application/xml
+Location: http://localhost:8080/hello/api/person/1
+Server: Jetty(6.1.14)
+
+<?xml version="1.0" encoding="UTF-8"?>
+<person id="1">
+  <firstName>Sam</firstName>
+  <lastName>Hill</lastName>
+</person>
+}}}
+
+The client explicitly requested an XML representation via the {{{Accept}}} request header. Note that the returned representation differs from the submitted representation by an {{{id}}} attribute in the {{{<person>}}} element. This id is also contained in the {{{Location}}} response header, the URL of the created resource. The response code is {{{201}}} ({{{CREATED}}}). Let's create another person object using a JSON representation. Here's the request
+
+{{{
+POST /hello/api/person HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Host: localhost:8080
+Content-Length: 58
+
+{"class":"Person","firstName":"Fabien","lastName":"Barel"}
+}}}
+
+The response also contains a JSON representation of the created person (see {{{Accept}}} request header). The id of the created person object is {{{2}}}.
+
+{{{
+HTTP/1.1 201 Created
+Content-Type: application/json
+Location: http://localhost:8080/hello/api/person/2
+Transfer-Encoding: chunked
+Server: Jetty(6.1.14)
+
+{"class":"Person","id":"2","firstName":"Fabien","lastName":"Barel"}
+}}}
+
+Content negotiation via {{{Content-Type}}} and  {{{Accept}}} headers works for other HTTP methods as well. To GET the list of created persons, open a browser and enter the URL {{{http://localhost:8080/hello/api/person}}}. This returns an XML representation of the list of persons stored in the database.
+
+TODO: continue here (explain accept header set by firefox).
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-03.png
 
