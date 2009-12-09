@@ -163,6 +163,7 @@ The {{{Content-Type}}} header must be set either to {{{application/xml}}} or {{{
 HTTP/1.1 201 Created
 Content-Type: application/xml
 Location: http://localhost:8080/hello/api/person/1
+Transfer-Encoding: chunked
 Server: Jetty(6.1.14)
 
 <?xml version="1.0" encoding="UTF-8"?>
@@ -200,7 +201,7 @@ Content negotiation via {{{Content-Type}}} and  {{{Accept}}} headers works for o
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-03.png
 
-An XML representation is returned because Firefox sets an {{{Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8}}} request header. To get the representation of a single person, specify the id in the URL. For example, to get the person with id 1 use {{{http://localhost:8080/hello/person/1}}}
+An XML representation is returned because Firefox sets an {{{Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8}}} request header. To get the representation of a single person, specify the id in the URL. For example, to get the person with id 1 use {{{http://localhost:8080/hello/api/person/1}}}
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-04.png
 
@@ -208,21 +209,49 @@ If you try to get a person that doesn't exist, an error message (with a status c
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-05.png
 
-TODO: continue here ...
+In the next step we update the first name of person 1 by PUTting a new representation to {{{http://localhost:8080/hello/api/person/1}}}. 
 
-In the next step we update the first name of person 1 by PUTting a new representation to {{{http://localhost:8080/hello/person/1}}}. The response is a new representation of the updated person.
+{{{
+PUT /hello/api/person/1 HTTP/1.1
+Content-Type: application/xml
+Accept: application/xml
+Host: localhost:8080
+Content-Length: 85
 
-http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-06.png
+<person>
+  <firstName>Samuel</firstName>
+  <lastName>Hill</lastName>
+</person>
+}}}
+
+The response is a new representation of the updated person.
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Server: Jetty(6.1.14)
+
+<?xml version="1.0" encoding="UTF-8"?>
+<person id="1">
+  <firstName>Samuel</firstName>
+  <lastName>Hill</lastName>
+</person>
+}}}
 
 GETting the person list again shows the update of person 1.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-07.png
 
-Finally, we delete person 1 by sending a DELETE request to {{{http://localhost:8080/hello/person/1}}}.
+Finally, we delete person 1 by sending a DELETE request to {{{http://localhost:8080/hello/api/person/1}}}.
 
-http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-08.png
+{{{
+DELETE /hello/api/person/1 HTTP/1.1
+Accept: application/xml
+Host: localhost:8080
+}}}
 
-GETting the person lists again shows that person 1 has actually been removed.
+GETting the person lists again shows that person 1 has actually been deleted.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
 
