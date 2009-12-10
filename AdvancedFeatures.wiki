@@ -584,14 +584,9 @@ org.grails.jaxrs.resource.scope='singleton'
 
 ==Domain object providers==
 
-From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section. Here, only the configuration options are summarized. The grails-jaxrs plugin comes with two domain object providers:
+From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Domain_object_providers domain object providers] section. Domain object readers and writers can be disabled by adding the following entries to {{{grails-app/conf/Config.groovy}}}.
 
-  * {{{org.grails.jaxrs.provider.DomainObjectReader}}}
-  * {{{org.grails.jaxrs.provider.DomainObjectWriter}}}
+  * {{{org.grails.jaxrs.doreader.disable=true}}}
+  * {{{org.grails.jaxrs.dowriter.disable=true}}}
 
-These can selectively be disabled by using the following configuration properties in {{{grails-app/conf/Config.groovy}}}.
-
-  * {{{org.grails.jaxrs.doreader.disable}}}
-  * {{{org.grails.jaxrs.dowriter.disable}}}
-
-Setting these properties to {{{true}}} will disable the default domain object providers. Another {{{DomainObjectWriter}}} configuration option, {{{org.grails.jaxrs.dowriter.require.generic.collections}}} is explained in the [#Entity_providers entity providers] section.
+This is useful in situations where applications implement [#Custom_providers custom providers]. Another domain object provider configuration property, {{{org.grails.jaxrs.dowriter.require.generic.collections}}}, is explained in the [#Domain_objects_collections domain objects collections] section.
