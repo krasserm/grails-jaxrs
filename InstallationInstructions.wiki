@@ -5,7 +5,9 @@
 
 =Prerequisites=
 
-Using the grails-jaxrs plugin requires a Grails 1.1.1 (or higher) installation. For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1].
+Using the grails-jaxrs plugin requires a Grails 1.1.1 (or higher) installation. Recommended is version 1.1.2. Please note that the plugin has not been tested yet with a Grails 1.2 milestone or release candidate.
+
+For instructions how to download and install Grails refer to the [http://grails.org/doc/1.1.1/guide/2.%20Getting%20Started.html#2.1%20Downloading%20and%20Installing Grails reference documentation section 2.1].
 
 =Getting the plugin= 
 
@@ -13,7 +15,7 @@ Using the grails-jaxrs plugin requires a Grails 1.1.1 (or higher) installation. 
 
 ==Binaries==
 
-The plugin binaries can be downloaded from the project's [http://code.google.com/p/grails-jaxrs/downloads/list download section]. The latest stable version is grails-jaxrs-0.2.zip.
+The plugin binaries can be downloaded from the project's [http://code.google.com/p/grails-jaxrs/downloads/list download section]. The latest stable version is grails-jaxrs-0.3.zip.
 
 ==Sources==
 
@@ -62,6 +64,24 @@ grails install-plugin /path/to/grails-jaxrs-<version>.zip
 where {{{/path/to}}} needs to be replaced by the absolute or relative path to the {{{grails-jaxrs-<version>.zip}}} file.
 
 =Upgrade notes=
+
+==From 0.2 to 0.3==
+
+The default URL mapping changed in version 0.3. In version 0.2 all URLs were mapped to the {{{JaxrsController}}}. In version 0.3 the default URL mapping changed to 
+
+  * {{{"/api"    (controller:"jaxrs")}}}
+  * {{{"/api/**" (controller:"jaxrs")}}}
+
+Refer to the [#URL mapping URL mappings] section for instructions how to change the default URL mapping. 
+
+The auto-detection criteria for 
+
+  * JAX-RS resource classes under {{{grails-app/resources}}} and
+  * JAX-RS provider classes under {{{grails-app/provider}}}
+
+are now better aligned with the JAX-RS specification, sections 3.1 and 4.2.
+
+==From 0.1 to 0.2==
 
 In version 0.2 the way how JAX-RS resources and providers are auto-detected has changed. In version 0.1 plain Spring mechanisms were used ({{{<context:component-scan />}}}, {{{@Component}}} annotation, etc.) whereas in version 0.2 the plugin follows Grails conventions how to detect and manage resources. There's no need any more to provide a custom Spring application context. The grails-jaxrs plugin is now making these changes behind the scenes.
 
