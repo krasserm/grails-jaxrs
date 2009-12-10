@@ -290,11 +290,11 @@ Server: Jetty(6.1.14)
 
 There are several other protected {{{DomainObjectWriterSupport}}} methods for customizing the domain object marshalling. These allow, for example, to
 
-  * create custom JSON representations ({{{writetoJson}}})
-  * narrow the set of domain objects that a custom domain object writer accepts ({{{isWriteable}}})
+  * create custom JSON representations ({{{writeToJson(...)}}})
+  * narrow the set of domain objects that a custom domain object writer accepts ({{{isWriteable(...)}}})
   * etc ...
 
-Refer to the the API documentation for details.
+Refer to the the API documentation for details (TODO: insert link).
 
 ===Further entity provider support===
 
@@ -307,7 +307,7 @@ These base classes can also be used for other classes than domain classes. Imple
 
 {{{
 @Provider
-@Produces('text/xml')
+@Produces('application/xml')
 class NoteWriter extends MessageBodyWriterSupport<Note> {
     
     void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
@@ -320,215 +320,9 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-For details refer to the API docs.
+For details refer to the API docs (TODO: insert link).
 
-==Obsolete==
-
-Entity providers supply mapping services between representations formats and their associated Java types. They are used to factor out parsing and rendering code from resource classes. The {{{grails-jaxrs}}} plugin provides abstract base classes for entity providers. 
-
-  * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
-  * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
-
-These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like following:
-
-{{{
-import groovy.xml.MarkupBuilder
-
-import java.io.OutputStreamWriter
-
-import javax.ws.rs.Produces
-import javax.ws.rs.core.MultivaluedMap
-import javax.ws.rs.ext.Provider
-
-import org.grails.jaxrs.support.MessageBodyWriterSupport
-
-@Provider
-@Produces('text/xml')
-class NoteWriter extends MessageBodyWriterSupport<Note> {
-    
-    void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
-        def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
-        builder.note {
-            id(entity.id)
-            content(entity.text)
-        }
-        // Alternative (default rendering):
-        // entityStream << (entity as XML)
-    }
-   
-}
-}}}
-
-When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly in the response object:
-
-{{{
-...
-
-class NoteResource {
-
-    Note note
-
-    @GET
-    @Produces('text/xml')
-    Response getNote() {
-        if (note) {
-            // custom XML rendering done by provider (NoteWriter)
-            Response.ok(note).build()
-            //Response.ok(note as XML).build()
-        } else {
-            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
-        } 
-    }
-     
-}
-}}}
-
-In this case the response looks like:
-
-{{{
-HTTP/1.1 200 OK
-Content-Type: text/xml
-
-<?xml version="1.0" encoding="UTF-8"?>
-<note>
-  <id>1</id>
-  <content>Don't forget to learn Scala</content>
-</note>
-}}}
-
-=Configuration=
-
-==URL mappings==
-
-When the grails-jaxrs plugin is installed, requests paths matching {{{/api/**}}} are forwarded to a {{{JaxrsController}}} which is part of the plugin. This default URL mapping can be changed via the {{{org.grails.jaxrs.url.mappings}}} configuration property in {{{grails-app/conf/Config.groovy}}}. For example, setting this property to 
-
-  * {{{org.grails.jaxrs.url.mappings=['/abc', '/xyz']}}}
-
-will create the following URL mappings for the {{{JaxrsController}}}:
-
-  * {{{"/abc"(controller:"jaxrs")}}}
-  * {{{"/abc/**"(controller:"jaxrs")}}}
-  * {{{"/xyz"(controller:"jaxrs")}}}
-  * {{{"/xyz/**"(controller:"jaxrs")}}}
-
-{{{@Path}}} annotation values in JAX-RS resource classes must be set accordingly e.g. 
-
-{{{
-@Path('/abc/test1')
-class TestResource1 {
-  ...    
-}
-}}}
-
-or 
-
-{{{
-@Path('/xyz/test2')
-class TestResource2 {
-  ...    
-}
-}}}
-
-Custom mappings replace the default {{{/api/**}}} mapping. If the default mapping should apply in addition to custom mappings it must be added to the {{{org.grails.jaxrs.url.mappings}}} list.
-
-  * {{{org.grails.jaxrs.url.mappings=['/abc', '/xyz', '/api']}}}
-
-==JAX-RS implementation==
-
-The grails-jaxrs plugin allows to choose between [https://jersey.dev.java.net/ Jersey] (version 1.1.4.1) and [http://www.restlet.org/ Restlet] (version 2.0-M6) as JAX-RS implementations. By default, Jersey is used. If you want to use Restlet instead, add the following line to {{{grails-app/conf/Config.groovy}}}.
-
-{{{
-org.grails.jaxrs.provider.name='restlet'
-}}}
-
-Restlet was added because it supports deployments to [http://code.google.com/appengine/ Google App Engine] (GAE). For instructions how to deploy a grails-jaxrs application to Google App Engine refer to the [#Google_App_Engine Google App Engine] section. 
-
-The main obstacle for deploying Jersey to Google App Engine was missing support for JAXB in the past. This has been resolved with the App Engine SDK 1.2.8. However, attempts to deploy Jersey to Google App Engine revealed other issues. We plan to resolve these issues in upcoming versions of this plugin.
-
-==JAX-RS resource scope==
-
-By default, JAX-RS resource classes are instantiated with every request which corresponds to the following entry in {{{grails-app/conf/Config.groovy}}}.
-
-{{{
-org.grails.jaxrs.resource.scope='prototype'
-}}}
-
-Since this is the default you can omit this entry as well. On the other hand, if you want that your JAX-RS resources are singletons, add the following configuration entry.
-
-{{{
-org.grails.jaxrs.resource.scope='singleton'
-}}}
-
-==Domain object providers==
-
-From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section. Here, only the configuration options are summarized. The grails-jaxrs plugin comes with two domain object providers:
-
-  * {{{org.grails.jaxrs.provider.DomainObjectReader}}}
-  * {{{org.grails.jaxrs.provider.DomainObjectWriter}}}
-
-These can selectively be disabled by using the following configuration properties in {{{grails-app/conf/Config.groovy}}}.
-
-  * {{{org.grails.jaxrs.doreader.disable}}}
-  * {{{org.grails.jaxrs.dowriter.disable}}}
-
-Setting these properties to {{{true}}} will disable the default domain object providers. Another {{{DomainObjectWriter}}} configuration option, {{{org.grails.jaxrs.dowriter.require.generic.collections}}} is explained in the [#Entity_providers entity providers] section.
-
-=Applying filters=
-
-[http://grails.org/doc/1.1.2/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/api/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
-
-{{{
-class TestFilters {
-
-    def filters = {
-            
-        testUris(uri:'/api/test/**') {
-            before = {
-                // do some preprocessing
-            }
-            after = {
-                // do some postprocessing
-            }
-            
-        }   
-    }
-}
-}}}
-
-=Service injection=
-
-Services can be auto-injected into resource and [#Entity_providers provider] objects by name. Assuming we have a service class named {{{TestService.groovy}}} in {{{grails-app/services}}}
-
-{{{
-class TestService {
-
-     String greet(String name) {
-         'Hello ' + (name ? name : 'unknown')
-     }
-    
-}
-}}}
-
-then we can auto-inject it by defining a {{{testService}}} property like in the following resource class.
-
-{{{
-// imports omitted ...
-
-@Path('/api/test')
-class TestResource {
-
-    def testService // injected
-    
-    @GET
-    @Produces('text/plain')
-    String getTestRepresentation(@QueryParam('name') String name) {
-        testService.greet(name)
-    }
-    
-}
-}}}
-
-=Scaffolding=
+=Using GORM=
 
 The grails-jaxrs plugin supports scaffolding. Please note that the scaffolding feature in version 0.3 is still *early access*. For an introductory scaffolding example refer to the [GettingStarted#Scaffolding scaffolding section of the getting started guide]. The following subsections walk through the generated example code. 
 
@@ -634,166 +428,59 @@ The {{{id}}} property is set during construction of the resource and is used for
 
 If there's no person with given {{{id}}} in the database, a {{{DomainObjectNotFoundException}}} is thrown. This exception class generates a custom {{{404}}} response using the JAX-RS API ([http://grails-jaxrs.googlecode.com/svn/trunk/jaxrs/src/groovy/org/grails/jaxrs/provider/DomainObjectNotFoundException.groovy see source code for details]).
 
-=Using GORM=
+=Applying filters=
 
-*Hint*: the example described in this section can be implemented much easier using [#Scaffolding Scaffolding]. Most of the code presented here can be generated since version 0.2 of grails-jaxrs. The following example nevertheless provides useful information how to implement simple RESTful service interfaces by hand (i.e. without code generation).
-
-Usage of [http://grails.org/doc/1.1.2/guide/5.%20Object%20Relational%20Mapping%20(GORM).html GORM] is demonstrated on a (over-simplified) web application that keeps track of notes that have been POSTed via HTTP.
-
-  * POSTing to {{{http://localhost:8080/hello/api/notes}}} creates a new {{{Note}}} domain object in the database containing the actual note from the request entity. The request content type is {{{text/plain}}}. The response entity contains a representation of the created {{{Note}}} object. The response content type is {{{application/xml}}} or {{{application/json}}} depending on the {{{Accept}}} request header. The {{{Location}}} response header value is the URL of the created note resource.
-
-  * GETing from {{{http://localhost:8080/hello/api/notes}}} obtains a list of all created notes so far or an empty list. The response content type is {{{application/xml}}} or {{{application/json}}} depending on the {{{Accept}}} request header. 
-
-  * GETing from {{{http://localhost:8080/hello/api/notes/{id} }}} obtains a note with a certain {{{id}}} or an error message (along with status code 404) if a note with the given {{{id}}} doesn't exist.
-
-The first step is to create the {{{Note}}} domain object. This can be either done via {{{grails create-domain-class note}}} from the command line or manually by adding a {{{Note.groovy}}} file with the following content to the {{{grails-app/domain}}} directory.
+[http://grails.org/doc/1.1.2/guide/6.%20The%20Web%20Layer.html#6.6%20Filters Grails filters] can be applied to JAX-RS resources as well. For example, to add a filter for the {{{/api/test/**}}} URL pattern, create a file {{{TestFilters.groovy}}} under {{{grails-app/conf}}} with a content like
 
 {{{
-class Note {
+class TestFilters {
 
-    static constraints = {
+    def filters = {
+            
+        testUris(uri:'/api/test/**') {
+            before = {
+                // do some preprocessing
+            }
+            after = {
+                // do some postprocessing
+            }
+            
+        }   
     }
+}
+}}}
+
+=Service injection=
+
+Services can be auto-injected into resource and [#Entity_providers provider] objects by name. Assuming we have a service class named {{{TestService.groovy}}} in {{{grails-app/services}}}
+
+{{{
+class TestService {
+
+     String greet(String name) {
+         'Hello ' + (name ? name : 'unknown')
+     }
     
-    String text
+}
+}}}
+
+then we can auto-inject it by defining a {{{testService}}} property like in the following resource class.
+
+{{{
+// imports omitted ...
+
+@Path('/api/test')
+class TestResource {
+
+    def testService // injected
     
-}
-}}}
-
-The only thing a note object stores is the note {{{text}}} (and an {{{id}}} property that is available on every Grails domain object). For inserting new {{{Note}}} objects into the database, we create a {{{NotesResource}}} class that can handle POST requests to {{{http://localhost:8080/hello/api/notes}}}.
-
-{{{
-import javax.ws.rs.Consumes
-import javax.ws.rs.GET
-import javax.ws.rs.Produces
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.POST
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.UriBuilder
-
-@Path('/api/notes')
-class NotesResource {
-
-     @POST
-     @Consumes('text/plain')
-     @Produces(['application/xml', 'application/json'])
-     Response addNote(String text) {
-         def note = new Note(text:text).save()
-         URI uri = UriBuilder.fromPath(note.id as String).build()
-         Response.created(uri).entity(note).build()
-     }
-
-     @GET
-     @Produces(['application/xml', 'application/json'])
-     Response getNotes() {
-         Response.ok(Note.findAll()).build()
-     }
-     
-     // ... other methods omitted
-     
-}
-}}}
-
-Save this class as {{{NotesResource.groovy}}} in the {{{grails-app/resources}}} directory. Let's take a closer look at it. The class-level {{{@Path}}} annotation makes this resource accessible under the {{{/api/notes}}} path i.e. the full URL is {{{http://localhost:8080/hello/api/notes}}}. POSTing to this URL will call the {{{addNote(String)}}} method passing the request entity via the {{{text}}} parameter. This parameter is used to construct a {{{Note}}} object which is then stored in the database. The URL for the newly created note is constructed in the second line. We use this URL to set the {{{Location}}} response header via {{{Response.created(uri)}}}. The response entity is the created note object. The plugin will use a {{{org.grails.jaxrs.provider.DomainObjectWriter}}} to convert the note object to an XML or JSON representation. Here's a sample HTTP request
-
-{{{
-POST /hello/notes/ HTTP/1.1
-Content-Type: text/plain
-Host: localhost:8080
-Content-Length: 27
-
-Don't forget to learn Scala
-}}}
-
-and the response
-
-{{{
-HTTP/1.1 201 Created
-Content-Type: application/xml
-Location: http://localhost:8080/hello/api/notes/1
-Transfer-Encoding: chunked
-Server: Jetty(6.1.14)
-
-<?xml version="1.0" encoding="UTF-8"?>
-<note id="1">
-  <text>Don't forget to learn Scala</text>
-</note>
-}}}
-
-TODO: continue here ...
-
-To obtain a list of all notes send a GET request to {{{http://localhost:8080/hello/notes}}} which will call the {{{getNotes()}}} method. This method again uses the Grails XML converter to create an XML representation of the notes collection, such as 
-
-{{{
-HTTP/1.1 200 OK
-Content-Type: text/xml
-
-<?xml version="1.0" encoding="UTF-8"?>
-<list>
-  <note id="1">
-    <text>Don't forget to learn Scala</text>
-  </note>
-  <note id="2">
-    <text>Another important note</text>
-  </note>
-</list>
-}}}
-
-Finally we want to obtain individual notes via {{{http://localhost:8080/hello/notes/{id} }}} where {{{id}}} is in range 1..n. This can be achieved by adding a {{{getNote(String}}} method to the {{{NotesResource}}} class:
-
-{{{
-@Component
-@Path('/notes')
-class NotesResource {
-
-     // ... other methods omitted
-
-     @Path('/{id}')
-     NoteResource getNote(@PathParam('id') String id) {
-         new NoteResource(note:Note.get(id))
-     }
-     
-}
-}}}
-
-Instead of using a fixed path we use a _path template_ where the last path segment is the variable part of the path. It is bound to the {{{id}}} parameter of the {{{getNote(String)}}} method using a {{{@PathParam}}} annotation. Instead of rendering the response directly in the {{{NotesResource}}} class it is delegated to the {{{NoteResource}}} class after we've loaded the note object from the database:
-
-{{{
-import static javax.ws.rs.core.Response.Status.NOT_FOUND
- 
-import grails.converters.* 
- 
-import javax.ws.rs.GET
-import javax.ws.rs.Produces
-import javax.ws.rs.core.Response
-
-class NoteResource {
-
-    Note note
-
     @GET
-    @Produces('text/xml')
-    Response getNote() {
-        if (note) {
-            Response.ok(note as XML).build()
-        } else {
-            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
-        } 
+    @Produces('text/plain')
+    String getTestRepresentation(@QueryParam('name') String name) {
+        testService.greet(name)
     }
     
 }
-}}}
-
-If a note object with the requested id exists an XML representation is returned, otherwise, an error message is created along with a status code 404 (NOT FOUND). For example, GETing the note {{{http://localhost:8080/hello/notes/1}}} returns
-
-{{{
-HTTP/1.1 200 OK
-Content-Type: text/xml
-
-<?xml version="1.0" encoding="UTF-8"?>
-<note id="1">
-  <text>Don't forget to learn Scala</text>
-</note>
 }}}
 
 =Google App Engine=
@@ -831,3 +518,80 @@ $APPENGINE_HOME/bin/appcfg.sh update ./target/war
   * Once deployment is done go enter the URL {{{http://<application-name>.appspot.com/test?name=Tester}}} into your browser and the browser window should display {{{Hello Tester}}}. It may take 10-20 seconds for Google App Engine to initialize the Grails application the first time. Subsequent requests are served much faster.
 
 Deployments of applications that use GORM have not been tested yet but should be possible with the Grails {{{gorm-jpa}}} plugin. In order to use the plugin make sure to choose JPA for persistence when installing the Grails {{{app-engine}}} plugin. Initial tests on Windows resulted in classpath issues after installation of the {{{gorm-jpa}}} plugin. I'll post a message to the [http://groups.google.com/group/grails-jaxrs grails-jaxrs] group as soon as there are updates.
+
+=Configuration=
+
+==URL mappings==
+
+When the grails-jaxrs plugin is installed, requests paths matching {{{/api/**}}} are forwarded to a {{{JaxrsController}}} which is part of the plugin. This default URL mapping can be changed via the {{{org.grails.jaxrs.url.mappings}}} configuration property in {{{grails-app/conf/Config.groovy}}}. For example, setting this property to 
+
+  * {{{org.grails.jaxrs.url.mappings=['/abc', '/xyz']}}}
+
+will create the following URL mappings for the {{{JaxrsController}}}:
+
+  * {{{"/abc"(controller:"jaxrs")}}}
+  * {{{"/abc/**"(controller:"jaxrs")}}}
+  * {{{"/xyz"(controller:"jaxrs")}}}
+  * {{{"/xyz/**"(controller:"jaxrs")}}}
+
+{{{@Path}}} annotation values in JAX-RS resource classes must be set accordingly e.g. 
+
+{{{
+@Path('/abc/test1')
+class TestResource1 {
+  ...    
+}
+}}}
+
+or 
+
+{{{
+@Path('/xyz/test2')
+class TestResource2 {
+  ...    
+}
+}}}
+
+Custom mappings replace the default {{{/api/**}}} mapping. If the default mapping should apply in addition to custom mappings it must be added to the {{{org.grails.jaxrs.url.mappings}}} list.
+
+  * {{{org.grails.jaxrs.url.mappings=['/abc', '/xyz', '/api']}}}
+
+==JAX-RS implementation==
+
+The grails-jaxrs plugin allows to choose between [https://jersey.dev.java.net/ Jersey] (version 1.1.4.1) and [http://www.restlet.org/ Restlet] (version 2.0-M6) as JAX-RS implementations. By default, Jersey is used. If you want to use Restlet instead, add the following line to {{{grails-app/conf/Config.groovy}}}.
+
+{{{
+org.grails.jaxrs.provider.name='restlet'
+}}}
+
+Restlet was added because it supports deployments to [http://code.google.com/appengine/ Google App Engine] (GAE). For instructions how to deploy a grails-jaxrs application to Google App Engine refer to the [#Google_App_Engine Google App Engine] section. 
+
+The main obstacle for deploying Jersey to Google App Engine was missing support for JAXB in the past. This has been resolved with the App Engine SDK 1.2.8. However, attempts to deploy Jersey to Google App Engine revealed other issues. We plan to resolve these issues in upcoming versions of this plugin.
+
+==JAX-RS resource scope==
+
+By default, JAX-RS resource classes are instantiated with every request which corresponds to the following entry in {{{grails-app/conf/Config.groovy}}}.
+
+{{{
+org.grails.jaxrs.resource.scope='prototype'
+}}}
+
+Since this is the default you can omit this entry as well. On the other hand, if you want that your JAX-RS resources are singletons, add the following configuration entry.
+
+{{{
+org.grails.jaxrs.resource.scope='singleton'
+}}}
+
+==Domain object providers==
+
+From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Entity_providers entity providers] section. Here, only the configuration options are summarized. The grails-jaxrs plugin comes with two domain object providers:
+
+  * {{{org.grails.jaxrs.provider.DomainObjectReader}}}
+  * {{{org.grails.jaxrs.provider.DomainObjectWriter}}}
+
+These can selectively be disabled by using the following configuration properties in {{{grails-app/conf/Config.groovy}}}.
+
+  * {{{org.grails.jaxrs.doreader.disable}}}
+  * {{{org.grails.jaxrs.dowriter.disable}}}
+
+Setting these properties to {{{true}}} will disable the default domain object providers. Another {{{DomainObjectWriter}}} configuration option, {{{org.grails.jaxrs.dowriter.require.generic.collections}}} is explained in the [#Entity_providers entity providers] section.
