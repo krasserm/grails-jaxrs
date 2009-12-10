@@ -1,10 +1,10 @@
 #summary What's new in grails-jaxrs 0.3
 
-=What's new=
+=What's new in version 0.3=
 
 ...
 
-=Upgrade notes=
+=Upgrading from version 0.2=
 
 The default URL mapping changed in version 0.3. In version 0.2 all URLs were mapped to the {{{JaxrsController}}}. In version 0.3 the default URL mapping changed to 
 
