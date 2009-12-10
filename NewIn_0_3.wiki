@@ -1,0 +1,1 @@
+#summary What's new in grails-jaxrs 0.3
