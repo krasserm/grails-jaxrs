@@ -89,11 +89,67 @@ This gives better control over e.g. response header creation and still allows cl
 
 ==Domain object collections==
 
-...
+The grails-jaxrs plugin can also handle domain object collections that are returned from resource methods. In the following example, the resource method returns a list of all {{{Person}}} objects in the database.
 
-==Content negotiation==
+{{{
+import java.util.List
+import javax.ws.rs.GET
+import javax.ws.rs.Produces
+import javax.ws.rs.Path
 
-...
+@Path('/api/person')
+class PersonCollectionResource {
+
+    @GET
+    @Produces(['application/xml','application/json'])
+    List<Person> readAll() {
+        Person.findAll()
+    }
+
+    // ...
+
+}
+}}}
+
+Depending on the {{{Accept}}} request header either an XML or JSON representation is returned. The generic return type ({{{List<Person>}}}) makes it explicit which domain objects are contained in the collection, but one could equally write.
+
+{{{
+    @GET
+    @Produces(['application/xml','application/json'])
+    List readAll() {
+        Person.findAll()
+    }
+}}}
+
+or 
+
+{{{
+    @GET
+    @Produces(['application/xml','application/json'])
+    def readAll() {
+        Person.findAll()
+    }
+}}}
+
+The plugin's domain object writer (TODO: insert link), however, can be configured to only convert domain objects returned from methods that declare a generic collection return type by adding the following line to {{{grails-app/conf/Config.groovy}}}: 
+
+{{{
+org.grails.jaxrs.dowriter.require.generic.collections
+}}}
+
+This is useful in situations when there are resource methods that return collections that contain object other than Grails domain objects. Alternatively, one could disable (TODO: insert link) the plugin's domain object writer completely and write a custom one (TODO: insert link).
+
+As with resource methods that return single domain objects, one can also declare a {{{javax.ws.rs.core.Response}}} return type and set the domain object collection as response entity.
+
+{{{
+    @GET
+    @Produces(['application/xml','application/json'])
+    Response readAll() {
+        Response.ok(Person.findAll())
+    }
+}}}
+
+Using domain object collections for method parameters is not supported (yet).
 
 =Configuration=
 
