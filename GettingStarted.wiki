@@ -255,7 +255,7 @@ GETting the person lists again shows that person 1 has actually been deleted.
 
 http://grails-jaxrs.googlecode.com/svn/wiki/images/scaffolding-09.png
 
-The [AdvancedFeatures#Scaffolding scaffolding section] of the [AdvancedFeatures advanced features] page walks through the source code of the generated JAX-RS resources.
+The [AdvancedFeatures#Using_GORM using GORM section] of the [AdvancedFeatures advanced features] page walks through the source code of the generated JAX-RS resources.
 
 =Using Eclipse=
 
