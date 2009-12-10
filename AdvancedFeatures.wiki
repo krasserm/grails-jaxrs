@@ -20,8 +20,8 @@ class Person {
 
 The {{{update}}} method is a member of the {{{PersonResource}}} class and 
 
-  * defines a {{{Person}}} parameter for receiving {{{Person}}} data from a client
-  * defines a {{{Person}}} return type for sending {{{Person}}} data to the client.
+  * defines a {{{Person}}} parameter for receiving person data from a client
+  * defines a {{{Person}}} return type for sending person data to the client.
   * has annotations that constrain valid {{{Person}}} representation formats to {{{application/xml}}} or {{{application/json}}}.
 
 {{{
@@ -44,7 +44,7 @@ class PersonResource {
 }
 }}}
 
-Depending on the {{{Content-Type}}} request header the client either send an XML representation
+Depending on the {{{Content-Type}}} request header the client must either send an XML representation
 
 {{{
 PUT /hello/api/person/1 HTTP/1.1
@@ -71,9 +71,9 @@ Content-Length: 58
 {"class":"Person","firstName":"Fabien","lastName":"Barel"}
 }}}
 
-In both cases the plugin binds the representation to the {{{Person}}} parameter of the {{{update}}} method. The representation of the response entity depends on the {{{Accept}}} request header. If the client sends an {{{Accept=application/xml}}} request header, the {{{Person}}} object returned from the {{{update}}} method is converted to XML. With an {{{Accept=application/json}}} request header, a conversion to JSON is done.
+In both cases the plugin binds the representation to the {{{person}}} parameter of the {{{update}}} method. The representation of the response entity depends on the {{{Accept}}} request header. If the client sends an {{{Accept=application/xml}}} request header, the {{{Person}}} object returned from the {{{update}}} method is converted to XML. With an {{{Accept=application/json}}} request header, a conversion to JSON is done.
 
-Instead of declaring a {{{Person}}} return type one could also declare a {{{javax.ws.rs.core.Response}}} return type and set the response entity during the response building process.
+Instead of declaring a {{{Person}}} return type one could also declare a {{{javax.ws.rs.core.Response}}} return type and set the response entity during the response building process, as shown in the following example:
 
 {{{
     @PUT
@@ -85,7 +85,7 @@ Instead of declaring a {{{Person}}} return type one could also declare a {{{java
     }
 }}}
 
-This gives better control over e.g. response header creation and still allows clients to do content negotiation.
+This gives better control over e.g. response header creation and still allows for content negotiation.
 
 ==Domain object collections==
 
@@ -111,7 +111,7 @@ class PersonCollectionResource {
 }
 }}}
 
-Depending on the {{{Accept}}} request header either an XML or JSON representation is returned. The generic return type ({{{List<Person>}}}) makes it explicit which domain objects are contained in the collection, but one could equally write.
+Depending on the {{{Accept}}} request header either an XML or JSON representation is returned. The generic return type ({{{List<Person>}}}) makes it explicit which domain objects are contained in the collection. But one could equally write:
 
 {{{
     @GET
@@ -131,13 +131,13 @@ or
     }
 }}}
 
-The plugin's domain object writer (TODO: insert link), however, can be configured to only convert domain objects returned from methods that declare a generic collection return type by adding the following line to {{{grails-app/conf/Config.groovy}}}: 
+The plugin's [#Domain_object_providers domain object writer], however, can be configured to only convert domain objects returned from methods that declare a generic collection return type by adding the following line to {{{grails-app/conf/Config.groovy}}}: 
 
 {{{
-org.grails.jaxrs.dowriter.require.generic.collections
+org.grails.jaxrs.dowriter.require.generic.collections=true
 }}}
 
-This is useful in situations when there are resource methods that return collections that contain object other than Grails domain objects. Alternatively, one could disable (TODO: insert link) the plugin's domain object writer completely and write a custom one (TODO: insert link).
+This is useful in situations where resource methods return collections that contain objects other than Grails domain objects (which cannot be handled by the domain object writer). Alternatively, one could [#Configuration disable] the plugin's domain object writer completely and write a [#Custom_providers custom one].
 
 As with resource methods that return single domain objects, one can also declare a {{{javax.ws.rs.core.Response}}} return type and set the domain object collection as response entity.
 
@@ -224,15 +224,14 @@ Applications can implement their own entity providers by placing them into the {
 
 ===Custom domain object providers===
 
-For customizing the conversion between domain classes and their XML or JSON representations, one has to disable the default domain object providers (TODO: insert link) first. To disable the default domain object reader and writer, for example, the following entries must be added to {{{grails-app/conf/Config.groovy}}}. 
+For customizing the conversion between Grails domain objects and their XML or JSON representations, one has to disable the default [#Domain_object_providers domain object providers] first. To disable the default domain object reader and writer, the following entries must be added to {{{grails-app/conf/Config.groovy}}}. 
 
 {{{
 org.grails.jaxrs.doreader.disable=true
 org.grails.jaxrs.dowriter.disable=true
 }}}
 
-In the following example a custom domain object writer is implemented, therefore, only the default domain object writer must be disabled. In this example, a custom XML creation should be done for the {{{Person}}} domain class (see [GettingStarted#Scaffolding scaffolding] example), for all other classes the default XML creation should occur. Here's the custom provider.
-
+In the following example a custom domain object writer is implemented, therefore, only the default domain object writer needs to be disabled. A custom XML creation should be done for the {{{Person}}} domain class (see [GettingStarted#Scaffolding scaffolding] example), for all other classes the default XML creation should occur. Here's the custom provider.
 
 {{{
 import javax.ws.rs.ext.Provider
@@ -258,7 +257,7 @@ class CustomDomainObjectWriter extends DomainObjectWriterSupport {
 }
 }}}
 
-The custom provider redefines the {{{writeToXml}}} method that generates custom XML using a {{{MarkupBuilder}}}. To test this provider, create an application as described in the [GettingStarted#Scaffolding scaffolding] example, create a folder {{{grails-app/provider}}} and place this custom provider there. The plugin will auto-detect the provider. To create a new person object in the database, send the following request:
+The custom provider overrides the {{{writeToXml}}} method and generates custom XML using a {{{MarkupBuilder}}}. To test this provider, create an application as described in the [GettingStarted#Scaffolding scaffolding] example, create a folder {{{grails-app/provider}}} and place this custom provider there. The plugin will auto-detect the provider. To create a new person object in the database, send the following request:
 
 {{{
 POST /hello/api/person HTTP/1.1
@@ -288,13 +287,7 @@ Server: Jetty(6.1.14)
 </person>
 }}}
 
-There are several other protected {{{DomainObjectWriterSupport}}} methods for customizing the domain object marshalling. These allow, for example, to
-
-  * create custom JSON representations ({{{writeToJson(...)}}})
-  * narrow the set of domain objects that a custom domain object writer accepts ({{{isWriteable(...)}}})
-  * etc ...
-
-Refer to the the API documentation for details (TODO: insert link).
+There are several other protected {{{DomainObjectWriterSupport}}} methods for customizing the domain object marshalling, for example {{{writeToJson}}} to create custom JSON representations or {{{isWriteable}}} to narrow the set of domain classes that a custom domain object writer accepts. Refer to the the API docs for details (TODO: insert link).
 
 ===Further entity provider support===
 
@@ -303,7 +296,7 @@ For simple use cases, the grails-jaxrs plugin additionally provides the abstract
   * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
   * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
 
-These base classes can also be used for other classes than domain classes. Implementors define the supported Java type with a type parameter. For example, the following class is a {{{MessageBodyWriter}}} that support the {{{Note}}} Java class.
+These base classes can also be used for classes other than domain classes. Implementors define the supported Java type with a type parameter. For example, the following class is a {{{MessageBodyWriter}}} that supports conversions for the {{{Note}}} class.
 
 {{{
 @Provider
@@ -320,7 +313,7 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-For details refer to the API docs (TODO: insert link).
+For details about the {{{MessageBodyWriterSupport}}} and {{{MessageBodyReaderSupport}}} classes refer to the API docs (TODO: insert link).
 
 =Using GORM=
 
@@ -523,7 +516,7 @@ Deployments of applications that use GORM have not been tested yet but should be
 
 ==URL mappings==
 
-When the grails-jaxrs plugin is installed, requests paths matching {{{/api/**}}} are forwarded to a {{{JaxrsController}}} which is part of the plugin. This default URL mapping can be changed via the {{{org.grails.jaxrs.url.mappings}}} configuration property in {{{grails-app/conf/Config.groovy}}}. For example, setting this property to 
+When the grails-jaxrs plugin is installed, requests paths matching {{{/api/**}}} are forwarded to a {{{JaxrsController}}} which is part of the plugin. This default URL mapping can be changed via the {{{org.grails.jaxrs.url.mappings}}} property in {{{grails-app/conf/Config.groovy}}}. For example, setting this property to 
 
   * {{{org.grails.jaxrs.url.mappings=['/abc', '/xyz']}}}
 
@@ -586,7 +579,9 @@ org.grails.jaxrs.resource.scope='singleton'
 
 From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for converting between Grails domain objects and XML/JSON representations. Domain object providers are explained in detail in the [#Domain_object_providers domain object providers] section. Domain object readers and writers can be disabled by adding the following entries to {{{grails-app/conf/Config.groovy}}}.
 
-  * {{{org.grails.jaxrs.doreader.disable=true}}}
-  * {{{org.grails.jaxrs.dowriter.disable=true}}}
+{{{
+org.grails.jaxrs.doreader.disable=true
+org.grails.jaxrs.dowriter.disable=true
+}}}
 
 This is useful in situations where applications implement [#Custom_providers custom providers]. Another domain object provider configuration property, {{{org.grails.jaxrs.dowriter.require.generic.collections}}}, is explained in the [#Domain_object_collections domain object collections] section.
