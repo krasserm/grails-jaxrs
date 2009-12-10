@@ -151,6 +151,100 @@ As with resource methods that return single domain objects, one can also declare
 
 Using domain object collections for method parameters is not supported (yet).
 
+=Entity providers=
+
+Entity providers bind representation formats to Java classes e.g. an XML representation  to a {{{Person}}} class as shown in the [#Domain_objects previous] section. They are used to factor out marshalling and unmarshalling code from resource classes.
+
+==Domain object providers==
+
+Domain object providers convert between Grails domain classes and their XML or JSON representations. This has already been shown in the sections [GettingStarted#Scaffolding scaffolding] and [#Domain_objects domain objects].
+
+==XML providers==
+
+...
+
+==JSON providers==
+
+...
+
+==Custom providers==
+
+...
+
+==Obsolete==
+
+Entity providers supply mapping services between representations formats and their associated Java types. They are used to factor out parsing and rendering code from resource classes. The {{{grails-jaxrs}}} plugin provides abstract base classes for entity providers. 
+
+  * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
+  * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
+
+These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like following:
+
+{{{
+import groovy.xml.MarkupBuilder
+
+import java.io.OutputStreamWriter
+
+import javax.ws.rs.Produces
+import javax.ws.rs.core.MultivaluedMap
+import javax.ws.rs.ext.Provider
+
+import org.grails.jaxrs.support.MessageBodyWriterSupport
+
+@Provider
+@Produces('text/xml')
+class NoteWriter extends MessageBodyWriterSupport<Note> {
+    
+    void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
+        def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
+        builder.note {
+            id(entity.id)
+            content(entity.text)
+        }
+        // Alternative (default rendering):
+        // entityStream << (entity as XML)
+    }
+   
+}
+}}}
+
+When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly in the response object:
+
+{{{
+...
+
+class NoteResource {
+
+    Note note
+
+    @GET
+    @Produces('text/xml')
+    Response getNote() {
+        if (note) {
+            // custom XML rendering done by provider (NoteWriter)
+            Response.ok(note).build()
+            //Response.ok(note as XML).build()
+        } else {
+            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
+        } 
+    }
+     
+}
+}}}
+
+In this case the response looks like:
+
+{{{
+HTTP/1.1 200 OK
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <id>1</id>
+  <content>Don't forget to learn Scala</content>
+</note>
+}}}
+
 =Configuration=
 
 ==URL mappings==
@@ -548,80 +642,6 @@ Content-Type: text/xml
 <?xml version="1.0" encoding="UTF-8"?>
 <note id="1">
   <text>Don't forget to learn Scala</text>
-</note>
-}}}
-
-=Entity providers=
-
-Entity providers supply mapping services between representations and their associated Java types. They are used to factor out parsing and rendering code from resource classes. The {{{grails-jaxrs}}} plugin provides abstract base classes for entity providers. 
-
-  * {{{org.grails.jaxrs.support.MessageBodyReaderSupport<T>}}}
-  * {{{org.grails.jaxrs.support.MessageBodyWriterSupport<T>}}}
-
-These can be used for simple use cases. For example, if you want to use Groovy's markup builder for creating custom XML responses from {{{Note}}} objects (see [#Using_GORM previous] section) implement a {{{NoteWriter}}} provider class like following:
-
-{{{
-import groovy.xml.MarkupBuilder
-
-import java.io.OutputStreamWriter
-
-import javax.ws.rs.Produces
-import javax.ws.rs.core.MultivaluedMap
-import javax.ws.rs.ext.Provider
-
-import org.grails.jaxrs.support.MessageBodyWriterSupport
-
-@Provider
-@Produces('text/xml')
-class NoteWriter extends MessageBodyWriterSupport<Note> {
-    
-    void writeTo(Note entity, MultivaluedMap httpHeaders, OutputStream entityStream) {
-        def builder = new MarkupBuilder(new OutputStreamWriter(entityStream)) 
-        builder.note {
-            id(entity.id)
-            content(entity.text)
-        }
-        // Alternative (default rendering):
-        // entityStream << (entity as XML)
-    }
-   
-}
-}}}
-
-When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. Having such a provider in place, resource methods can return a {{{Note}}} object directly in the response object:
-
-{{{
-...
-
-class NoteResource {
-
-    Note note
-
-    @GET
-    @Produces('text/xml')
-    Response getNote() {
-        if (note) {
-            // custom XML rendering done by provider (NoteWriter)
-            Response.ok(note).build()
-            //Response.ok(note as XML).build()
-        } else {
-            Response.status(NOT_FOUND).entity('<error>not found</error>').build()
-        } 
-    }
-     
-}
-}}}
-
-In this case the response looks like:
-
-{{{
-HTTP/1.1 200 OK
-Content-Type: text/xml
-
-<?xml version="1.0" encoding="UTF-8"?>
-<note>
-  <id>1</id>
-  <content>Don't forget to learn Scala</content>
 </note>
 }}}
 
