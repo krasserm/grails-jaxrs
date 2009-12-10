@@ -157,17 +157,80 @@ Entity providers bind representation formats to Java classes e.g. an XML represe
 
 ==Domain object providers==
 
-Domain object providers convert between Grails domain classes and their XML or JSON representations. This has already been shown in the sections [GettingStarted#Scaffolding scaffolding] and [#Domain_objects domain objects].
+Domain object providers convert between Grails domain classes and their XML or JSON representations and support content negotiation. This has already been shown in the sections [GettingStarted#Scaffolding scaffolding] and [#Domain_objects domain objects].
+
+  * Converting an XML or JSON representation to a domain object is done by the {{{org.grails.jaxrs.provider.DomainObjectReader}}}. This provider is used whenever a Grails domain class is used as resource method parameter.
+  * Converting a domain object to an XML or JSON representation is done by the {{{org.grails.jaxrs.provider.DomainObjectWriter}}}. This provider is used whenever a Grails domain object (collection) is returned from a resource method.
+
+The behaviour of domain object providers can be customized as described in the [#Custom_providers custom providers] section.
 
 ==XML providers==
 
+XML providers are superseded by [#Domain_object_providers domain object providers] since grails-jaxrs version 0.3.
+
+  * {{{org.grails.jaxrs.provider.XMLReader}}} converts an XML representation of a domain object into a {{{java.util.Map}}}. This map can be for constructing domain objects.
+  * {{{org.grails.jaxrs.provider.XMLWriter}}} converts an {{{grails.converters.XML}}} object into an XML representation. 
+
+Usage example:
+
+{{{
+import grails.converters.XML
 ...
+
+class PersonResource {
+        
+    @PUT
+    @Consumes('application/xml')
+    @Produces('application/xml')
+    XML update(Map dto) {
+        Person person = new Person(map)
+        // ... do something with person
+        return person as XML
+    }
+
+}
+}}}
 
 ==JSON providers==
 
+JSON providers are superseded by [#Domain_object_providers domain object providers] since grails-jaxrs version 0.3.
+
+  * {{{org.grails.jaxrs.provider.JSONReader}}} converts a JSON representation of a domain object into a {{{java.util.Map}}}. This map can be for constructing domain objects.
+  * {{{org.grails.jaxrs.provider.JSONWriter}}} converts an {{{grails.converters.JSON}}} object into a JSON representation. 
+
+Usage example:
+
+{{{
+import grails.converters.JSON
 ...
 
+class PersonResource {
+        
+    @PUT
+    @Consumes('application/json')
+    @Produces('application/json')
+    JSON update(Map dto) {
+        Person person = new Person(map)
+        // ... do something with person
+        return person as JSON
+    }
+
+}
+}}}
+
 ==Custom providers==
+
+Applications can implement their own entity providers by placing them into the {{{grails-app/providers}}} directory. In order to be auto-detected by grails-jaxrs they must be annotated with {{{javax.ws.rs.ext.Provider}}} and implement {{{javax.ws.rs.ext.MessageBodyReader<T>}}} or {{{javax.ws.rs.ext.MessageBodyWriter<T>}}}. 
+
+For ...
+
+Entity providers are classes 
+
+auto-detected by the grails-jaxrs plugin when they are placed into 
+
+When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. 
+
+The grails-jaxrs provides base classes for implementing custom entity providers. Using these base classes is of course optional; one can implement 
 
 ...
 
