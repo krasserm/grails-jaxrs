@@ -72,7 +72,7 @@ The default URL mapping changed in version 0.3. In version 0.2 all URLs were map
   * {{{"/api"    (controller:"jaxrs")}}}
   * {{{"/api/**" (controller:"jaxrs")}}}
 
-Refer to the [AdvancedFeatures#URL mapping URL mappings] section for instructions how to change the default URL mapping. 
+Refer to the [AdvancedFeatures#URL_mappings URL mappings] section for instructions how to change the default URL mapping. 
 
 The auto-detection criteria for 
 
