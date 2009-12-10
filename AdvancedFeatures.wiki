@@ -220,17 +220,20 @@ class PersonResource {
 
 ==Custom providers==
 
-Applications can implement their own entity providers by placing them into the {{{grails-app/providers}}} directory. In order to be auto-detected by grails-jaxrs they must be annotated with {{{javax.ws.rs.ext.Provider}}} and implement {{{javax.ws.rs.ext.MessageBodyReader<T>}}} or {{{javax.ws.rs.ext.MessageBodyWriter<T>}}}. 
+Applications can implement their own entity providers by placing them into the {{{grails-app/providers}}} directory. In order to be auto-detected by grails-jaxrs they must be annotated with {{{@javax.ws.rs.ext.Provider}}} and implement {{{javax.ws.rs.ext.MessageBodyReader}}} or {{{javax.ws.rs.ext.MessageBodyWriter}}}. The grails-jaxrs plugin also provides base classes for implementing custom entity providers. 
 
-For ...
+For customizing the conversion between domain classes and their XML or JSON representations, one has to disable the default domain object providers (TODO: insert link) first. To disable the default domain object reader and writer, for example, the following entries must be added to {{{grails-app/conf/Config.groovy}}}. 
 
-Entity providers are classes 
+{{{
+org.grails.jaxrs.doreader.disable=true
+org.grails.jaxrs.dowriter.disable=true
+}}}
 
-auto-detected by the grails-jaxrs plugin when they are placed into 
+In the following example a custom domain object writer is implemented, therefore, only the default domain object writer must be disabled. In this example, a custom XML creation should be done for the {{{Person}}} domain class, for all other classes the default XML creation should occur. Here's the custom provider.
 
-When you place that entity provider into the {{{grails-app/providers}}} directory then it is auto-detected by Grails. 
 
-The grails-jaxrs provides base classes for implementing custom entity providers. Using these base classes is of course optional; one can implement 
+{{{
+}}}
 
 ...
 
