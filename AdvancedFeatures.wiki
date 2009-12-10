@@ -155,6 +155,8 @@ Using domain object collections for method parameters is not supported (yet).
 
 Entity providers bind representation formats to Java classes e.g. an XML representation  to a {{{Person}}} class as shown in the [#Domain_objects previous] section. They are used to factor out marshalling and unmarshalling code from resource classes.
 
+The grails-jaxrs plugin provides some default entity providers that are presented in the following subsections. The [#Custom_providers custom providers] section explains how to implement custom entity providers.
+
 ==Domain object providers==
 
 Domain object providers convert between Grails domain classes and their XML or JSON representations and support content negotiation. This has already been shown in the sections [GettingStarted#Scaffolding scaffolding] and [#Domain_objects domain objects].
@@ -220,7 +222,11 @@ class PersonResource {
 
 ==Custom providers==
 
-Applications can implement their own entity providers by placing them into the {{{grails-app/providers}}} directory. In order to be auto-detected by grails-jaxrs they must be annotated with {{{@javax.ws.rs.ext.Provider}}} and implement {{{javax.ws.rs.ext.MessageBodyReader}}} or {{{javax.ws.rs.ext.MessageBodyWriter}}}. The grails-jaxrs plugin also provides base classes for implementing custom entity providers. 
+Applications can implement their own entity providers by placing them into the {{{grails-app/providers}}} directory. In order to be auto-detected by grails-jaxrs they
+
+  * must be annotated with {{{@javax.ws.rs.ext.Provider}}}
+  * must have a file name matching {{{*Reader.groovy}}} if the corresponding class implements {{{javax.ws.rs.ext.MessageBodyReader}}} 
+  * must have a file name matching {{{*Writer.groovy}}} if the corresponding class implements {{{javax.ws.rs.ext.MessageBodyWriter}}} 
 
 ===Custom domain object providers===
 
