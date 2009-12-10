@@ -3,6 +3,98 @@
 
 <wiki:toc/>
 
+=Domain objects=
+
+Grails domain classes can be used in resource method signatures out-of-the box. The grails-jaxrs plugin is able to convert domain object arguments or return values from and to XML and JSON representations. These conversions are done by dedicated domain object providers (TODO: insert link). This section gives some examples how to use domain classes in resource methods.
+
+==Single domain objects==
+
+Let's assume there's a {{{Person}}} domain class and an {{{update}}} resource method  that responds to HTTP PUT operations. The {{{Person}}} domain class has two properties {{{firstName}}} and {{{lastName}}}.
+
+{{{
+class Person {
+    String firstName
+    String lastName
+}
+}}}
+
+The {{{update}}} method is a member of the {{{PersonResource}}} class and 
+
+  * defines a {{{Person}}} parameter for receiving {{{Person}}} data from a client
+  * defines a {{{Person}}} return type for sending {{{Person}}} data to the client.
+  * has annotations that constrain valid {{{Person}}} representation formats to {{{application/xml}}} or {{{application/json}}}.
+
+{{{
+import javax.ws.rs.Consumes
+import javax.ws.rs.Produces
+import javax.ws.rs.PUT
+
+class PersonResource {
+        
+    @PUT
+    @Consumes(['application/xml','application/json'])
+    @Produces(['application/xml','application/json'])
+    Person update(Person person) {
+        Person result = ... // make some database changes
+        return result
+    }
+
+    // ...
+
+}
+}}}
+
+Depending on the {{{Content-Type}}} request header the client either send an XML representation
+
+{{{
+PUT /hello/api/person/1 HTTP/1.1
+Content-Type: application/xml
+Accept: application/xml
+Host: localhost:8080
+Content-Length: 82
+
+<person>
+  <firstName>Sam</firstName>
+  <lastName>Hill</lastName>
+</person>
+}}}
+
+or a JSON representation
+
+{{{
+PUT /hello/api/person/2 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Host: localhost:8080
+Content-Length: 58
+
+{"class":"Person","firstName":"Fabien","lastName":"Barel"}
+}}}
+
+In both cases the plugin binds the representation to the {{{Person}}} parameter of the {{{update}}} method. The representation of the response entity depends on the {{{Accept}}} request header. If the client sends an {{{Accept=application/xml}}} request header, the {{{Person}}} object returned from the {{{update}}} method is converted to XML. With an {{{Accept=application/json}}} request header, a conversion to JSON is done.
+
+Instead of declaring a {{{Person}}} return type one could also declare a {{{javax.ws.rs.core.Response}}} return type and set the response entity during the response building process.
+
+{{{
+    @PUT
+    @Consumes(['application/xml','application/json'])
+    @Produces(['application/xml','application/json'])
+    Response update(Person person) {
+        Person result = ... // make some database changes
+        return Response.ok(result)
+    }
+}}}
+
+This gives better control over e.g. response header creation and still allows clients to do content negotiation.
+
+==Domain object collections==
+
+...
+
+==Content negotiation==
+
+...
+
 =Configuration=
 
 ==URL mappings==
