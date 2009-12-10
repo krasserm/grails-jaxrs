@@ -79,7 +79,7 @@ The auto-detection criteria for
   * JAX-RS resource classes under {{{grails-app/resources}}} and
   * JAX-RS provider classes under {{{grails-app/provider}}}
 
-are now better aligned with the JAX-RS specification, sections 3.1 and 4.2.
+are now better aligned with the JAX-RS specification 1.0, sections 3.1 and 4.2.
 
 ==From 0.1 to 0.2==
 
