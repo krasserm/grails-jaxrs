@@ -589,4 +589,4 @@ From version 0.3 onwards the grails-jaxrs plugin comes with JAX-RS providers for
   * {{{org.grails.jaxrs.doreader.disable=true}}}
   * {{{org.grails.jaxrs.dowriter.disable=true}}}
 
-This is useful in situations where applications implement [#Custom_providers custom providers]. Another domain object provider configuration property, {{{org.grails.jaxrs.dowriter.require.generic.collections}}}, is explained in the [#Domain_objects_collections domain objects collections] section.
+This is useful in situations where applications implement [#Custom_providers custom providers]. Another domain object provider configuration property, {{{org.grails.jaxrs.dowriter.require.generic.collections}}}, is explained in the [#Domain_object_collections domain object collections] section.
