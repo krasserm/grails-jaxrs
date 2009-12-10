@@ -5,7 +5,7 @@
 
 =Domain objects=
 
-Grails domain classes can be used in resource method signatures out-of-the box. The grails-jaxrs plugin is able to convert domain object arguments or return values from and to XML and JSON representations. These conversions are done by dedicated domain object providers (TODO: insert link). This section gives some examples how to use domain classes in resource methods.
+Grails domain classes can be used in resource method signatures out-of-the box. The grails-jaxrs plugin is able to convert domain object method arguments or return values from and to XML and JSON representations. These conversions are done by dedicated [#Domain_object_providers domain object providers]. This section gives some examples how to use domain classes in resource methods.
 
 ==Single domain objects==
 
