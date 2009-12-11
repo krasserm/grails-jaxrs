@@ -6,6 +6,11 @@
 
   * See [InstallationInstructions installation instructions]
 
+==Documentation==
+
+  * [GettingStarted Getting started]
+  * [AdvancedFeatures Advanced features]
+
 ==What's new==
 
   * Domain object providers
