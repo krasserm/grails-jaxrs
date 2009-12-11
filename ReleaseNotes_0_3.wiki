@@ -4,11 +4,52 @@
 
 ==What's new==
 
+  * Domain object providers
+    * x
+    * y
+  * z
+  
+
 ...
+
+
+  * Implement stricter criteria about a resource and provider (done)
+  * JSON support (done)
+  * Content negotiation support (done)
+  * Domain object reader and domain object writer support (done)
+  * Make DomainObjectReader/Writer configurable (done)
+    - enable/disable
+    - writer: requireGenericCollections
+  * Unit tests (done)
+    - domain object reader/writer
+    - domain object reader/writer configuration
+    - content negotiation
+  * Javadocs (done)
+  * Scaffolding with support for XML and JSON (done)
+  * Support annotation inheritance during resource detection (done)
+  * Extend JaxrsClasses unit test (done)
+  * paths: /api/** (done)
+  * scaffolding: domain objects as args (done)
+  * domain object reader/writer support (done)
+  * Support for default URL mapping (done)
+  * Enhancements to MessageBodyReader/WriterSupport (done)
+  * Javdoc/Groovydoc generation doesn't work (done)
+  * Upgrade to latest Restlet/Jersey version (done)
+  * Test Jersey on Google App Engine
+  * Report issue that MessageBodyWriter interface must be implemented directly
+    when using Restlet (done)  
+  * Support for Grails 1.1.2 (done)
+
+  * Documentation revised
+  * Document how to customize domain object reader/writer
+  * Document additional media types support: application/* 
+
 
 ==Known issues==
 
 ...
+
+  * Document Restlet issue 971
 
 ==Upgrade notes==
 
