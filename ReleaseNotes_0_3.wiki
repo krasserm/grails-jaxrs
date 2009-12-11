@@ -2,6 +2,10 @@
 
 =Release notes for grails-jaxrs version 0.3=
 
+==Download==
+
+  * See [InstallationInstructions installation instructions]
+
 ==What's new==
 
   * Domain object providers
