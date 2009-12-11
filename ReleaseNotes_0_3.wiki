@@ -21,7 +21,7 @@
     * Content negotiation support
   * Auto-detection of JAX-RS resource classes better aligned with the JAX-RS specification (incl. support for annotation inheritance)
   * Auto-detection of JAX-RS provider classes better aligned with the JAX-RS specification
-  * Default URL mapping for JaxrsController [#Upgrade_notes changed]
+  * Default URL mapping for {{{JaxrsController}}} [#Upgrade_notes changed]
   * Upgrade to Grails 1.1.2
   * Upgrade to Jersey 1.1.4.1
   * Upgrade to Restlet 2.0-M6
