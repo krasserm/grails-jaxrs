@@ -5,51 +5,30 @@
 ==What's new==
 
   * Domain object providers
-    * x
-    * y
-  * z
-  
-
-...
-
-
-  * Implement stricter criteria about a resource and provider (done)
-  * JSON support (done)
-  * Content negotiation support (done)
-  * Domain object reader and domain object writer support (done)
-  * Make DomainObjectReader/Writer configurable (done)
-    - enable/disable
-    - writer: requireGenericCollections
-  * Unit tests (done)
-    - domain object reader/writer
-    - domain object reader/writer configuration
-    - content negotiation
-  * Javadocs (done)
-  * Scaffolding with support for XML and JSON (done)
-  * Support annotation inheritance during resource detection (done)
-  * Extend JaxrsClasses unit test (done)
-  * paths: /api/** (done)
-  * scaffolding: domain objects as args (done)
-  * domain object reader/writer support (done)
-  * Support for default URL mapping (done)
-  * Enhancements to MessageBodyReader/WriterSupport (done)
-  * Javdoc/Groovydoc generation doesn't work (done)
-  * Upgrade to latest Restlet/Jersey version (done)
-  * Test Jersey on Google App Engine
-  * Report issue that MessageBodyWriter interface must be implemented directly
-    when using Restlet (done)  
-  * Support for Grails 1.1.2 (done)
-
-  * Documentation revised
-  * Document how to customize domain object reader/writer
-  * Document additional media types support: application/* 
-
+    * Convert between Grails domain objects and XML or JSON representations
+    * Allow usage of Grails domain classes in resource method signatures
+    * Support for content negotiation using the {{{Accept}}} request header
+    * Can be disabled by means of configuration
+  * Custom entity provider support
+    * Base classes for custom domain object providers
+      * {{{org.grails.jaxrs.support.DomainObjectReaderSupport}}}
+      * {{{org.grails.jaxrs.support.DomainObjectWriterSupport}}}
+    * Base classes for more general entity providers (improved)
+      * {{{org.grails.jaxrs.support.MessageBodyReaderSupport}}}
+      * {{{org.grails.jaxrs.support.MessageBodyWriterSupport}}}
+  * Scaffolding enhancements
+    * XML and JSON representations
+    * Content negotiation support
+  * Auto-detection of JAX-RS resource classes better aligned with the JAX-RS specification (incl. support for annotation inheritance)
+  * Auto-detection of JAX-RS provider classes better aligned with the JAX-RS specification
+  * Default URL mapping for JaxrsController changed
+  * Upgrade to Grails 1.1.2
+  * Upgrade to Jersey 1.1.4.1
+  * Upgrade to Restlet 2.0-M6
 
 ==Known issues==
 
-...
-
-  * Document Restlet issue 971
+  * There's a bug ([http://restlet.tigris.org/issues/show_bug.cgi?id=971 issue 971]) in Restlet 2.0-M6 that forces implementors of {{{MessageBodyReader}}} and {{{MessageBodyWriter}}} to *directly* implement these interfaces. Extending a class that implements these interfaces doesn't work. Restlet will ignore the provider in this case. 
 
 ==Upgrade notes==
 
