@@ -293,7 +293,7 @@ Server: Jetty(6.1.14)
 </person>
 }}}
 
-There are several other protected {{{DomainObjectWriterSupport}}} methods for customizing the domain object marshalling, for example {{{writeToJson}}} to create custom JSON representations or {{{isWriteable}}} to narrow the set of domain classes that a custom domain object writer accepts. Refer to the the API docs for details (TODO: insert link).
+There are several other protected {{{DomainObjectWriterSupport}}} methods for customizing the domain object marshalling, for example {{{writeToJson}}} to create custom JSON representations or {{{isWriteable}}} to narrow the set of domain classes that a custom domain object writer accepts. Refer to the the API docs for details.
 
 ===Further entity provider support===
 
@@ -319,7 +319,7 @@ class NoteWriter extends MessageBodyWriterSupport<Note> {
 }
 }}}
 
-For details about the {{{MessageBodyWriterSupport}}} and {{{MessageBodyReaderSupport}}} classes refer to the API docs (TODO: insert link).
+For details about the {{{MessageBodyWriterSupport}}} and {{{MessageBodyReaderSupport}}} classes refer to the API docs.
 
 =Using GORM=
 
