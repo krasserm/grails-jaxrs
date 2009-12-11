@@ -5,23 +5,23 @@
 ==What's new==
 
   * Domain object providers
-    * Convert between Grails domain objects and XML or JSON representations
-    * Allow usage of Grails domain classes in resource method signatures
-    * Support for content negotiation using the {{{Accept}}} request header
-    * Can be disabled by means of configuration
-  * Custom entity provider support
+    * Convert between Grails [AdvancedFeatures#Domain_objects domain objects] and XML or JSON representations
+    * Allow usage of Grails [AdvancedFeatures#Domain_objects domain classes] in resource method signatures
+    * Support for [AdvancedFeatures#Domain_objects content negotiation] using the {{{Accept}}} request header
+    * Can be disabled by means of [AdvancedFeatures#Configuration configuration]
+  * [AdvancedFeatures#Custom_providers Custom entity provider] support
     * Base classes for custom domain object providers
       * {{{org.grails.jaxrs.support.DomainObjectReaderSupport}}}
       * {{{org.grails.jaxrs.support.DomainObjectWriterSupport}}}
     * Base classes for more general entity providers (improved)
       * {{{org.grails.jaxrs.support.MessageBodyReaderSupport}}}
       * {{{org.grails.jaxrs.support.MessageBodyWriterSupport}}}
-  * Scaffolding enhancements
+  * [GettingStarted#Scaffolding Scaffolding enhancements]
     * XML and JSON representations
     * Content negotiation support
   * Auto-detection of JAX-RS resource classes better aligned with the JAX-RS specification (incl. support for annotation inheritance)
   * Auto-detection of JAX-RS provider classes better aligned with the JAX-RS specification
-  * Default URL mapping for JaxrsController changed
+  * Default URL mapping for JaxrsController [#Upgrade_notes changed]
   * Upgrade to Grails 1.1.2
   * Upgrade to Jersey 1.1.4.1
   * Upgrade to Restlet 2.0-M6
