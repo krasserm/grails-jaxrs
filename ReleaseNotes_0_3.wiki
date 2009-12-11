@@ -9,7 +9,7 @@
     * Allow usage of Grails [AdvancedFeatures#Domain_objects domain classes] in resource method signatures
     * Support for [AdvancedFeatures#Domain_objects content negotiation] using the {{{Accept}}} request header
     * Can be disabled by means of [AdvancedFeatures#Configuration configuration]
-  * [AdvancedFeatures#Custom_providers Custom entity provider] support
+  * [AdvancedFeatures#Custom_providers Custom entity provider support]
     * Base classes for custom domain object providers
       * {{{org.grails.jaxrs.support.DomainObjectReaderSupport}}}
       * {{{org.grails.jaxrs.support.DomainObjectWriterSupport}}}
