@@ -1,6 +1,6 @@
 import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;import org.codehaus.groovy.grails.commons.ConfigurationHolderimport org.grails.jaxrs.DefaultGrailsResourceClassimport org.grails.jaxrs.ProviderArtefactHandlerimport org.grails.jaxrs.ResourceArtefactHandlerimport org.grails.jaxrs.generator.ResourceGeneratorimport org.grails.jaxrs.provider.DomainObjectReaderimport org.grails.jaxrs.provider.DomainObjectWriterimport org.grails.jaxrs.provider.JSONReaderimport org.grails.jaxrs.provider.JSONWriterimport org.grails.jaxrs.provider.XMLReaderimport org.grails.jaxrs.provider.XMLWriterimport org.grails.jaxrs.web.JaxrsContextimport org.grails.jaxrs.web.JaxrsFilterimport org.grails.jaxrs.web.JaxrsListenerclass JaxrsGrailsPlugin {
     // the plugin version
-    def version = "0.3"
+    def version = "0.4"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1.1 > *"
     // the other plugins this plugin depends on
