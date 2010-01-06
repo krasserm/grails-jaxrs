@@ -160,7 +160,6 @@ abstract class DomainObjectWriterSupport implements MessageBodyWriter<Object>, G
         def writer = new OutputStreamWriter(entityStream, charset)
         def converter = new XML(t)
         converter.render(writer)
-        writer.flush()
     }
     
     /**
