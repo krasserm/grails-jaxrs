@@ -2,6 +2,6 @@
     
     static mappings = {
         def logger = LogFactory.getLog(JaxrsUrlMappings.class)        def patternList = ConfigurationHolder.config.org.grails.jaxrs.url.mappings                if (!patternList) {            patternList = ['/api']        } else if (patternList instanceof String) {            patternList = [patternList]        }              logger.info('URL mappings for JaxrsController:')        patternList.each { pattern ->            "${pattern}"(controller:"jaxrs")
-            "${pattern}/**"(controller:"jaxrs")            logger.info("${pattern}")            logger.info("${pattern}/**")        }		// WADL generation at runtime		"/application.wadl"(controller:"jaxrs")	}
+            "${pattern}/**"(controller:"jaxrs")            logger.info("${pattern}")            logger.info("${pattern}/**")        }		// WADL document generation at runtime		"/application.wadl"(controller:"jaxrs")	}
     
 }
