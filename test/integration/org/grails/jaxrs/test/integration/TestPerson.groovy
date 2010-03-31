@@ -19,7 +19,13 @@ package org.grails.jaxrs.test.integration
  * @author Martin Krasser
  */
 class TestPerson {
-
+    
+    static {
+        // Id property needed by 
+        // domain object providers
+        TestPerson.metaClass.id = null
+    }
+    
     String name 
     
     int age
