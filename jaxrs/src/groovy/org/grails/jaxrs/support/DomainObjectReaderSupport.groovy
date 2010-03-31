@@ -63,7 +63,7 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  * @author Martin Krasser
  */
 abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, GrailsApplicationAware {
-
+    
     GrailsApplication grailsApplication
     
     /**
@@ -73,11 +73,10 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * <code>application/json</code>. If <code>isEnabled()</code> returns 
      * <code>false</code> this method will always return <code>false</code>.
      */
-    boolean isReadable(Class type, Type genericType,
-            Annotation[] annotations, MediaType mediaType) {
+    boolean isReadable(Class type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return isEnabled() && grailsApplication.isDomainClass(type) && (isXmlType(mediaType) || isJsonType(mediaType))
     }
-
+    
     /**
      * Creates a Grails domain object from an XML or JSON request entity 
      * stream.
@@ -85,7 +84,7 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
     Object readFrom(Class type, Type genericType,
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, InputStream entityStream)
-            throws IOException, WebApplicationException {
+        throws IOException, WebApplicationException {
         
         if (isXmlType(mediaType)) {
             return readFromXml(type, entityStream, getDefaultXMLEncoding(grailsApplication))
@@ -100,21 +99,35 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * <code>true</code> by default.
      */
     protected boolean isEnabled() {
-         true
-     }
+        true
+    }
     
     /**
      * Construct domain object from xml map obtained from entity stream.
      */
     protected Object readFromXml(Class type, InputStream entityStream, String charset) {
-        type.metaClass.invokeConstructor(xmlToMap(entityStream, charset))
+        def map = xmlToMap(entityStream, charset)
+        def result = type.metaClass.invokeConstructor(map)
+
+        // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
+        if (!result.id) {
+            result.id = idFromMap(map) 
+        }
+        result
     }
     
     /**
      * Construct domain object from json map obtained from entity stream.
      */
     protected Object readFromJson(Class type, InputStream entityStream, String charset) {
-        type.metaClass.invokeConstructor(JSON.parse(entityStream, charset))
+        def map = JSON.parse(entityStream, charset)
+        def result = type.metaClass.invokeConstructor(map)
+
+        // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
+        if (!result.id) {
+            result.id = idFromMap(map) 
+        }
+        result
     }
     
 }
