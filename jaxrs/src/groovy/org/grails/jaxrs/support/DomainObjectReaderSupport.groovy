@@ -34,6 +34,7 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap;
 
 /**
  * A message body reader that converts an XML or JSON entity streams to a domain
@@ -106,7 +107,7 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * Construct domain object from xml map obtained from entity stream.
      */
     protected Object readFromXml(Class type, InputStream entityStream, String charset) {
-        def map = xmlToMap(entityStream, charset)
+        def map = xmlToMap(entityStream, charset) 
         def result = type.metaClass.invokeConstructor(map)
 
         // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
@@ -120,7 +121,7 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * Construct domain object from json map obtained from entity stream.
      */
     protected Object readFromJson(Class type, InputStream entityStream, String charset) {
-        def map = JSON.parse(entityStream, charset)
+        def map = jsonToMap(entityStream, charset) 
         def result = type.metaClass.invokeConstructor(map)
 
         // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
