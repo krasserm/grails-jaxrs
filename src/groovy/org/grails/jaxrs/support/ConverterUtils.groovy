@@ -26,6 +26,8 @@ import groovy.util.slurpersupport.GPathResult
 import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
+import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.servlet.mvc.ParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
@@ -37,6 +39,9 @@ import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 class ConverterUtils {
     
     static final LOG = LogFactory.getLog(ConverterUtils.class)
+    
+    private static def jsonListener = new JSONParsingParameterCreationListener() 
+    private static def xmlListener = new XMLParsingParameterCreationListener()
     
     /**
      * Returns character encoding settings for the given Grails application.
@@ -75,10 +80,22 @@ class ConverterUtils {
     }
     
     /**
-     * Not implemented yet.
+     * Reads a JSON stream from <code>input</code> and converts it to a map
+     * that can be used to construct a Grails domain objects (passing the map
+     * to the domain object constructor).
+     * 
+     * @param input JSON input stream.
+     * @param encoding charset name.
+     * @return a map representing the input JSON stream.
      */
     static jsonToMap(InputStream input, String encoding) {
-        throw new UnsupportedOperationException('not implemented')
+        def adapter = new RequestStreamAdapter(input)
+        adapter.characterEncoding = encoding
+        adapter.format = 'json'
+        
+        def params = new GrailsParameterMap(adapter)
+        jsonListener.paramsCreated(params)
+        params.iterator().next().value 
     }
     
     /**
@@ -88,30 +105,16 @@ class ConverterUtils {
      * 
      * @param input XML input stream.
      * @param encoding charset name.
-     * @return a map representig the input XML stream.
-     * @see org.grails.jaxrs.provider.XMLReader
+     * @return a map representing the input XML stream.
      */
     static Map xmlToMap(InputStream input, String encoding) {
-        def map = [:]
-        try {
-            GPathResult xml = XML.parse(input, encoding)
-            def name =  xml.name()
-            def id = xml.@id.text()
-            if (id) {
-                map['id'] = id
-            }
-            populateParamsFromXML(xml, map)
-            def target = [:]
-            createFlattenedKeys(map, map, target)
-            for(entry in target) {
-                if(!map[entry.key]) {
-                    map[entry.key] = entry.value
-                }
-            }
-        } catch (Exception e) {
-            LOG.error('Error parsing incoming XML request', e)
-        }
-        map
+        def adapter = new RequestStreamAdapter(input)
+        adapter.characterEncoding = encoding
+        adapter.format = 'xml'
+        
+        def params = new GrailsParameterMap(adapter)
+        xmlListener.paramsCreated(params)
+        params.iterator().next().value 
     }
     
     /**
@@ -130,29 +133,6 @@ class ConverterUtils {
             return map.id.toLong()
         }
         return Long.parseLong(map.id)
-    }
-    
-    private static populateParamsFromXML(xml, map) {
-        for(child in xml.children()) {
-            if (child.@id.text()) {
-                map["${child.name()}.id"] = child.@id.text()
-                def childMap = [:]
-                map[child.name()] = childMap
-                populateParamsFromXML(child, childMap)
-            } else {
-                map[child.name()] = child.text()
-            }
-        }
-    }
-    
-    private static createFlattenedKeys(Map root, Map current, Map target, prefix = '') {
-        for (entry in current) {
-            if (entry.value instanceof Map) {
-                createFlattenedKeys(root,entry.value, target, "${entry.key}.")
-            } else if (prefix) {
-                target["${prefix}${entry.key}"] = entry.value
-            }
-        }
     }
     
 }
