@@ -3,6 +3,7 @@ package org.grails.jaxrs.support
 import java.io.InputStream;
 import javax.servlet.ServletInputStream
 
+import org.springframework.mock.web.DelegatingServletInputStream;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 class RequestStreamAdapter extends MockHttpServletRequest {
@@ -17,10 +18,13 @@ class RequestStreamAdapter extends MockHttpServletRequest {
     
     @Override
     ServletInputStream getInputStream() {
-        if (stream) {
+        if (stream instanceof ServletInputStream) {
             return stream
+        } else if (stream) {
+            return new DelegatingServletInputStream(stream)
+        } else {
+            return super.getInputStream()
         }
-        return super.getInputStream()
     }
     
 }
