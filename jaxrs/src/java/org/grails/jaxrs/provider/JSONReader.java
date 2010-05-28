@@ -15,7 +15,8 @@
  */
 package org.grails.jaxrs.provider;
 
-import grails.converters.JSON;
+import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
+import static org.grails.jaxrs.support.ConverterUtils.jsonToMap;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +30,6 @@ import javax.ws.rs.ext.Provider;
 import org.codehaus.groovy.grails.commons.GrailsApplication;
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
 import org.grails.jaxrs.support.MessageBodyReaderSupport;
-
-import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
 
 /**
  * A message body reader that converts a JSON entity stream to a map than can be
@@ -86,7 +85,7 @@ public class JSONReader extends MessageBodyReaderSupport<Map> implements GrailsA
         String encoding = getDefaultEncoding(grailsApplication);
 
         // Convert JSON to map used for constructing domain objects
-        return (Map) JSON.parse(entityStream, encoding);
+        return jsonToMap(entityStream, encoding);
     }
 
 }

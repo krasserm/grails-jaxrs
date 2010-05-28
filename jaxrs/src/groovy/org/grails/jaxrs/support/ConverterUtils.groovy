@@ -88,7 +88,7 @@ class ConverterUtils {
      * @param encoding charset name.
      * @return a map representing the input JSON stream.
      */
-    static jsonToMap(InputStream input, String encoding) {
+    static Map jsonToMap(InputStream input, String encoding) {
         def adapter = new RequestStreamAdapter(input)
         adapter.characterEncoding = encoding
         adapter.format = 'json'
