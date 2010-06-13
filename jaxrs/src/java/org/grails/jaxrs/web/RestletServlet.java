@@ -30,7 +30,7 @@ import org.restlet.ext.servlet.ServerServlet;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Servlet that dispatches JAX-RS requests to the Restlet.
+ * Servlet that dispatches JAX-RS requests to Restlet.
  * 
  * @author Martin Krasser
  */

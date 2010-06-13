@@ -17,7 +17,7 @@ package org.grails.jaxrs.web;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.NoSuchElementException;
+import java.util.Hashtable;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -26,16 +26,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * The JAX-RS context used by applications to interact with a JAX-RS
  * implementation.
  * 
  * @author Martin Krasser
+ * @author David Castro
  */
 public class JaxrsContext {
+    
+    private static final Log LOG = LogFactory.getLog(JaxrsContext.class);
 
     /**
      * Name of the Jersey JAX-RS implementation. 
@@ -56,6 +59,7 @@ public class JaxrsContext {
     private volatile ServletContext jaxrsServletContext;
     private volatile JaxrsConfig jaxrsConfig;
     private volatile String jaxrsProviderName;
+    private volatile String jaxrsProviderExtraPaths;
     
     private JaxrsService jaxrsService;
 
@@ -97,7 +101,24 @@ public class JaxrsContext {
      * @see #JAXRS_PROVIDER_NAME_RESTLET
      */
     public void setJaxrsProviderName(String jaxrsProviderName) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setting provider name: " + jaxrsProviderName);
+        }
         this.jaxrsProviderName = jaxrsProviderName;
+    }
+
+    /**
+     * Set the extra paths to pass to the JAX-RS implementation to search
+     * for providers.
+     * 
+     * @param jaxrsProviderExtraPaths extra paths to pass to the JAX-RS
+     *            implementation to search for providers
+     */
+    public void setJaxrsProviderExtraPaths(String jaxrsProviderExtraPaths) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setting provider extra paths: " + jaxrsProviderExtraPaths);
+        }
+        this.jaxrsProviderExtraPaths = jaxrsProviderExtraPaths;
     }
     
     /**
@@ -118,13 +139,12 @@ public class JaxrsContext {
         if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_RESTLET)) {
             init(new RestletServlet(jaxrsConfig));
         } else if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_JERSEY)) {
-            init(new SpringServlet());
+            init(new JerseyServlet());
         } else {
             throw new ServletException("Illegal provider name: " + jaxrsProviderName + ". either use "
                     + JAXRS_PROVIDER_NAME_JERSEY + " or " 
                     + JAXRS_PROVIDER_NAME_RESTLET + "."); 
         }
-                
     }
     
     void init(Servlet jaxrsServlet) throws ServletException {
@@ -152,14 +172,23 @@ public class JaxrsContext {
         
     }
     
-    private class Config implements ServletConfig {
+    class Config implements ServletConfig {
+        Hashtable<String, String> params = new Hashtable<String, String>();
+ 
+        public String getJaxrsProviderExtraPaths() {
+            return jaxrsProviderExtraPaths;
+        }
+        
+        public Hashtable<String, String> getInitParameters() {
+            return params;
+        }
         
         public String getInitParameter(String name) {
-            return null;
+            return params.get(name);
         }
 
         public Enumeration<String> getInitParameterNames() {
-            return new EmptyEnumeration();
+            return params.keys();
         }
 
         public ServletContext getServletContext() {
@@ -168,18 +197,6 @@ public class JaxrsContext {
 
         public String getServletName() {
             return SERVLET_NAME;
-        }
-        
-    }
-    
-    private static class EmptyEnumeration implements Enumeration<String> {
-
-        public boolean hasMoreElements() {
-            return false;
-        }
-
-        public String nextElement() {
-            throw new NoSuchElementException();
         }
         
     }

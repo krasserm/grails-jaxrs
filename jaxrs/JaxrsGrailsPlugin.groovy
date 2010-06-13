@@ -188,6 +188,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         def config = context.jaxrsConfig
         
         context.jaxrsProviderName = this.providerName
+        context.jaxrsProviderExtraPaths = this.providerExtraPaths
         
         config.reset()
         config.classes << XMLWriter.class
@@ -234,4 +235,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         name
     }
     
+    private String getProviderExtraPaths() {
+        ConfigurationHolder.config.org.grails.jaxrs.provider.extra.paths
+    }
 }
