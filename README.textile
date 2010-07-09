@@ -2,4 +2,4 @@ grails-jaxrs is a "Grails":http://grails.org/ plugin that supports the developme
 
 At the moment, plugin users may choose between "Jersey":https://jersey.dev.java.net/ and "Restlet":http://www.restlet.org/ as JAX-RS implementations. Both implementations are packaged with the plugin. Support for Restlet was added in version 0.2 of the plugin in order to support deployments to "Google App Engine":http://code.google.com/appengine/. 
 
-Learn more at http://code.google.com/p/grails-jaxrs/
+Learn more at "http://code.google.com/p/grails-jaxrs/":http://code.google.com/p/grails-jaxrs/
