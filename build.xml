@@ -62,20 +62,20 @@
 
     <target name="-init-grails" depends="-resolve">
         <path id="grails.classpath">
-            <fileset dir="${lib.dir}/build"/>
-			<fileset dir="${lib.dir}"/>
+            <fileset dir="lib/build"/>
+			<fileset dir="lib"/>
         </path>
 
         <path id="compile.classpath">
-            <fileset dir="${lib.dir}/compile"/>
+            <fileset dir="lib/compile"/>
         </path>
 
         <path id="test.classpath">
-            <fileset dir="${lib.dir}/test"/>
+            <fileset dir="lib/test"/>
         </path>
 
         <path id="app.classpath">
-            <fileset dir="${lib.dir}/runtime"/>
+            <fileset dir="lib/runtime"/>
         </path>
 
         <taskdef name="grailsTask"
@@ -92,10 +92,10 @@
          ================================= -->
  	<target name="clean" description="--> Cleans a Grails application">
 		<delete failonerror="true">
-		<fileset dir="${lib.dir}/build" includes="*/"/>
-		<fileset dir="${lib.dir}/compile" includes="*/"/>
-		<fileset dir="${lib.dir}/runtime" includes="*/"/>
-		<fileset dir="${lib.dir}/test" includes="*/"/>
+		<fileset dir="lib/build" includes="*/"/>
+		<fileset dir="lib/compile" includes="*/"/>
+		<fileset dir="lib/runtime" includes="*/"/>
+		<fileset dir="lib/test" includes="*/"/>
 		</delete>
 		<antcall target="--grails-clean"/>
 	</target>
