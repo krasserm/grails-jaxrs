@@ -28,6 +28,7 @@ import org.grails.jaxrs.test.integration.TestResource01
 import org.grails.jaxrs.test.integration.TestResource02
 import org.grails.jaxrs.test.integration.TestResource03
 import org.grails.jaxrs.test.integration.TestResource04
+import org.grails.jaxrs.test.integration.TestResource05
 import org.grails.jaxrs.web.JaxrsUtils
 
 /**
@@ -40,6 +41,7 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
            TestResource02.class, 
            TestResource03.class, 
            TestResource04.class, 
+		   TestResource05.class, 
            CustomRequestEntityReader.class, 
            CustomResponseEntityWriter.class,
            JSONReader.class,           JSONWriter.class,
@@ -222,4 +224,14 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         println 'content: ' + controller.response.getHeader('Content-Type')
     }
     
+    void testGet05HtmlResponse() {
+        controller.request.method = 'GET'
+        controller.request.content = ''.bytes
+        JaxrsUtils.setRequestUriAttribute(controller.request, '/test/05')
+        controller.handle()
+        assertEquals(200, controller.response.status)
+        assertEquals('<html><body>test05</body></html>', controller.response.contentAsString)
+        assertTrue(controller.response.getHeader('Content-Type').startsWith('text/html'))
+    }
+	
 }

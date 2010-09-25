@@ -1,4 +1,4 @@
-package org.grails.jaxrs.supportimport java.io.ByteArrayInputStream/*
+/*
  * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +13,11 @@ package org.grails.jaxrs.supportimport java.io.ByteArrayInputStream/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.grails.jaxrs.support
+
 import static org.grails.jaxrs.support.ConverterUtils.xmlToMap
 
-import grails.test.*
+import java.io.ByteArrayInputStreamimport grails.test.*
 
 /**
  * @author Martin Krasser

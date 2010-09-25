@@ -17,6 +17,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <bean class="org.grails.jaxrs.test.integration.TestResource02" />
     <bean class="org.grails.jaxrs.test.integration.TestResource03" />
     <bean class="org.grails.jaxrs.test.integration.TestResource04" />
+    <bean class="org.grails.jaxrs.test.integration.TestResource05" />
 
     <!--
         Find out why Jersey complains when scope="singleton" is 
