@@ -35,20 +35,20 @@ import org.grails.jaxrs.web.JaxrsUtils
  * @author Martin Krasser
  */
 abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
-
+    
     static List jaxrsClasses = [
-           TestResource01.class, 
-           TestResource02.class, 
-           TestResource03.class, 
-           TestResource04.class, 
-		   TestResource05.class, 
-           CustomRequestEntityReader.class, 
-           CustomResponseEntityWriter.class,
-           JSONReader.class,           JSONWriter.class,
-           DomainObjectReader.class,
-           DomainObjectWriter.class
+        TestResource01.class, 
+        TestResource02.class, 
+        TestResource03.class, 
+        TestResource04.class, 
+        TestResource05.class, 
+        CustomRequestEntityReader.class, 
+        CustomResponseEntityWriter.class,
+        JSONReader.class,        JSONWriter.class,
+        DomainObjectReader.class,
+        DomainObjectWriter.class
     ]
-
+    
     def controller
     
     void setUp() {
@@ -66,7 +66,7 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertEquals('test01', controller.response.contentAsString)
         assertTrue(controller.response.getHeader('Content-Type').startsWith('text/plain'))
     }
-
+    
     void testPost02() {
         controller.request.method = 'POST'
         controller.request.content = 'hello'.bytes
@@ -233,5 +233,4 @@ abstract class JaxrsControllerIntegrationTests extends GroovyTestCase {
         assertEquals('<html><body>test05</body></html>', controller.response.contentAsString)
         assertTrue(controller.response.getHeader('Content-Type').startsWith('text/html'))
     }
-	
 }
