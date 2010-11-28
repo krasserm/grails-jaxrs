@@ -1,5 +1,5 @@
+*.zip
 *.log
 *target
 web-app
-
-/plugin.xml
+plugin.xml
