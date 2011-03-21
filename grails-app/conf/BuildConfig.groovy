@@ -1,6 +1,19 @@
 /*
+ * Copyright 2009-2011 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 grails.project.dependency.resolution = {
     inherits "global"
     log "warn"
@@ -14,23 +27,21 @@ grails.project.dependency.resolution = {
 
     dependencies {
         compile('asm:asm:3.3',
+                'org.restlet.gae:org.restlet:2.0-RC3',
+                'org.restlet.gae:org.restlet.ext.servlet:2.0-RC3',
+                // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
+                // is contained in the project's lib folder. This is needed because of a bug described 
+                // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
+                //'org.restlet.gae:org.restlet.ext.jaxrs:2.0-RC3',
+                'org.restlet.gae:org.restlet.ext.json:2.0-RC3',
+                'org.restlet.gae:org.restlet.lib.org.json:2.0',
                 'com.sun.jersey:jersey-core:1.5',
                 'com.sun.jersey:jersey-server:1.5',
                 'com.sun.jersey.contribs:jersey-spring:1.5',
-                'javax.ws.rs:jsr311-api:1.1',
-		        'org.restlet.jse:org.restlet:2.0.5',
-		        'org.restlet.jee:org.restlet.ext.jaxrs:2.0.5' /** Collision with jersey-core's jaxrs classes */,
-                'org.restlet.jee:org.restlet.ext.servlet:2.0.5',
-                //org.restlet.gae-2.0-RC3.jar /** Unable to identify the correct artifact */,
-                'org.restlet.jee:org.restlet.ext.json:2.0.5'
+                'javax.ws.rs:jsr311-api:1.1'
         ){
-           transitive=false
+           transitive = false
         }
-        /*
-        test( 'com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:1.5'){
-            //export=false
-        }
-        */
     }
 
 }
