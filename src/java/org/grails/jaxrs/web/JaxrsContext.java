@@ -137,8 +137,14 @@ public class JaxrsContext {
     
     void init() throws ServletException {
         if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_RESTLET)) {
+            System.setProperty(
+                    "javax.ws.rs.ext.RuntimeDelegate", 
+                    "org.restlet.ext.jaxrs.internal.spi.RuntimeDelegateImpl");
             init(new RestletServlet(jaxrsConfig));
         } else if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_JERSEY)) {
+            System.setProperty(
+                    "javax.ws.rs.ext.RuntimeDelegate", 
+                    "com.sun.jersey.server.impl.provider.RuntimeDelegateImpl");
             init(new JerseyServlet());
         } else {
             throw new ServletException("Illegal provider name: " + jaxrsProviderName + ". either use "
