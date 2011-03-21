@@ -1,6 +1,6 @@
 package org.grails.jaxrs
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,6 @@ package org.grails.jaxrs
 import static JaxrsControllerIntegrationTests.jaxrsClasses
  
 import org.grails.jaxrs.web.IntegrationTestEnvironment
-
-// EXPERIMENTAL
-import org.grails.jaxrs.provider.DomainObjectReader
-import org.grails.jaxrs.provider.DomainObjectWriter
-import org.grails.jaxrs.provider.JSONWriter
-import org.grails.jaxrs.provider.JSONReader
-import org.grails.jaxrs.test.integration.CustomRequestEntityReader
-import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
-import org.grails.jaxrs.test.integration.TestResource01
-import org.grails.jaxrs.test.integration.TestResource02
-import org.grails.jaxrs.test.integration.TestResource03
-import org.grails.jaxrs.test.integration.TestResource04
-
 
 /**
  * @author Martin Krasser
