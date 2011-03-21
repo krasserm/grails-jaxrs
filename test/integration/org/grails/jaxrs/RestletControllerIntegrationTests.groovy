@@ -1,3 +1,4 @@
+package org.grails.jaxrs
 /*
  * Copyright 2009 the original author or authors.
  * 
