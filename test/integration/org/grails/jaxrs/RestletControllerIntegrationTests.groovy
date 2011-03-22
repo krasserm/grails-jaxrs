@@ -1,6 +1,6 @@
 package org.grails.jaxrs
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,39 @@ package org.grails.jaxrs
  */
 
 import static JaxrsControllerIntegrationTests.jaxrsClasses
+
+import java.util.List;
  
-import org.grails.jaxrs.web.IntegrationTestEnvironment
+import org.grails.jaxrs.provider.DomainObjectReader
+import org.grails.jaxrs.provider.DomainObjectWriter
+import org.grails.jaxrs.provider.JSONWriter
+import org.grails.jaxrs.provider.JSONReader
+import org.grails.jaxrs.test.integration.CustomRequestEntityReader
+import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
+import org.grails.jaxrs.test.integration.TestResource01
+import org.grails.jaxrs.test.integration.TestResource02
+import org.grails.jaxrs.test.integration.TestResource03
+import org.grails.jaxrs.test.integration.TestResource04
+import org.grails.jaxrs.test.integration.TestResource05
 
 /**
  * @author Martin Krasser
  */
 public class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
 
-    static transactional = false
-    static environment 
-     
-    void setUp() {
-        if (!environment) {
-            environment = new IntegrationTestEnvironment('context-integration.xml', 'restlet', jaxrsClasses)
-        }
-        super.setUp()
-        controller = new JaxrsController()
-        controller.jaxrsContext = environment.jaxrsContext 
+    @Override
+    protected List getJaxrsClasses() {
+        [TestResource01.class, 
+         TestResource02.class, 
+         TestResource03.class, 
+         TestResource04.class, 
+         TestResource05.class, 
+         CustomRequestEntityReader.class, 
+         CustomResponseEntityWriter.class,
+         JSONReader.class,
+         JSONWriter.class,
+         DomainObjectReader.class,
+         DomainObjectWriter.class]    
     }
-     
+        
 }

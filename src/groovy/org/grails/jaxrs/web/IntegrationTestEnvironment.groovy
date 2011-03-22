@@ -30,15 +30,12 @@ import org.springframework.web.context.ContextLoaderListener;
 class IntegrationTestEnvironment {
 
     private JaxrsContext jaxrsContext
-    
-    private String contextConfigLocation
-    
+    private String contextConfigLocations
     private String jaxrsProviderName
-    
     private List jaxrsClasses
     
-    IntegrationTestEnvironment(String contextConfigLocation, String jaxrsProviderName, List jaxrsClasses) {
-        this.contextConfigLocation = contextConfigLocation
+    IntegrationTestEnvironment(String contextConfigLocations, String jaxrsProviderName, List jaxrsClasses) {
+        this.contextConfigLocations = contextConfigLocations
         this.jaxrsProviderName = jaxrsProviderName
         this.jaxrsClasses = jaxrsClasses
     }
@@ -46,7 +43,7 @@ class IntegrationTestEnvironment {
     synchronized JaxrsContext getJaxrsContext() {
         if (!jaxrsContext) {
             MockServletContext mockServletContext = new MockServletContext()
-            mockServletContext.addInitParameter('contextConfigLocation', contextConfigLocation)
+            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/web/IntegrationTestEnvironment.xml, ${contextConfigLocations}")
             
             ServletContextListener loaderListener = new ContextLoaderListener()
             ServletContextListener jaxrsListener = new JaxrsListener()

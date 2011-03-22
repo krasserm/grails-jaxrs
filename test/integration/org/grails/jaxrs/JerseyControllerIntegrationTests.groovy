@@ -1,4 +1,3 @@
-package org.grails.jaxrs
 /*
  * Copyright 2009 - 2011 the original author or authors.
  * 
@@ -14,26 +13,10 @@ package org.grails.jaxrs
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import static JaxrsControllerIntegrationTests.jaxrsClasses
- 
-import org.grails.jaxrs.web.IntegrationTestEnvironment
+package org.grails.jaxrs
 
 /**
  * @author Martin Krasser
  */
 public class JerseyControllerIntegrationTests extends JaxrsControllerIntegrationTests {
-
-    static transactional = false
-    static environment  
-    
-    void setUp() {
-        if (!environment) {
-            environment = new IntegrationTestEnvironment('context-integration.xml', 'jersey', jaxrsClasses)
-        }
-        super.setUp()
-        controller = new JaxrsController()
-        controller.jaxrsContext = environment.jaxrsContext 
-    }
-    
 }
