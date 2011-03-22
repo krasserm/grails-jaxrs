@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.test.integration;
+package org.grails.jaxrs.itest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsApplication;
 
 /**
  * @author Martin Krasser
  */
-public class TestGrailsApplication extends DefaultGrailsApplication {
+public class IntegrationTestApplication extends DefaultGrailsApplication {
 
-    private static TestGrailsApplication instance = new TestGrailsApplication();
+    private static IntegrationTestApplication instance = new IntegrationTestApplication();
     
-    public static TestGrailsApplication getInstance() {
+    public static IntegrationTestApplication getInstance() {
         return instance;
+    }
+
+    private List<Class<?>> domainClasses = new ArrayList<Class<?>>();
+    
+    public List<Class<?>> getDomainClasses() {
+        return domainClasses;
     }
     
     @Override
     public Object invokeMethod(String methodName, Object args) {
         if (methodName.equals("isDomainClass")) {
             Object[] arguments = (Object[])args;
-            return arguments[0].equals(TestPerson.class);
+            return domainClasses.contains(arguments[0]);
         } else {
             return super.invokeMethod(methodName, args);
         }

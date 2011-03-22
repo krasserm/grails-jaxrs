@@ -1,16 +1,19 @@
-package org.grails.jaxrs
+package org.grails.jaxrs.itest
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.grails.jaxrs.web.IntegrationTestCase;
-import org.grails.jaxrs.web.JaxrsUtils
+import org.grails.jaxrs.itest.IntegrationTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 class ExampleIntegrationTest extends IntegrationTestCase {
 
     String getContextLocations() {
-        'org/grails/jaxrs/context-itest.xml'
+        'org/grails/jaxrs/itest/context.xml'
     }
 
+    @Test
     void testGet() {
         sendRequest('/test/01', 'GET')
         assertEquals(200, response.status)
@@ -18,6 +21,7 @@ class ExampleIntegrationTest extends IntegrationTestCase {
         assertTrue(response.getHeader('Content-Type').startsWith('text/plain'))
     }
     
+    @Test
     void testPost() {
         sendRequest('/test/02', 'POST', ['Content-Type':'text/plain'], 'hello'.bytes)
         assertEquals(200, response.status)

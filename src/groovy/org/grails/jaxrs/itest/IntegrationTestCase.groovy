@@ -13,27 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package org.grails.jaxrs.web
+ package org.grails.jaxrs.itest
 
 import javax.servlet.http.HttpServletResponse;
 
-import groovy.util.GroovyTestCase;
-
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
-import org.grails.jaxrs.JaxrsController;
+import org.grails.jaxrs.JaxrsController
+import org.grails.jaxrs.web.JaxrsUtils
+import org.junit.Before
+import org.junit.BeforeClass
 
 /**
  * Base class for integration testing JAX-RS resources and providers.  
  * 
  * @author Martin Krasser
  */
-abstract class IntegrationTestCase extends GroovyTestCase {
+abstract class IntegrationTestCase {
 
     static transactional = false
     static environment
 
     def controller
+
+    @BeforeClass
+    static void setUpBeforeClass() {
+        environment = null
+    }
+        
+    @Before
+    void setUp() {
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = false
+        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
+        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
+
+        if (!environment) {
+            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, domainClasses)
+        }
+
+        controller = new JaxrsController()
+        controller.jaxrsContext = environment.jaxrsContext
+    }
     
     void setRequestUrl(String url) {
         JaxrsUtils.setRequestUriAttribute(controller.request, url)
@@ -79,19 +99,6 @@ abstract class IntegrationTestCase extends GroovyTestCase {
         controller.response
     }
         
-    void setUp() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = false
-        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
-
-        if (!environment) {
-            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses)
-        }
-
-        controller = new JaxrsController()
-        controller.jaxrsContext = environment.jaxrsContext
-    }
-    
     protected String getContextLocations() {
         ''
     }
@@ -104,4 +111,7 @@ abstract class IntegrationTestCase extends GroovyTestCase {
         []
     }
     
+    protected List getDomainClasses() {
+        []
+    }
 }

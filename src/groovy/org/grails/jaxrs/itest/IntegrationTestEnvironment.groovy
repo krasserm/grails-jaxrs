@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.web
+package org.grails.jaxrs.itest
 
 import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+
+import org.grails.jaxrs.web.JaxrsContext;
+import org.grails.jaxrs.web.JaxrsListener;
+import org.grails.jaxrs.web.JaxrsUtils;
 
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.ContextLoaderListener;
@@ -30,20 +34,24 @@ import org.springframework.web.context.ContextLoaderListener;
 class IntegrationTestEnvironment {
 
     private JaxrsContext jaxrsContext
+    
     private String contextConfigLocations
     private String jaxrsProviderName
+
     private List jaxrsClasses
+    private List domainClasses
     
-    IntegrationTestEnvironment(String contextConfigLocations, String jaxrsProviderName, List jaxrsClasses) {
+    IntegrationTestEnvironment(String contextConfigLocations, String jaxrsProviderName, List jaxrsClasses, List domainClasses) {
         this.contextConfigLocations = contextConfigLocations
         this.jaxrsProviderName = jaxrsProviderName
         this.jaxrsClasses = jaxrsClasses
+        this.domainClasses = domainClasses
     }
     
     synchronized JaxrsContext getJaxrsContext() {
         if (!jaxrsContext) {
             MockServletContext mockServletContext = new MockServletContext()
-            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/web/IntegrationTestEnvironment.xml, ${contextConfigLocations}")
+            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/itest/IntegrationTestEnvironment.xml, ${contextConfigLocations}")
             
             ServletContextListener loaderListener = new ContextLoaderListener()
             ServletContextListener jaxrsListener = new JaxrsListener()
@@ -54,7 +62,9 @@ class IntegrationTestEnvironment {
             jaxrsContext= JaxrsUtils.getRequiredJaxrsContext(mockServletContext)
             jaxrsContext.jaxrsServletContext = mockServletContext
             
+            domainClasses.each { IntegrationTestApplication.instance.domainClasses << it }
             jaxrsClasses.each { jaxrsContext.jaxrsConfig.classes << it }
+            
             jaxrsContext.jaxrsProviderName = jaxrsProviderName
             jaxrsContext.init()
         }

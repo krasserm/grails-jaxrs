@@ -1,4 +1,4 @@
-package org.grails.jaxrs
+package org.grails.jaxrs.itest
 /*
  * Copyright 2009 - 2011 the original author or authors.
  * 
@@ -23,20 +23,12 @@ import org.grails.jaxrs.provider.DomainObjectReader
 import org.grails.jaxrs.provider.DomainObjectWriter
 import org.grails.jaxrs.provider.JSONWriter
 import org.grails.jaxrs.provider.JSONReader
-import org.grails.jaxrs.test.integration.CustomRequestEntityReader
-import org.grails.jaxrs.test.integration.CustomResponseEntityWriter
-import org.grails.jaxrs.test.integration.TestResource01
-import org.grails.jaxrs.test.integration.TestResource02
-import org.grails.jaxrs.test.integration.TestResource03
-import org.grails.jaxrs.test.integration.TestResource04
-import org.grails.jaxrs.test.integration.TestResource05
 
 /**
  * @author Martin Krasser
  */
 public class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
 
-    @Override
     protected List getJaxrsClasses() {
         [TestResource01.class, 
          TestResource02.class, 
