@@ -31,12 +31,22 @@ import static org.junit.Assert.*
  */
 abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     
-    protected String getContextLocations() {
-        'org/grails/jaxrs/itest/context.xml'
-    }
-    
+    // not in grails-app/domain, 
+    // so domain classes are added here ...    
     protected List getDomainClasses() {
         [TestPerson.class]
+    }
+
+    // not in grails-app/resources or grails-app/providers,
+    // so jaxrs classes are added here ...
+    protected List getJaxrsClasses() {
+        [TestResource01.class,
+         TestResource02.class,
+         TestResource03.class,
+         TestResource04.class,
+         TestResource05.class,
+         CustomRequestEntityReader.class,
+         CustomResponseEntityWriter.class]
     }
 
     @Test

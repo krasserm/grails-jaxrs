@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsApplication;
+import org.codehaus.groovy.grails.commons.GrailsApplication;
 
 /**
  * @author Martin Krasser
@@ -27,16 +28,26 @@ public class IntegrationTestApplication extends DefaultGrailsApplication {
 
     private static IntegrationTestApplication instance = new IntegrationTestApplication();
     
+    private List<Class<?>> domainClasses = new ArrayList<Class<?>>();
+    
+    private GrailsApplication pluginApplication;
+    
     public static IntegrationTestApplication getInstance() {
         return instance;
     }
 
-    private List<Class<?>> domainClasses = new ArrayList<Class<?>>();
-    
     public List<Class<?>> getDomainClasses() {
         return domainClasses;
     }
     
+    public GrailsApplication getPluginApplication() {
+        return pluginApplication;
+    }
+
+    public void setPluginApplication(GrailsApplication pluginApplication) {
+        this.pluginApplication = pluginApplication;
+    }
+
     @Override
     public Object invokeMethod(String methodName, Object args) {
         if (methodName.equals("isDomainClass")) {

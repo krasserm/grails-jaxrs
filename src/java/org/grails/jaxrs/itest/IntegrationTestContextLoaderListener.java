@@ -1,4 +1,3 @@
-package org.grails.jaxrs.itest
 /*
  * Copyright 2009 - 2011 the original author or authors.
  * 
@@ -14,18 +13,26 @@ package org.grails.jaxrs.itest
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.grails.jaxrs.itest;
 
-import static JaxrsControllerIntegrationTests.jaxrsClasses
+import javax.servlet.ServletContextEvent;
 
-import java.util.List;
- 
-import org.grails.jaxrs.provider.DomainObjectReader
-import org.grails.jaxrs.provider.DomainObjectWriter
-import org.grails.jaxrs.provider.JSONWriter
-import org.grails.jaxrs.provider.JSONReader
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  * @author Martin Krasser
  */
-public class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
+public class IntegrationTestContextLoaderListener extends ContextLoaderListener {
+
+    private WebApplicationContext webApplicationContext;
+    
+    public WebApplicationContext getWebApplicationContext() {
+        return webApplicationContext;
+    }
+    
+    public void contextInitialized(ServletContextEvent event) {
+        webApplicationContext = initWebApplicationContext(event.getServletContext());
+    }
+    
 }

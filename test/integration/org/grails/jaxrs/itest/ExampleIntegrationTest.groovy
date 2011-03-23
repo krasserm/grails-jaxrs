@@ -9,10 +9,13 @@ import static org.junit.Assert.*;
 
 class ExampleIntegrationTest extends IntegrationTestCase {
 
-    String getContextLocations() {
-        'org/grails/jaxrs/itest/context.xml'
+    List getJaxrsClasses() {
+        [TestResource01.class,
+         TestResource02.class,
+         CustomRequestEntityReader.class,
+         CustomResponseEntityWriter.class]
     }
-
+    
     @Test
     void testGet() {
         sendRequest('/test/01', 'GET')

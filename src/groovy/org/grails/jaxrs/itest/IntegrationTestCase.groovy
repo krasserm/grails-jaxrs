@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 import org.grails.jaxrs.JaxrsController
+import org.grails.jaxrs.web.JaxrsContext;
 import org.grails.jaxrs.web.JaxrsUtils
 import org.junit.Before
 import org.junit.BeforeClass
@@ -48,7 +49,11 @@ abstract class IntegrationTestCase {
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
 
         if (!environment) {
-            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, domainClasses)
+            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, 
+                jaxrsClasses, 
+                domainClasses,
+                autoDetectJaxrsClasses,
+                autoDetectDomainClasses)
         }
 
         controller = new JaxrsController()
@@ -99,19 +104,54 @@ abstract class IntegrationTestCase {
         controller.response
     }
         
+    /**
+     * Implementors can define additional Spring application context locations. 
+     */
     protected String getContextLocations() {
         ''
     }
     
+    /**
+     * Returns the JAX-RS implementation to use. Default is 'jersey'. 
+     */
     protected String getJaxrsImplementation() {
-        'jersey'
+        JaxrsContext.JAXRS_PROVIDER_NAME_JERSEY
     }
     
+    /**
+     * Returns the list of JAX-RS classes for testing. Auto-detected classes 
+     * will be added to this list later. 
+     */
     protected List getJaxrsClasses() {
         []
     }
     
+    /**
+     * Returns the list of domain classes for testing. Auto-detected classes 
+     * will be added to this list later. 
+     */
     protected List getDomainClasses() {
         []
     }
+    
+    /**
+     * Determines whether JAX-RS resources or providers are auto-detected in 
+     * <code>grails-app/resources</code> or <code>grails-app/providers</code>.  
+     * 
+     * @return true is JAX-RS classes should be auto-detected.
+     */
+    protected boolean isAutoDetectJaxrsClasses() {
+        true
+    }
+
+    /**
+     * Determines whether domain classes are auto-detected in 
+     * <code>grails-app/domain</code>.  
+     * 
+     * @return true is domain classes should be auto-detected.
+     */
+    protected boolean isAutoDetectDomainClasses() {
+        true
+    }
+    
 }
