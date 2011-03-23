@@ -26,6 +26,10 @@ import javax.servlet.ServletException;
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler;
 import org.grails.jaxrs.ProviderArtefactHandler;
 import org.grails.jaxrs.ResourceArtefactHandler;
+import org.grails.jaxrs.provider.DomainObjectReader;
+import org.grails.jaxrs.provider.DomainObjectWriter;
+import org.grails.jaxrs.provider.JSONReader;
+import org.grails.jaxrs.provider.JSONWriter;
 import org.grails.jaxrs.web.JaxrsContext;
 import org.grails.jaxrs.web.JaxrsListener;
 import org.grails.jaxrs.web.JaxrsUtils;
@@ -79,6 +83,13 @@ class IntegrationTestEnvironment {
                 IntegrationTestApplication.instance.pluginApplication.getArtefacts(ProviderArtefactHandler.TYPE).each { gc ->
                      jaxrsClasses << gc.clazz
                 }
+            }
+            
+            if (jaxrsProviderName == JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET) {
+                jaxrsClasses << JSONReader.class
+                jaxrsClasses << JSONWriter.class
+                jaxrsClasses << DomainObjectReader.class
+                jaxrsClasses << DomainObjectWriter.class
             }
             
             if (autoDetectDomainClasses) {

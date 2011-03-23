@@ -23,9 +23,15 @@ import org.grails.jaxrs.provider.DomainObjectReader
 import org.grails.jaxrs.provider.DomainObjectWriter
 import org.grails.jaxrs.provider.JSONWriter
 import org.grails.jaxrs.provider.JSONReader
+import org.grails.jaxrs.web.JaxrsContext;
 
 /**
  * @author Martin Krasser
  */
 public class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
+
+    protected String getJaxrsImplementation() {
+        return JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
+    }
+    
 }
