@@ -69,7 +69,7 @@ class IntegrationTestEnvironment {
     synchronized JaxrsContext getJaxrsContext() {
         if (!jaxrsContext) {
             MockServletContext mockServletContext = new MockServletContext()
-            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/itest/IntegrationTestEnvironment.xml, ${contextConfigLocations}")
+            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/itest/integrationTestEnvironment.xml, ${contextConfigLocations}")
             
             IntegrationTestContextLoaderListener loaderListener = new IntegrationTestContextLoaderListener()
             ServletContextListener jaxrsListener = new JaxrsListener()
