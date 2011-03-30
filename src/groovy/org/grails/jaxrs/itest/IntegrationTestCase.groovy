@@ -49,11 +49,7 @@ abstract class IntegrationTestCase {
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
 
         if (!environment) {
-            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, 
-                jaxrsClasses, 
-                domainClasses,
-                autoDetectJaxrsClasses,
-                autoDetectDomainClasses)
+            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
         }
 
         controller = new JaxrsController()
@@ -127,14 +123,6 @@ abstract class IntegrationTestCase {
     }
     
     /**
-     * Returns the list of domain classes for testing. Auto-detected classes 
-     * will be added to this list later. 
-     */
-    protected List getDomainClasses() {
-        []
-    }
-    
-    /**
      * Determines whether JAX-RS resources or providers are auto-detected in 
      * <code>grails-app/resources</code> or <code>grails-app/providers</code>.  
      * 
@@ -144,14 +132,4 @@ abstract class IntegrationTestCase {
         true
     }
 
-    /**
-     * Determines whether domain classes are auto-detected in 
-     * <code>grails-app/domain</code>.  
-     * 
-     * @return true is domain classes should be auto-detected.
-     */
-    protected boolean isAutoDetectDomainClasses() {
-        true
-    }
-    
 }

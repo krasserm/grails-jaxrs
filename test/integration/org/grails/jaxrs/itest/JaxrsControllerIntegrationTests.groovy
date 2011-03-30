@@ -31,12 +31,6 @@ import static org.junit.Assert.*
  */
 abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     
-    // not in grails-app/domain, 
-    // so domain classes are added here ...    
-    protected List getDomainClasses() {
-        [TestPerson.class]
-    }
-
     // not in grails-app/resources or grails-app/providers,
     // so jaxrs classes are added here ...
     protected List getJaxrsClasses() {
