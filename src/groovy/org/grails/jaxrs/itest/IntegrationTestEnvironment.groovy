@@ -15,26 +15,24 @@
  */
 package org.grails.jaxrs.itest
 
-import grails.spring.BeanBuilder;
+import grails.spring.BeanBuilder
 
-import java.io.IOException;
+import javax.servlet.ServletContextEvent
+import javax.servlet.ServletContextListener
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-
-import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler;
-import org.grails.jaxrs.ProviderArtefactHandler;
-import org.grails.jaxrs.ResourceArtefactHandler;
-import org.grails.jaxrs.provider.DomainObjectReader;
-import org.grails.jaxrs.provider.DomainObjectWriter;
-import org.grails.jaxrs.provider.JSONReader;
-import org.grails.jaxrs.provider.JSONWriter;
-import org.grails.jaxrs.web.JaxrsContext;
-import org.grails.jaxrs.web.JaxrsListener;
-import org.grails.jaxrs.web.JaxrsUtils;
-
-import org.springframework.mock.web.MockServletContext;
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
+import org.codehaus.groovy.grails.commons.GrailsApplication;
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import org.grails.jaxrs.ProviderArtefactHandler
+import org.grails.jaxrs.ResourceArtefactHandler
+import org.grails.jaxrs.provider.DomainObjectReader
+import org.grails.jaxrs.provider.DomainObjectWriter
+import org.grails.jaxrs.provider.JSONReader
+import org.grails.jaxrs.provider.JSONWriter
+import org.grails.jaxrs.web.JaxrsContext
+import org.grails.jaxrs.web.JaxrsListener
+import org.grails.jaxrs.web.JaxrsUtils
 
 /**
  * @author Martin Krasser
@@ -47,40 +45,31 @@ class IntegrationTestEnvironment {
     private String jaxrsProviderName
 
     private List jaxrsClasses
-    private List domainClasses
     
     private boolean autoDetectJaxrsClasses
-    private boolean autoDetectDomainClasses
     
-    IntegrationTestEnvironment(String contextConfigLocations, String jaxrsProviderName, 
-            List jaxrsClasses, 
-            List domainClasses,
-            boolean autoDetectJaxrsClasses,
-            boolean autoDetectDomainClasses) {
-
+    IntegrationTestEnvironment(String contextConfigLocations, String jaxrsProviderName, List jaxrsClasses, boolean autoDetectJaxrsClasses) {
         this.contextConfigLocations = contextConfigLocations
         this.jaxrsProviderName = jaxrsProviderName
         this.jaxrsClasses = jaxrsClasses
-        this.domainClasses = domainClasses
         this.autoDetectJaxrsClasses = autoDetectJaxrsClasses
-        this.autoDetectDomainClasses = autoDetectDomainClasses
     }
     
     synchronized JaxrsContext getJaxrsContext() {
         if (!jaxrsContext) {
-            MockServletContext mockServletContext = new MockServletContext()
-            mockServletContext.addInitParameter('contextConfigLocation', "org/grails/jaxrs/itest/integrationTestEnvironment.xml, ${contextConfigLocations}")
+            GrailsApplication application = ApplicationHolder.application
+            GrailsWebApplicationContext applicationContext = application.mainContext
             
-            IntegrationTestContextLoaderListener loaderListener = new IntegrationTestContextLoaderListener()
+            BeanBuilder beanBuilder = new BeanBuilder(applicationContext)
+            beanBuilder.importBeans "org/grails/jaxrs/itest/integrationTestEnvironment.xml, ${contextConfigLocations}"
+			
             ServletContextListener jaxrsListener = new JaxrsListener()
             
-            loaderListener.contextInitialized(new ServletContextEvent(mockServletContext))
-
             if (autoDetectJaxrsClasses) {
-                IntegrationTestApplication.instance.pluginApplication.getArtefacts(ResourceArtefactHandler.TYPE).each { gc ->
+                application.getArtefacts(ResourceArtefactHandler.TYPE).each { gc ->
                      jaxrsClasses << gc.clazz
                 }
-                IntegrationTestApplication.instance.pluginApplication.getArtefacts(ProviderArtefactHandler.TYPE).each { gc ->
+                application.getArtefacts(ProviderArtefactHandler.TYPE).each { gc ->
                      jaxrsClasses << gc.clazz
                 }
             }
@@ -92,23 +81,17 @@ class IntegrationTestEnvironment {
                 jaxrsClasses << DomainObjectWriter.class
             }
             
-            if (autoDetectDomainClasses) {
-                IntegrationTestApplication.instance.pluginApplication.getArtefacts(DomainClassArtefactHandler.TYPE).each { gc ->
-                     domainClasses << gc.clazz
-                }
-            }
-
-            new BeanBuilder().beans {
+            beanBuilder.beans {
                 jaxrsClasses.each { clazz -> 
-                   "${clazz.name}"(clazz)
+                   "${clazz.name}"(clazz) { bean->
+                        bean.autowire = true
+                    }
                 }
-            }.registerBeans(loaderListener.webApplicationContext.beanFactory)
-            
-            jaxrsListener.contextInitialized(new ServletContextEvent(mockServletContext))            
-            jaxrsContext = JaxrsUtils.getRequiredJaxrsContext(mockServletContext)
-            jaxrsContext.jaxrsServletContext = mockServletContext
-            
-            domainClasses.each { IntegrationTestApplication.instance.domainClasses << it }
+            }.registerBeans(applicationContext.beanFactory)
+			
+            jaxrsListener.contextInitialized(new ServletContextEvent(applicationContext.servletContext))            
+            jaxrsContext = JaxrsUtils.getRequiredJaxrsContext(applicationContext.servletContext)
+            jaxrsContext.jaxrsServletContext = applicationContext.servletContext
             jaxrsClasses.each { jaxrsContext.jaxrsConfig.classes << it }
             
             jaxrsContext.jaxrsProviderName = jaxrsProviderName

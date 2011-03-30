@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,14 @@ package org.grails.jaxrs.itest
  */
 class TestPerson {
     
-    static {
-        // Id property needed by 
-        // domain object providers
-        TestPerson.metaClass.id = null
-    }
-    
+    // pretend being a domain class
+    def id
+    def version
+    void setClass(def obj) {}
+
+    // test properties
     String name 
-    
     int age
     
-    // only needed for testing
-    void setClass(def obj) {}
     
 }
