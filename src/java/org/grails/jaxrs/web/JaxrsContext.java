@@ -18,6 +18,8 @@ package org.grails.jaxrs.web;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -60,6 +62,7 @@ public class JaxrsContext {
     private volatile JaxrsConfig jaxrsConfig;
     private volatile String jaxrsProviderName;
     private volatile String jaxrsProviderExtraPaths;
+    private volatile Map<String, String> jaxrsProviderInitParameters;
     
     private JaxrsService jaxrsService;
 
@@ -70,6 +73,7 @@ public class JaxrsContext {
         this.jaxrsConfig = new JaxrsConfig();
         this.jaxrsService = new JaxrsServiceImpl();
         this.jaxrsProviderName = JAXRS_PROVIDER_NAME_JERSEY;
+        this.jaxrsProviderInitParameters = new HashMap<String, String>();
     }
 
     /**
@@ -119,6 +123,18 @@ public class JaxrsContext {
             LOG.debug("setting provider extra paths: " + jaxrsProviderExtraPaths);
         }
         this.jaxrsProviderExtraPaths = jaxrsProviderExtraPaths;
+    }
+    
+    /**
+     * Set servlet config init parameters.  
+     * 
+     * @param jaxrsProviderInitParameters servlet config init parameters.
+     */
+    public void setJaxrsInitParameters(Map<String, String> jaxrsProviderInitParameters) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setting init parameters: " + jaxrsProviderInitParameters);
+        }
+        this.jaxrsProviderInitParameters = jaxrsProviderInitParameters;
     }
     
     /**
@@ -179,7 +195,7 @@ public class JaxrsContext {
     }
     
     class Config implements ServletConfig {
-        Hashtable<String, String> params = new Hashtable<String, String>();
+        Hashtable<String, String> params = new Hashtable<String, String>(jaxrsProviderInitParameters);
  
         public String getJaxrsProviderExtraPaths() {
             return jaxrsProviderExtraPaths;

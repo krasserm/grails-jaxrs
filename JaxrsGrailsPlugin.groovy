@@ -189,6 +189,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         
         context.jaxrsProviderName = this.providerName
         context.jaxrsProviderExtraPaths = this.providerExtraPaths
+        context.jaxrsProviderInitParameters = this.providerInitParameters
         
         config.reset()
         config.classes << XMLWriter.class
@@ -238,4 +239,9 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
     private String getProviderExtraPaths() {
         ConfigurationHolder.config.org.grails.jaxrs.provider.extra.paths
     }
+
+    private Map<String, String> getProviderInitParameters() {
+        ConfigurationHolder.config.org.grails.jaxrs.provider.init.parameters
+    }
+    
 }

@@ -32,8 +32,6 @@ import org.grails.jaxrs.support.DomainObjectWriterSupport
  * <code>org.grails.jaxrs.dowriter.require.generic.collections</code> to
  * <code>true</code> in the application config. 
  * 
- * @see AbstractDomainObjectWriter
- *  
  * @author Martin Krasser
  */
 @Provider

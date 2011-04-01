@@ -32,6 +32,8 @@ import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
 @SuppressWarnings("serial")
 public class JerseyServlet extends SpringServlet {
 
+    private static final String PROVIDER_EXTRA_PATHS_KEY = "com.sun.jersey.config.property.packages";
+    
     /**
      * Initializes the Jersey servlet. If <code>config</code> is an instance of
      * {@link Config} then Jersey is configured with extra paths for scanning
@@ -59,8 +61,8 @@ public class JerseyServlet extends SpringServlet {
      */
     void init(Config config) {
         String extra = config.getJaxrsProviderExtraPaths();
-        if (isExtraPathsDefined(extra)) {
-            config.getInitParameters().put("com.sun.jersey.config.property.packages", extra);
+        if (isExtraPathsDefined(extra) && !config.getInitParameters().containsKey(PROVIDER_EXTRA_PATHS_KEY)) {
+            config.getInitParameters().put(PROVIDER_EXTRA_PATHS_KEY, extra);
         }
     }
     

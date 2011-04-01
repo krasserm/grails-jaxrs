@@ -58,6 +58,10 @@ public class RestletServlet extends ServerServlet {
         return config;
     }
 
+    //
+    // TODO: set servlet config init parameters ...
+    //
+    
     /**
      * Destroys this servlet removing all Restlet-specific attributes from the
      * servlet context.
