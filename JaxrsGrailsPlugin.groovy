@@ -31,7 +31,7 @@ class JaxrsGrailsPlugin {
             "lib/*-sources.jar"
     ]
     
-    def loadAfter = ['controllers','services']
+    def loadAfter = ['controllers','services','spring-security-core']
     def artefacts = [
             new ResourceArtefactHandler(),
             new ProviderArtefactHandler()
