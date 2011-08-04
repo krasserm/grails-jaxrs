@@ -119,20 +119,27 @@ class ConverterUtils {
     
     /**
      * Returns the mapped value for <code>id</code> in <code>map</code> 
-     * as java.util.Long or <code>null</code> if there's no mapped value
-     * for <code>id</code>.
-     * 
-     * @throws NumberFormatException if the mapped value for <code>id</code>
-     *         cannot be parsed with {@link Long#parseLong}. 
+     * or <code>null</code> if there's no mapped value for <code>id</code>.
      */
-    static Long idFromMap(Map map) {
+    static def idFromMap(Map map) {
         if (!map.id) {
             return null
-        }
-        if (map.id instanceof Number) {
+        } else if (map.id instanceof Number) {
             return map.id.toLong()
+        } else if (isNumeric(map.id)) {
+            return Long.parseLong(map.id)
         }
-        return Long.parseLong(map.id)
+        return map.id
     }
     
+    static def isNumeric = {
+        def formatter = java.text.NumberFormat.instance
+        def pos = [0] as java.text.ParsePosition
+        formatter.parse(it, pos)
+ 
+        // if parse position index has moved to end of string
+        // them the whole string was numeric
+        pos.index == it.size()
+    }
+
 }
