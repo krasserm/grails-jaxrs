@@ -15,6 +15,7 @@
  */
 package org.grails.jaxrs.support
 
+import static org.grails.jaxrs.support.ConverterUtils.idFromMap
 import static org.grails.jaxrs.support.ConverterUtils.xmlToMap
 
 import java.io.ByteArrayInputStreamimport grails.test.*
@@ -36,5 +37,17 @@ class ConverterUtilsTests extends GrailsUnitTestCase {
         def xml = "<x id=\"1\"><y>2</y><z>3</z></x>"
         def map = xmlToMap(new ByteArrayInputStream(xml.getBytes(encoding)), encoding)        assertEquals('1', map.id) 
         assertEquals('2', map.y)         assertEquals('3', map.z)     }
+    
+    void testIdFromMapWithNumericId() {
+        def xml = "<x id=\"1\"><y>2</y><z>3</z></x>"
+        def map = xmlToMap(new ByteArrayInputStream(xml.getBytes(encoding)), encoding)
+        assertEquals(new Long(1), idFromMap(map)) 
+    }
+    
+    void testIdFromMapWithNonNumericId() {
+        def xml = "<x id=\"a\"><y>2</y><z>3</z></x>"
+        def map = xmlToMap(new ByteArrayInputStream(xml.getBytes(encoding)), encoding)
+        assertEquals('a', idFromMap(map)) 
+    }
     
 }
