@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,34 +21,35 @@ import groovy.text.SimpleTemplateEngine
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.springframework.core.io.FileSystemResourceimport org.springframework.core.io.ClassPathResource
 /**
- * Code generator that generates resource classes for Grails domain objects. 
- * For each domain class X two resource classes are created, XResource for 
- * operating on a single X and XCollectionResource for operating on an X 
- * collection.
+ * Code generator that generates resource classes and service classes for 
+ * Grails domain objects. For each domain class X on service class two 
+ * resource classes are created, XResource for operating on a single 
+ * X and XCollectionResource for operating on an X collection. Both resource
+ * classes delegate to the service class.
  * 
  * @author Martin Krasser
  */
-class ResourceGenerator {
+class CodeGenerator {
 
-     private static final Log LOG = LogFactory.getLog(ResourceGenerator.class)
+     private static final Log LOG = LogFactory.getLog(CodeGenerator.class)
      
      def engine
      def pluginDir
      
      boolean overwrite = false
      
-     ResourceGenerator() {
+     CodeGenerator() {
          engine = new SimpleTemplateEngine()
      }
 
      /**
-      * Generates JAX-RS resources for the given domain class to the given 
-      * destination directory.
+      * Generates JAX-RS resource and service classes for the given domain class
+      * to the given destination directory.
       * 
       * @param domainClass Grails domain class.
       * @param destdir destination directory.
       */
-     void generateResources(GrailsDomainClass domainClass, String destdir) {
+     void generate(GrailsDomainClass domainClass, String destdir) {
          if (!destdir) {
              throw new IllegalArgumentException("Argument [destdir] not specified")
          }
@@ -60,10 +61,16 @@ class ResourceGenerator {
              if (pos != -1) {
                  pkg = fullName[0..pos]
              }
-             def path = "${destdir}/grails-app/resources/${pkg.replace('.' as char, '/' as char)}"
-    
-             generateCollectionResource(domainClass, path)
-             generateResource(domainClass, path)
+             
+             def pkgPath = pkg.replace('.' as char, '/' as char)
+             
+             def resourcePath = "${destdir}/grails-app/resources/${pkgPath}"
+             generateCollectionResource(domainClass, resourcePath)
+             generateResource(domainClass, resourcePath)
+             
+             def servicePath = "${destdir}/grails-app/services/${pkgPath}"
+             generateService(domainClass, servicePath)
+             
          }
      }
      
@@ -89,22 +96,46 @@ class ResourceGenerator {
          }
      }
      
+     protected void generateService(GrailsDomainClass domainClass, String path) {
+         def destFile = new File("${path}${domainClass.shortName}ResourceService.groovy")
+         if (canWrite(destFile)) {
+             destFile.parentFile.mkdirs()
+             destFile.withWriter {w ->
+                 generateService(domainClass, w)
+             }
+             LOG.info("Service generated at ${destFile}")
+         }
+     }
+     
      protected void generateCollectionResource(GrailsDomainClass domainClass, Writer out) {
          def templateText = getResourceTemplateText("CollectionResource.groovy")
+         def propertyName = GrailsNameUtils.getPropertyName(domainClass.shortName)
          def binding = [
              packageName : domainClass.packageName,
              resourceName : domainClass.shortName,
-             resourcePath : GrailsNameUtils.getPropertyName(domainClass.shortName)
+             resourceProp : propertyName,
+             resourcePath : propertyName
          ]
          engine.createTemplate(templateText).make(binding).writeTo(out)
      }
     
      protected void generateResource(GrailsDomainClass domainClass, Writer out) {
          def templateText = getResourceTemplateText("Resource.groovy")
+         def propertyName = GrailsNameUtils.getPropertyName(domainClass.shortName)
          def binding = [
              packageName : domainClass.packageName,
              resourceName : domainClass.shortName,
-             resourcePath : GrailsNameUtils.getPropertyName(domainClass.shortName)
+             resourceProp : propertyName,
+             resourcePath : propertyName
+         ]
+         engine.createTemplate(templateText).make(binding).writeTo(out)
+     }
+    
+     protected void generateService(GrailsDomainClass domainClass, Writer out) {
+         def templateText = getResourceTemplateText("ResourceService.groovy")
+         def binding = [
+             packageName : domainClass.packageName,
+             resourceName : domainClass.shortName,
          ]
          engine.createTemplate(templateText).make(binding).writeTo(out)
      }

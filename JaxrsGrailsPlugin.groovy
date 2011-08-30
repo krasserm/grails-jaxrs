@@ -4,7 +4,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.grails.jaxrs.DefaultGrailsResourceClass
 import org.grails.jaxrs.ProviderArtefactHandler
 import org.grails.jaxrs.ResourceArtefactHandler
-import org.grails.jaxrs.generator.ResourceGenerator
+import org.grails.jaxrs.generator.CodeGenerator
 import org.grails.jaxrs.provider.DomainObjectReader
 import org.grails.jaxrs.provider.DomainObjectWriter
 import org.grails.jaxrs.provider.JSONReader
@@ -134,7 +134,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         }
         
         // Configure the resource code generator
-        "${ResourceGenerator.class.name}"(ResourceGenerator)
+        "${CodeGenerator.class.name}"(CodeGenerator)
     }
 
     /**

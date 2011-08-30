@@ -13,19 +13,21 @@ import javax.ws.rs.core.Response
 @Produces(['application/xml','application/json'])
 class ${resourceName}CollectionResource {
 
+    def ${resourceProp}ResourceService
+    
     @POST
     Response create(${resourceName} dto) {
-        created dto.save()
+        created ${resourceProp}ResourceService.create(dto)
     }
 
     @GET
     Response readAll() {
-        ok ${resourceName}.findAll()
+        ok ${resourceProp}ResourceService.readAll()
     }
     
     @Path('/{id}')
-    ${resourceName}Resource getResource(@PathParam('id') String id) {
-        new ${resourceName}Resource(id:id)
+    ${resourceName}Resource getResource(@PathParam('id') Long id) {
+        new ${resourceName}Resource(${resourceProp}ResourceService: ${resourceProp}ResourceService, id:id)
     }
         
 }
