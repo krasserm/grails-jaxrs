@@ -39,6 +39,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
          TestResource03.class,
          TestResource04.class,
          TestResource05.class,
+         TestResource06.class,
          CustomRequestEntityReader.class,
          CustomResponseEntityWriter.class]
     }
@@ -66,6 +67,15 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
         assertTrue(response.contentAsString.contains('"age":39'))
         assertTrue(response.contentAsString.contains('"name":"ekim"'))
         assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    @Test
+    void testPost06() {
+        sendRequest('/test/06', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        assertEquals(200, response.status)
+        assertTrue(response.contentAsString.contains('<age>39</age>'))
+        assertTrue(response.contentAsString.contains('<name>ekim</name>'))
+        assertTrue(response.getHeader('Content-Type').startsWith('application/xml'))
     }
     
     @Test

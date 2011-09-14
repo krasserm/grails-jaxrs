@@ -95,7 +95,6 @@ public class XMLWriter extends MessageBodyWriterSupport<XML> {
             writer = new OutputStreamWriter(entityStream, charset);
         }
         xml.render(writer);
-        writer.flush();
 
     }
     
