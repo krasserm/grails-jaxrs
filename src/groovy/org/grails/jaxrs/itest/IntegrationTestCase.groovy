@@ -48,9 +48,7 @@ abstract class IntegrationTestCase {
         ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
 
-        if (!environment) {
-            environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
-        }
+        environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
 
         controller = new JaxrsController()
         controller.jaxrsContext = environment.jaxrsContext

@@ -16,25 +16,20 @@
 package org.grails.jaxrs
 
 import java.io.ByteArrayInputStream
-import javax.ws.rs.Path
-import javax.ws.rs.GET
-import javax.ws.rs.ext.MessageBodyReader
-import javax.ws.rs.ext.Provider
-import grails.test.*
+import grails.test.mixin.TestFor
+import grails.test.mixin.support.GrailsUnitTestMixin
+
+import org.grails.jaxrs.test.*
 
 /**
  * @author Martin Krasser
  */
-class JaxrsClassesTests extends GrailsUnitTestCase {
-    protected void setUp() {
-        super.setUp()
-    }
+//class JaxrsClassesTests extends GrailsUnitTestCase {
+@TestMixin(GrailsUnitTestMixin)
+class JaxrsClassesTests {
 
-    protected void tearDown() {
-        super.tearDown()
-    }
-
-    void testIsJaxrsResource() {        assertTrue(JaxrsClasses.isJaxrsResource(TestA.class))
+    void testIsJaxrsResource() {
+	assertTrue(JaxrsClasses.isJaxrsResource(TestA.class))
         assertTrue(JaxrsClasses.isJaxrsResource(TestB.class))
         assertTrue(JaxrsClasses.isJaxrsResource(TestC.class))
         assertFalse(JaxrsClasses.isJaxrsResource(TestD.class))
@@ -44,19 +39,8 @@ class JaxrsClassesTests extends GrailsUnitTestCase {
     void testIsJaxrsResourceInherit() {
         assertTrue(JaxrsClasses.isJaxrsResource(TestH1B.class))
         assertFalse(JaxrsClasses.isJaxrsResource(TestH2B.class))
-        assertTrue(JaxrsClasses.isJaxrsResource(TestH1B.class))
+        assertTrue(JaxrsClasses.isJaxrsResource(TestH3B.class))
     }
-    
 }
+    
 
-@Path('/a') class TestA { @GET String a() {'a'} }@Path('/b') class TestB { String b() {'b'} }class TestC { @GET String c() {'c'} }class TestD { String d() {'d'} }
-abstract class TestE implements MessageBodyReader { @GET String e() {'e'} }
-
-@Path('/a') class TestH1A {}
-class TestH1B extends TestH1A {}
-
-class TestH2A {}
-class TestH2B extends TestH2A {}
-
-@Path('/a') interface TestH3A {}
-class TestH3B implements TestH3A {}

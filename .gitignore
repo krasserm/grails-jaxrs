@@ -3,3 +3,10 @@
 *target
 web-app
 plugin.xml
+
+#Mac File
+.DS_Store
+
+#Vi/Emacs temporary files
+*~
+
