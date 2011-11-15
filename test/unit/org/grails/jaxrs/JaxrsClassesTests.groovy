@@ -16,7 +16,7 @@
 package org.grails.jaxrs
 
 import java.io.ByteArrayInputStream
-import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 
 import org.grails.jaxrs.test.*
