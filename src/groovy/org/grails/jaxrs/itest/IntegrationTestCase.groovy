@@ -33,13 +33,13 @@ import org.junit.BeforeClass
 abstract class IntegrationTestCase {
 
     static transactional = false
-    static environment
+    static testEnvironment
 
     def controller
 
     @BeforeClass
     static void setUpBeforeClass() {
-        environment = null
+        testEnvironment = null
     }
         
     @Before
@@ -48,10 +48,12 @@ abstract class IntegrationTestCase {
         ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
         ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
 
-        environment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
+        if (!testEnvironment) {
+            testEnvironment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
+        }
 
         controller = new JaxrsController()
-        controller.jaxrsContext = environment.jaxrsContext
+        controller.jaxrsContext = testEnvironment.jaxrsContext
     }
     
     void setRequestUrl(String url) {
