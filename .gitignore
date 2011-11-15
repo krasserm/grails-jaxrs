@@ -1,6 +1,7 @@
 *.zip
 *.log
 *target
+*target-eclipse
 web-app
 plugin.xml
 
