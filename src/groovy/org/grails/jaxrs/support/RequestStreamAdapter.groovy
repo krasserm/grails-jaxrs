@@ -18,8 +18,6 @@ class RequestStreamAdapter extends MockHttpServletRequest {
 
     InputStream stream
     
-    String format
-    
     RequestStreamAdapter(InputStream stream) {
         this.stream = stream
     }

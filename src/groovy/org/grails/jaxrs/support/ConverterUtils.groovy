@@ -28,6 +28,7 @@ import groovy.util.slurpersupport.GPathResult
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener;
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
 import org.codehaus.groovy.grails.web.servlet.mvc.ParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
@@ -91,7 +92,7 @@ class ConverterUtils {
     static Map jsonToMap(InputStream input, String encoding) {
         def adapter = new RequestStreamAdapter(input)
         adapter.characterEncoding = encoding
-        adapter.format = 'json'
+        adapter.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, 'json')
         
         def params = new GrailsParameterMap(adapter)
         jsonListener.paramsCreated(params)
@@ -110,13 +111,13 @@ class ConverterUtils {
     static Map xmlToMap(InputStream input, String encoding) {
         def adapter = new RequestStreamAdapter(input)
         adapter.characterEncoding = encoding
-        adapter.format = 'xml'
+        adapter.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, 'xml')
         
         def params = new GrailsParameterMap(adapter)
         xmlListener.paramsCreated(params)
         params.iterator().next().value 
     }
-    
+
     /**
      * Returns the mapped value for <code>id</code> in <code>map</code> 
      * or <code>null</code> if there's no mapped value for <code>id</code>.

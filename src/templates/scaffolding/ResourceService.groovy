@@ -3,7 +3,6 @@
 class ${resourceName}ResourceService {
     
     def create(${resourceName} dto) {
-        dto.merge() // workaround for http://jira.grails.org/browse/GRAILS-6459
         dto.save()
     }
 
