@@ -3,6 +3,7 @@ package org.grails.jaxrs.support
 import java.io.InputStream;
 import javax.servlet.ServletInputStream
 
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
 import org.springframework.mock.web.DelegatingServletInputStream;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -20,6 +21,10 @@ class RequestStreamAdapter extends MockHttpServletRequest {
     
     RequestStreamAdapter(InputStream stream) {
         this.stream = stream
+    }
+    
+    String getFormat() {
+        return getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT)
     }
     
     @Override
