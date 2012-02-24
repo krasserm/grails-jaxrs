@@ -35,11 +35,12 @@ grails.project.dependency.resolution = {
                 //'org.restlet.gae:org.restlet.ext.jaxrs:2.0-RC3',
                 'org.restlet.gae:org.restlet.ext.json:2.0-RC3',
                 'org.restlet.gae:org.restlet.lib.org.json:2.0',
-                'com.sun.jersey:jersey-core:1.8',
-                'com.sun.jersey:jersey-server:1.8',
-                'com.sun.jersey.contribs:jersey-spring:1.8',
+                'com.sun.jersey:jersey-core:1.9.1',
+                'com.sun.jersey:jersey-server:1.9.1',
+                //'com.sun.jersey:jersey-json:1.9.1',
+                'com.sun.jersey.contribs:jersey-spring:1.9.1',
                 'javax.ws.rs:jsr311-api:1.1.1'
-        ){
+        ) {
            transitive = false
         }
     }
