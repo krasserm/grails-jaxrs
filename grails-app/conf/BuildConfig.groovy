@@ -39,7 +39,9 @@ grails.project.dependency.resolution = {
                 'com.sun.jersey:jersey-server:1.9.1',
                 //'com.sun.jersey:jersey-json:1.9.1',
                 'com.sun.jersey.contribs:jersey-spring:1.9.1',
-                'javax.ws.rs:jsr311-api:1.1.1'
+                'javax.ws.rs:jsr311-api:1.1.1',
+                // until RequestStreamAdapter is re-implemented ...
+                'org.springframework:spring-test:3.1.0.RELEASE'
         ) {
            transitive = false
         }
