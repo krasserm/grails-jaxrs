@@ -34,11 +34,12 @@ grails.project.dependency.resolution = {
                 // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
                 //'org.restlet.gae:org.restlet.ext.jaxrs:2.0-RC3',
                 'org.restlet.gae:org.restlet.ext.json:2.0-RC3',
-                'org.restlet.gae:org.restlet.lib.org.json:2.0',
-                'com.sun.jersey:jersey-core:1.9.1',
-                'com.sun.jersey:jersey-server:1.9.1',
-                'com.sun.jersey:jersey-json:1.9.1',
-                'com.sun.jersey.contribs:jersey-spring:1.9.1',
+                //'org.restlet.gae:org.restlet.lib.org.json:2.0',
+                'com.sun.jersey:jersey-core:1.12',
+                'com.sun.jersey:jersey-servlet:1.12',
+                'com.sun.jersey:jersey-server:1.12',
+                'com.sun.jersey:jersey-json:1.12',
+                'com.sun.jersey.contribs:jersey-spring:1.12',
                 'javax.ws.rs:jsr311-api:1.1.1',
                 // until RequestStreamAdapter is re-implemented ...
                 'org.springframework:spring-test:3.1.0.RELEASE'
