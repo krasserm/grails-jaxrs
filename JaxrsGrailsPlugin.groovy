@@ -1,7 +1,7 @@
 import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import org.grails.jaxrs.DefaultGrailsResourceClass
+import org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet
 import org.grails.jaxrs.ProviderArtefactHandler
 import org.grails.jaxrs.ResourceArtefactHandler
 import org.grails.jaxrs.generator.CodeGenerator
@@ -97,6 +97,26 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
                 'dispatcher'('REQUEST')
             }
         }
+		
+		def grailsServlet = xml.servlet.find { servlet ->
+			
+			'grails'.equalsIgnoreCase(servlet.'servlet-name'.text())
+			
+		}
+		
+		// reload default GrailsDispatcherServlet adding 'dispatchOptionsRequest':'true'  
+		grailsServlet.replaceNode { node ->
+			'servlet' {
+				'servlet-name'('grails')
+				'servlet-class'(GrailsDispatcherServlet.class.name)
+				'load-on-startup'('1')
+				'init-param'{
+					'param-name'('dispatchOptionsRequest')
+					'param-value'('true')
+				}
+			}
+			
+		}
         
     }
 
