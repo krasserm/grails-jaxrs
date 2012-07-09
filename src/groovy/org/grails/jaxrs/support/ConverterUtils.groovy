@@ -32,6 +32,7 @@ import grails.converters.XML
 import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletRequest
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
@@ -148,13 +149,13 @@ class ConverterUtils {
 
     static def newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
         
-        final MockHttpServletRequest req = new MockHttpServletRequest ();
+        final GrailsMockHttpServletRequest req = new GrailsMockHttpServletRequest ();
         
         req.characterEncoding = characterEncoding
         req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
         
-        return (HttpServletRequest)Proxy.newProxyInstance(HttpServletRequest.class.getClassLoader(),
-        [HttpServletRequest.class] as Class[], new InvocationHandler() {
+        return (HttpServletRequest)Proxy.newProxyInstance(getClassLoader(),
+        [HttpServletRequest.class, EnhancedRequestProps.class] as Class[], new InvocationHandler() {
             public Object invoke(Object proxy, Method method, Object[] args) {
 
                 String methodName = method.getName();
@@ -162,7 +163,7 @@ class ConverterUtils {
                 if ("getFormat".equals(methodName)) {
                     return req.getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT);
                 }
-                
+
                 if ("getInputStream".equals(methodName)) {
                     if (stream instanceof ServletInputStream) {
                         return stream
@@ -179,4 +180,13 @@ class ConverterUtils {
             
         });
     }
+	
+	/**
+	 * Interface used in order to expose properties dinamically added by grails (i.e. 'format added by RequestMimeTypesApi)
+	 * Without this some tests would fail. 
+	 */
+	interface EnhancedRequestProps {
+		String getFormat ();
+		void setFormat (String) 
+	}
 }
