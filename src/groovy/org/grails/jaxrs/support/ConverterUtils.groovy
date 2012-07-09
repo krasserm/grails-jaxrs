@@ -180,13 +180,13 @@ class ConverterUtils {
             
         });
     }
-	
-	/**
-	 * Interface used in order to expose properties dinamically added by grails (i.e. 'format added by RequestMimeTypesApi)
-	 * Without this some tests would fail. 
-	 */
-	interface EnhancedRequestProps {
-		String getFormat ();
-		void setFormat (String) 
-	}
+    
+    /**
+     * Interface used in order to expose properties dinamically added by grails (i.e. 'format added by RequestMimeTypesApi)
+     * Without this some tests would fail. 
+     */
+    interface EnhancedRequestProps {
+        String getFormat ();
+        void setFormat (String) 
+    }
 }
