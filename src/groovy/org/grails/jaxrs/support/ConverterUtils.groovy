@@ -17,20 +17,28 @@ package org.grails.jaxrs.support
 
 import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
 
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
 import java.util.Map
+
+import javax.servlet.ServletInputStream
+import javax.servlet.http.HttpServletRequest
 
 import grails.converters.JSON
 import grails.converters.XML
 
-import groovy.util.slurpersupport.GPathResult
-import org.apache.commons.logging.*
+
+import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletRequest
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
-import org.codehaus.groovy.grails.web.servlet.mvc.ParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
+import org.springframework.mock.web.DelegatingServletInputStream
+import org.springframework.mock.web.MockHttpServletRequest
 
 /**
  * Utility class for XML to map conversions.
@@ -90,9 +98,7 @@ class ConverterUtils {
      * @return a map representing the input JSON stream.
      */
     static Map jsonToMap(InputStream input, String encoding) {
-        def adapter = new RequestStreamAdapter(input)
-        adapter.characterEncoding = encoding
-        adapter.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, 'json')
+        def adapter = newRequestStreamAdapter(input, encoding, 'json')
         
         def params = new GrailsParameterMap(adapter)
         jsonListener.paramsCreated(params)
@@ -109,9 +115,7 @@ class ConverterUtils {
      * @return a map representing the input XML stream.
      */
     static Map xmlToMap(InputStream input, String encoding) {
-        def adapter = new RequestStreamAdapter(input)
-        adapter.characterEncoding = encoding
-        adapter.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, 'xml')
+        def adapter = newRequestStreamAdapter(input, encoding, 'xml')
         
         def params = new GrailsParameterMap(adapter)
         xmlListener.paramsCreated(params)
@@ -143,4 +147,46 @@ class ConverterUtils {
         pos.index == it.size()
     }
 
+    static def newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
+        
+        final GrailsMockHttpServletRequest req = new GrailsMockHttpServletRequest ();
+        
+        req.characterEncoding = characterEncoding
+        req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
+        
+        return (HttpServletRequest)Proxy.newProxyInstance(getClassLoader(),
+        [HttpServletRequest.class, EnhancedRequestProps.class] as Class[], new InvocationHandler() {
+            public Object invoke(Object proxy, Method method, Object[] args) {
+
+                String methodName = method.getName();
+
+                if ("getFormat".equals(methodName)) {
+                    return req.getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT);
+                }
+
+                if ("getInputStream".equals(methodName)) {
+                    if (stream instanceof ServletInputStream) {
+                        return stream
+                    } else if (stream) {
+                        return new DelegatingServletInputStream(stream)
+                    } else {
+                        return req.getInputStream()
+                    }
+                }
+                return req.getClass().getMethod(
+                    method.getName(), method.getParameterTypes()).invoke(req, args);
+        
+            }
+            
+        });
+    }
+    
+    /**
+     * Interface used in order to expose properties dinamically added by grails (i.e. 'format added by RequestMimeTypesApi)
+     * Without this some tests would fail. 
+     */
+    interface EnhancedRequestProps {
+        String getFormat ();
+        void setFormat (String) 
+    }
 }
