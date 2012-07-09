@@ -28,7 +28,8 @@ import javax.servlet.http.HttpServletRequest
 import grails.converters.JSON
 import grails.converters.XML
 
-import org.apache.commons.logging.*
+
+import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
@@ -96,7 +97,7 @@ class ConverterUtils {
      * @return a map representing the input JSON stream.
      */
     static Map jsonToMap(InputStream input, String encoding) {
-		def adapter = newRequestStreamAdapter(input, encoding, 'json')
+        def adapter = newRequestStreamAdapter(input, encoding, 'json')
         
         def params = new GrailsParameterMap(adapter)
         jsonListener.paramsCreated(params)
@@ -113,7 +114,7 @@ class ConverterUtils {
      * @return a map representing the input XML stream.
      */
     static Map xmlToMap(InputStream input, String encoding) {
-		def adapter = newRequestStreamAdapter(input, encoding, 'xml')
+        def adapter = newRequestStreamAdapter(input, encoding, 'xml')
         
         def params = new GrailsParameterMap(adapter)
         xmlListener.paramsCreated(params)
@@ -145,37 +146,37 @@ class ConverterUtils {
         pos.index == it.size()
     }
 
-	static def newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
-		
-				final MockHttpServletRequest req = new MockHttpServletRequest ();
-				
-				req.characterEncoding = characterEncoding
-				req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
-				
-				return (HttpServletRequest)Proxy.newProxyInstance(HttpServletRequest.class.getClassLoader(),
-				[HttpServletRequest.class] as Class[], new InvocationHandler() {
-					public Object invoke(Object proxy, Method method, Object[] args) {
-		
-						String methodName = method.getName();
-		
-						if ("getFormat".equals(methodName)) {
-							return req.getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT);
-						}
-						
-						if ("getInputStream".equals(methodName)) {
-							if (stream instanceof ServletInputStream) {
-								return stream
-							} else if (stream) {
-								return new DelegatingServletInputStream(stream)
-							} else {
-								return req.getInputStream()
-							}
-						}
-						return req.getClass().getMethod(
-							method.getName(), method.getParameterTypes()).invoke(req, args);
-				
-					}
-					
-				});
-			}
+    static def newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
+        
+        final MockHttpServletRequest req = new MockHttpServletRequest ();
+        
+        req.characterEncoding = characterEncoding
+        req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
+        
+        return (HttpServletRequest)Proxy.newProxyInstance(HttpServletRequest.class.getClassLoader(),
+        [HttpServletRequest.class] as Class[], new InvocationHandler() {
+            public Object invoke(Object proxy, Method method, Object[] args) {
+
+                String methodName = method.getName();
+
+                if ("getFormat".equals(methodName)) {
+                    return req.getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT);
+                }
+                
+                if ("getInputStream".equals(methodName)) {
+                    if (stream instanceof ServletInputStream) {
+                        return stream
+                    } else if (stream) {
+                        return new DelegatingServletInputStream(stream)
+                    } else {
+                        return req.getInputStream()
+                    }
+                }
+                return req.getClass().getMethod(
+                    method.getName(), method.getParameterTypes()).invoke(req, args);
+        
+            }
+            
+        });
+    }
 }
