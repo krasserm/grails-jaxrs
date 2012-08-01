@@ -32,7 +32,6 @@ import grails.converters.XML
 import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletRequest
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener;
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
@@ -149,7 +148,7 @@ class ConverterUtils {
 
     static def newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
         
-        final GrailsMockHttpServletRequest req = new GrailsMockHttpServletRequest ();
+        final MockHttpServletRequest req = new MockHttpServletRequest ();
         
         req.characterEncoding = characterEncoding
         req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
