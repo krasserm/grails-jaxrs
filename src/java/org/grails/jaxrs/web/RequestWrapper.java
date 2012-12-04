@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * A request wrapper that decorates {@link HttpServletRequest#getRequestURI()}.
- * 
+ *
  * @author Martin Krasser
- * 
+ *
  * @see JaxrsFilter
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
@@ -34,9 +34,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
     /**
      * Returns the request URI based on the attribute written by
      * {@link JaxrsFilter}.
-     * 
+     *
      * @return the request URI.
-     * 
+     *
      * @see JaxrsUtils#REQUEST_URI_ATTRIBUTE_NAME
      */
     @Override
@@ -46,12 +46,11 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
     /**
      * Always returns the empty string.
-     * 
+     *
      * @return an empty string.
      */
     @Override
     public String getServletPath() {
         return "";
     }
-    
 }

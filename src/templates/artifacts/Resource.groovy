@@ -2,7 +2,6 @@
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
-
 @Path('/api/@resource.path@')
 class @artifact.name@ {
 
@@ -11,5 +10,4 @@ class @artifact.name@ {
     String get@resource.name@Representation() {
         '@resource.name@'
     }
-    
 }

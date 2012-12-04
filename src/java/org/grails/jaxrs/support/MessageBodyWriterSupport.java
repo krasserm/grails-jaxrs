@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  */
 package org.grails.jaxrs.support;
 
-import static org.grails.jaxrs.support.ProviderUtils.*;
+import static org.grails.jaxrs.support.ProviderUtils.getWriterTypeArgument;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,10 +29,10 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 /**
  * Base class for simple message body writers.
- * 
+ *
  * @param T
  *            type of object to be written to the response entity.
- * 
+ *
  * @author Martin Krasser
  */
 public abstract class MessageBodyWriterSupport<T> extends ProviderSupport implements MessageBodyWriter<T> {
@@ -40,7 +40,7 @@ public abstract class MessageBodyWriterSupport<T> extends ProviderSupport implem
     public MessageBodyWriterSupport() {
         setTypeArgument(getWriterTypeArgument(this));
     }
-    
+
     /**
      * Always returns <code>-1</code>.
      */
@@ -66,7 +66,7 @@ public abstract class MessageBodyWriterSupport<T> extends ProviderSupport implem
     /**
      * Writes an object of type given by this class type parameter to the
      * response entity output stream.
-     * 
+     *
      * @param t
      *            object to be written.
      * @param httpHeaders
@@ -76,7 +76,6 @@ public abstract class MessageBodyWriterSupport<T> extends ProviderSupport implem
      * @throws IOException
      * @throws WebApplicationException
      */
-    protected abstract void writeTo(T t, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) 
+    protected abstract void writeTo(T t, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
         throws IOException, WebApplicationException;
-    
 }
