@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,25 +37,25 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
  * defines a {@link Map} as parameter and consumes either <code>text/xml</code>
  * or <code>application/xml</code> will be passed a map created from an XML
  * request entity:
- * 
- * 
+ *
+ *
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/xml')
  * class NotesResource {
- * 
+ *
  *      &#064;POST
  *      &#064;Consumes('text/xml')
  *      Response addNote(Map properties) {
  *          // create ne Note domain object
  *          def note = new Note(properties).save()
  *      }
- *      
+ *
  * }
- * 
- * 
+ *
+ *
  * </pre>
- * 
+ *
  * @author Martin Krasser
  */
 @Provider
@@ -63,14 +63,14 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
 public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsApplicationAware {
 
     private GrailsApplication grailsApplication;
-    
+
     public void setGrailsApplication(GrailsApplication grailsApplication) {
         this.grailsApplication = grailsApplication;
     }
 
     /**
      * Creates a map from an XML request entity stream.
-     * 
+     *
      * @param httpHeaders
      *            HTTP headers.
      * @param entityStream
@@ -79,14 +79,13 @@ public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsAp
      * @see ConverterUtils#xmlToMap(InputStream, String)
      */
     @Override
-    public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream) 
+    public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
         throws IOException, WebApplicationException {
-        
+
         // TODO: obtain encoding from HTTP header and/or XML document
         String encoding = getDefaultEncoding(grailsApplication);
 
         // Convert XML to map used for constructing domain objects
         return xmlToMap(entityStream, encoding);
     }
-
 }

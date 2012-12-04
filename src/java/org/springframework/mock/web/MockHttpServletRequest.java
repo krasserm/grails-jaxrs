@@ -1,7 +1,7 @@
 /*
  * WARNING: THIS FILE WAS COPIED AS-IS FROM SPRINGFRAMEWORK 3.0.5 DISTRIBUTION.
  * THE FILE WAS MODIFIED FOR GRAILS-JAXRX PLUGIN.
- * 
+ *
  * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,11 +38,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.util.Assert;
@@ -850,5 +850,4 @@ public class MockHttpServletRequest /*implements HttpServletRequest*/ {
 	public boolean isRequestedSessionIdFromUrl() {
 		return isRequestedSessionIdFromURL();
 	}
-
 }

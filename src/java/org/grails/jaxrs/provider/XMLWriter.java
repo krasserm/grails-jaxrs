@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,38 +32,38 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
 
 /**
  * Provider for Grails' {@link XML} converter class.
- * 
+ *
  * Message body writer that supports {@link XML} response entities. For example,
  * to create an XML representation from a list of Grails domain objects:
- * 
+ *
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/xml') // or 'application/xml'
  * class NotesResource {
- * 
+ *
  *      &#064;GET
  *      XML findNotes() {
  *          Note.findAll() as XML
  *      }
- *      
+ *
  * }
  * </pre>
- * 
+ *
  * Alternatively, one could write
- * 
+ *
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/xml') // or 'application/xml'
  * class NotesResource {
- * 
+ *
  *      &#064;GET
  *      Response findNotes() {
  *          Response.ok(Note.findAll() as XML).build()
  *      }
- *      
+ *
  * }
  * </pre>
- * 
+ *
  * @author Martin Krasser
  */
 @Provider
@@ -76,7 +76,7 @@ public class XMLWriter extends MessageBodyWriterSupport<XML> {
      * Renders the <code>xml</code> object to the response's
      * <code>entityStream</code> using the encoding set by the Grails
      * application.
-     * 
+     *
      * @param xml
      *            XML object.
      * @param httpHeaders
@@ -85,17 +85,10 @@ public class XMLWriter extends MessageBodyWriterSupport<XML> {
      *            XML response entity stream.
      */
     @Override
-    protected void writeTo(XML xml, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) 
+    protected void writeTo(XML xml, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
         throws IOException, WebApplicationException {
         String charset = ConvertersConfigurationHolder.getConverterConfiguration(XML.class).getEncoding();
-        Writer writer = null;
-        if (charset == null) {
-            writer = new OutputStreamWriter(entityStream, DEFAULT_CHARSET);
-        } else {
-            writer = new OutputStreamWriter(entityStream, charset);
-        }
+        Writer writer = new OutputStreamWriter(entityStream, charset == null ? DEFAULT_CHARSET : charset);
         xml.render(writer);
-
     }
-    
 }

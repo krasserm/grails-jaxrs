@@ -11,3 +11,4 @@ plugin.xml
 #Vi/Emacs temporary files
 *~
 
+.settings

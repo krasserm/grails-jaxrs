@@ -1,6 +1,5 @@
-import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME;
+import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet
 import org.grails.jaxrs.ProviderArtefactHandler
 import org.grails.jaxrs.ResourceArtefactHandler
@@ -16,21 +15,15 @@ import org.grails.jaxrs.web.JaxrsFilter
 import org.grails.jaxrs.web.JaxrsListener
 
 class JaxrsGrailsPlugin {
-    // the plugin version
     def version = "0.7"
-    // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
-    // the other plugins this plugin depends on
-    def dependsOn = [:]
-    // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/domain/*",
             "grails-app/providers/*",
             "grails-app/resources/*",
-            "grails-app/views/error.gsp",
             "lib/*-sources.jar"
     ]
-    
+
     def loadAfter = ['controllers','services','spring-security-core']
     def artefacts = [
             new ResourceArtefactHandler(),
@@ -49,45 +42,44 @@ class JaxrsGrailsPlugin {
     def authorEmail = "krasserm@googlemail.com"
     def title = "JSR 311 plugin"
     def description = """
-A plugin that supports the development of RESTful web services based on the 
-Java API for RESTful Web Services (JSR 311: JAX-RS). It is targeted at 
-developers who want to structure the web service layer of an application in 
-a JSR 311 compatible way but still want to continue to use Grails' powerful 
-features such as GORM, automated XML and JSON marshalling, Grails services, 
-Grails filters and so on. This plugin is an alternative to Grails' built-in 
+A plugin that supports the development of RESTful web services based on the
+Java API for RESTful Web Services (JSR 311: JAX-RS). It is targeted at
+developers who want to structure the web service layer of an application in
+a JSR 311 compatible way but still want to continue to use Grails' powerful
+features such as GORM, automated XML and JSON marshalling, Grails services,
+Grails filters and so on. This plugin is an alternative to Grails' built-in
 mechanism for implementing  RESTful web services.
 
-At the moment, plugin users may choose between Jersey and Restlet as JAX-RS 
-implementation. Both implementations are packaged with the plugin. Support for 
-Restlet was added in version 0.2 of the plugin in order to support deployments 
-on the Google App Engine. Other JAX-RS implementations such as RestEasy or 
-Apache Wink are likely to be added in upcoming versions of the plugin. 
+At the moment, plugin users may choose between Jersey and Restlet as JAX-RS
+implementation. Both implementations are packaged with the plugin. Support for
+Restlet was added in version 0.2 of the plugin in order to support deployments
+on the Google App Engine. Other JAX-RS implementations such as RestEasy or
+Apache Wink are likely to be added in upcoming versions of the plugin.
 """
 
-    // URL to the plugin's documentation
     def documentation = 'http://code.google.com/p/grails-jaxrs/'
 
     /**
-     * Adds the JaxrsFilter and JaxrsListener to the web application 
-     * descriptor. 
+     * Adds the JaxrsFilter and JaxrsListener to the web application
+     * descriptor.
      */
     def doWithWebDescriptor = { xml ->
 
         def lastListener = xml.'listener'.iterator().toList().last()
         lastListener + {
             'listener' {
-                'listener-class'(JaxrsListener.class.name)
+                'listener-class'(JaxrsListener.name)
             }
         }
-        
+
         def firstFilter = xml.'filter'[0]
         firstFilter + {
             'filter' {
                 'filter-name'('jaxrsFilter')
-                'filter-class'(JaxrsFilter.class.name)
+                'filter-class'(JaxrsFilter.name)
             }
         }
-    
+
         def firstFilterMapping = xml.'filter-mapping'[0]
         firstFilterMapping + {
             'filter-mapping' {
@@ -97,46 +89,44 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
                 'dispatcher'('REQUEST')
             }
         }
-		
+
 		def grailsServlet = xml.servlet.find { servlet ->
-			
+
 			'grails'.equalsIgnoreCase(servlet.'servlet-name'.text())
-			
+
 		}
-		
-		// reload default GrailsDispatcherServlet adding 'dispatchOptionsRequest':'true'  
+
+		// reload default GrailsDispatcherServlet adding 'dispatchOptionsRequest':'true'
 		grailsServlet.replaceNode { node ->
 			'servlet' {
 				'servlet-name'('grails')
-				'servlet-class'(GrailsDispatcherServlet.class.name)
+				'servlet-class'(GrailsDispatcherServlet.name)
 				'load-on-startup'('1')
 				'init-param'{
 					'param-name'('dispatchOptionsRequest')
 					'param-value'('true')
 				}
 			}
-			
 		}
-        
     }
 
     /**
-     * Adds the JaxrsContext and plugin- and application-specific JAX-RS 
+     * Adds the JaxrsContext and plugin- and application-specific JAX-RS
      * resource and provider classes to the application context.
      */
     def doWithSpring = {
 
-        // Configure the JAX-RS context 
+        // Configure the JAX-RS context
         'jaxrsContext'(JaxrsContext)
-        
+
         // Configure default providers
-        "${XMLWriter.class.name}"(XMLWriter)
-        "${XMLReader.class.name}"(XMLReader)
-        "${JSONWriter.class.name}"(JSONWriter)
-        "${JSONReader.class.name}"(JSONReader)
-        "${DomainObjectReader.class.name}"(DomainObjectReader)
-        "${DomainObjectWriter.class.name}"(DomainObjectWriter)
-        
+        "${XMLWriter.name}"(XMLWriter)
+        "${XMLReader.name}"(XMLReader)
+        "${JSONWriter.name}"(JSONWriter)
+        "${JSONReader.name}"(JSONReader)
+        "${DomainObjectReader.name}"(DomainObjectReader)
+        "${DomainObjectWriter.name}"(DomainObjectWriter)
+
         // Configure application-provided resources
         application.resourceClasses.each { rc ->
             "${rc.propertyName}"(rc.clazz) { bean ->
@@ -144,7 +134,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
                 bean.autowire = true
             }
         }
-        
+
         // Configure application-provided providers
         application.providerClasses.each { pc ->
             "${pc.propertyName}"(pc.clazz) { bean ->
@@ -152,17 +142,17 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
                 bean.autowire = true
             }
         }
-        
+
         // Configure the resource code generator
-        "${CodeGenerator.class.name}"(CodeGenerator)
+        "${CodeGenerator.name}"(CodeGenerator)
     }
 
     /**
-     * Updates application-specific JAX-RS resource and provider classes in 
+     * Updates application-specific JAX-RS resource and provider classes in
      * the application context.
      */
     def onChange = { event ->
-    
+
         if (!event.ctx) {
             return
         }
@@ -177,7 +167,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
             }.registerBeans(event.ctx)
         } else if (application.isArtefactOfType(ProviderArtefactHandler.TYPE, event.source)) {
             def providerClass = application.addArtefact(ProviderArtefactHandler.TYPE, event.source)
-            beans { 
+            beans {
                 "${providerClass.propertyName}"(providerClass.clazz) { bean ->
                     bean.scope = 'singleton'
                     bean.autowire = true
@@ -186,10 +176,10 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         } else {
             return
         }
-        
+
         // Setup the JaxrsConfig
         doWithApplicationContext(event.ctx)
-        
+
         // Resfresh the JaxrsContext
         event.ctx.getBean(JAXRS_CONTEXT_NAME).refresh()
     }
@@ -197,7 +187,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
     /**
      * Reconfigures the JaxrsConfig with plugin- and application-specific
      * JAX-RS resource and provider classes. Configures the JaxrsContext
-     * with the JAX-RS implementation to use. The name of the JAX-RS 
+     * with the JAX-RS implementation to use. The name of the JAX-RS
      * implementation is obtained from the configuration property
      * <code>org.grails.jaxrs.provider.name</code>. Default value is
      * <code>jersey</code>.
@@ -206,42 +196,29 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
 
         def context = applicationContext.getBean(JAXRS_CONTEXT_NAME)
         def config = context.jaxrsConfig
-        
+
         context.jaxrsProviderName = this.providerName
         context.jaxrsProviderExtraPaths = this.providerExtraPaths
         context.jaxrsProviderInitParameters = this.providerInitParameters
-        
+
         config.reset()
-        config.classes << XMLWriter.class
-        config.classes << XMLReader.class
-        config.classes << JSONWriter.class
-        config.classes << JSONReader.class
-        config.classes << DomainObjectReader.class
-        config.classes << DomainObjectWriter.class
-        
+        config.classes << XMLWriter
+        config.classes << XMLReader
+        config.classes << JSONWriter
+        config.classes << JSONReader
+        config.classes << DomainObjectReader
+        config.classes << DomainObjectWriter
+
         application.getArtefactInfo('Resource').classesByName.values().each { clazz ->
             config.classes << clazz
         }
         application.getArtefactInfo('Provider').classesByName.values().each { clazz ->
             config.classes << clazz
         }
-        
     }
 
-    /**
-     * 
-     */
-    def doWithDynamicMethods = { ctx ->
-    }
-
-    /**
-     * 
-     */
-    def onConfigChange = { event ->
-    }
-    
     private String getResourceScope() {
-        def scope = ConfigurationHolder.config.org.grails.jaxrs.resource.scope
+        def scope = application.config.org.grails.jaxrs.resource.scope
         if (!scope) {
             scope = 'prototype'
         }
@@ -249,19 +226,18 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
     }
 
     private String getProviderName() {
-        def name = ConfigurationHolder.config.org.grails.jaxrs.provider.name
+        def name = application.config.org.grails.jaxrs.provider.name
         if (!name) {
             name = JaxrsContext.JAXRS_PROVIDER_NAME_JERSEY
         }
         name
     }
-    
+
     private String getProviderExtraPaths() {
-        ConfigurationHolder.config.org.grails.jaxrs.provider.extra.paths
+        application.config.org.grails.jaxrs.provider.extra.paths
     }
 
     private Map<String, String> getProviderInitParameters() {
-        ConfigurationHolder.config.org.grails.jaxrs.provider.init.parameters
+        application.config.org.grails.jaxrs.provider.init.parameters
     }
-    
 }
