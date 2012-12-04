@@ -80,4 +80,10 @@ grails.project.dependency.resolution = {
                      'spring-web', 'spring-webmvc-portlet', 'spring-webmvc', 'testng'
         }
     }
+
+    plugins {
+        build(':release:2.1.0', ':rest-client-builder:1.0.2') {
+            export = false
+        }
+    }
 }
