@@ -1,32 +1,30 @@
 package org.grails.jaxrs.support
 
-import java.io.InputStream;
-import javax.servlet.ServletInputStream
-
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes;
-import org.springframework.mock.web.DelegatingServletInputStream;
-import org.springframework.mock.web.MockHttpServletRequest;
-
 import javax.servlet.AsyncContext
+import javax.servlet.DispatcherType
+import javax.servlet.ServletException
+import javax.servlet.ServletInputStream
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.Part
-import javax.servlet.ServletException
-import javax.servlet.DispatcherType
+
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.springframework.mock.web.DelegatingServletInputStream
+import org.springframework.mock.web.MockHttpServletRequest
 
 class RequestStreamAdapter extends MockHttpServletRequest {
 
     InputStream stream
-    
+
     RequestStreamAdapter(InputStream stream) {
         this.stream = stream
     }
-    
+
     String getFormat() {
         return getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT)
     }
-    
+
     @Override
     ServletInputStream getInputStream() {
         if (stream instanceof ServletInputStream) {
@@ -43,51 +41,51 @@ class RequestStreamAdapter extends MockHttpServletRequest {
     // Methods introduced in Servlet 3.0
     //---------------------------------------------------------------------
 
-    public AsyncContext getAsyncContext() {
-        throw new UnsupportedOperationException();
+    AsyncContext getAsyncContext() {
+        throw new UnsupportedOperationException()
     }
 
-    public DispatcherType getDispatcherType() {
-        throw new UnsupportedOperationException();
+    DispatcherType getDispatcherType() {
+        throw new UnsupportedOperationException()
     }
 
-    public boolean isAsyncSupported() {
-        throw new UnsupportedOperationException();
+    boolean isAsyncSupported() {
+        throw new UnsupportedOperationException()
     }
 
-    public AsyncContext startAsync() {
-        throw new UnsupportedOperationException();
+    AsyncContext startAsync() {
+        throw new UnsupportedOperationException()
     }
 
-    public AsyncContext startAsync(ServletRequest arg0, ServletResponse arg1) {
-        throw new UnsupportedOperationException();
+    AsyncContext startAsync(ServletRequest arg0, ServletResponse arg1) {
+        throw new UnsupportedOperationException()
     }
 
-    public boolean isAsyncStarted() {
-        throw new UnsupportedOperationException();
+    boolean isAsyncStarted() {
+        throw new UnsupportedOperationException()
     }
 
-    public boolean authenticate(HttpServletResponse arg0) throws IOException, ServletException {
-        throw new UnsupportedOperationException();
-    }
-    
-    public void addPart(Part part) {
-        parts.put(part.getName(), part);
+    boolean authenticate(HttpServletResponse arg0) throws IOException, ServletException {
+        throw new UnsupportedOperationException()
     }
 
-    public Part getPart(String key) throws IOException, IllegalStateException, ServletException {
-        return parts.get(key);
+    void addPart(Part part) {
+        parts.put(part.getName(), part)
     }
 
-    public Collection<Part> getParts() throws IOException, IllegalStateException, ServletException {
-        return parts.values();
+    Part getPart(String key) throws IOException, IllegalStateException, ServletException {
+        return parts.get(key)
     }
 
-    public void login(String arg0, String arg1) throws ServletException {
-        throw new UnsupportedOperationException();
+    Collection<Part> getParts() throws IOException, IllegalStateException, ServletException {
+        return parts.values()
     }
 
-    public void logout() throws ServletException {
-        throw new UnsupportedOperationException();
+    void login(String arg0, String arg1) throws ServletException {
+        throw new UnsupportedOperationException()
+    }
+
+    void logout() throws ServletException {
+        throw new UnsupportedOperationException()
     }
 }

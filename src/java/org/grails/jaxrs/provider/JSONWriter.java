@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,39 +32,39 @@ import org.grails.jaxrs.support.MessageBodyWriterSupport;
 
 /**
  * Provider for Grails' {@link JSON} converter class.
- * 
+ *
  * Message body writer that supports {@link JSON} response entities. For
  * example, to create a JSON representation from a list of Grails domain
  * objects:
- * 
+ *
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/x-json') // or 'application/json'
  * class NotesResource {
- * 
+ *
  *      &#064;GET
  *      XML findNotes() {
  *          Note.findAll() as JSON
  *      }
- *      
+ *
  * }
  * </pre>
- * 
+ *
  * Alternatively, one could write
- * 
+ *
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/x-json') // or 'application/json'
  * class NotesResource {
- * 
+ *
  *      &#064;GET
  *      Response findNotes() {
  *          Response.ok(Note.findAll() as JSON).build()
  *      }
- *      
+ *
  * }
  * </pre>
- * 
+ *
  * @author Martin Krasser
  */
 @Provider
@@ -77,7 +77,7 @@ public class JSONWriter extends MessageBodyWriterSupport<JSON> {
      * Renders the <code>json</code> object to the response's
      * <code>entityStream</code> using the encoding set by the Grails
      * application.
-     * 
+     *
      * @param json
      *            JSON object.
      * @param httpHeaders
@@ -86,7 +86,7 @@ public class JSONWriter extends MessageBodyWriterSupport<JSON> {
      *            JSON response entity stream.
      */
     @Override
-    protected void writeTo(JSON json, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) 
+    protected void writeTo(JSON json, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
         throws IOException, WebApplicationException {
         String charset = ConvertersConfigurationHolder.getConverterConfiguration(JSON.class).getEncoding();
         Writer writer = null;
@@ -96,7 +96,5 @@ public class JSONWriter extends MessageBodyWriterSupport<JSON> {
             writer = new OutputStreamWriter(entityStream, charset);
         }
         json.render(writer);
-        
     }
-
 }

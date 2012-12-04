@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Servlet that dispatches JAX-RS requests to Restlet.
- * 
+ *
  * @author Martin Krasser
  */
 @SuppressWarnings("serial")
@@ -41,17 +41,17 @@ public class RestletServlet extends ServerServlet {
 
     /**
      * Creates a new {@link RestletServlet}
-     * 
+     *
      * @param config
      *            JAX-RS configuration of the current {@link JaxrsContext}.
      */
     public RestletServlet(JaxrsConfig config) {
         this.config = config;
     }
-    
+
     /**
      * Returns the JAX-RS configuration.
-     * 
+     *
      * @return the JAX-RS configuration.
      */
     public JaxrsConfig getConfig() {
@@ -61,7 +61,7 @@ public class RestletServlet extends ServerServlet {
     //
     // TODO: set servlet config init parameters ...
     //
-    
+
     /**
      * Destroys this servlet removing all Restlet-specific attributes from the
      * servlet context.
@@ -84,7 +84,7 @@ public class RestletServlet extends ServerServlet {
      * Creates a {@link JaxRsApplication} for the given Restlet parent context.
      * A custom object factory is provided to lookup JAX-RS resource and
      * provider objects from the Spring web application context.
-     * 
+     *
      * @param Restlet
      *            parent context.
      * @return a new {@link JaxRsApplication} instance.
@@ -100,7 +100,7 @@ public class RestletServlet extends ServerServlet {
     private static class ApplicationContextObjectFactory implements ObjectFactory {
 
         ApplicationContext applicationContext;
-        
+
         public ApplicationContextObjectFactory(ServletContext servletContext) {
             this.applicationContext = getRequiredWebApplicationContext(servletContext);
         }
@@ -109,7 +109,5 @@ public class RestletServlet extends ServerServlet {
             // TODO: make this implementation more robust (plus improved performance)
             return (T)applicationContext.getBeansOfType(jaxRsClass).values().iterator().next();
         }
-        
     }
-    
 }

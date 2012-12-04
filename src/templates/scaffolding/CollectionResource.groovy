@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response
 class ${resourceName}CollectionResource {
 
     def ${resourceProp}ResourceService
-    
+
     @POST
     Response create(${resourceName} dto) {
         created ${resourceProp}ResourceService.create(dto)
@@ -24,10 +24,9 @@ class ${resourceName}CollectionResource {
     Response readAll() {
         ok ${resourceProp}ResourceService.readAll()
     }
-    
+
     @Path('/{id}')
     ${resourceName}Resource getResource(@PathParam('id') Long id) {
         new ${resourceName}Resource(${resourceProp}ResourceService: ${resourceProp}ResourceService, id:id)
     }
-        
 }
