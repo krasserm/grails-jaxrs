@@ -56,7 +56,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost03() {
-        sendRequest('/test/03', 'POST', ['Content-Type':'application/json'], '{":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/03', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"age":39'))
         assertTrue(response.contentAsString.contains('"name":"ekim"'))
@@ -65,7 +65,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost06() {
-        sendRequest('/test/06', 'POST', ['Content-Type':'application/json'], '{":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/06', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('<age>39</age>'))
         assertTrue(response.contentAsString.contains('<name>ekim</name>'))
@@ -84,7 +84,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     @Test
     void testRoundtrip04JsonSingle() {
         def headers = ['Content-Type':'application/json', 'Accept':'application/json']
-        sendRequest('/test/04/single', 'POST', headers, '{":"TestPerson","age":25,"name":"james"}'.bytes)
+        sendRequest('/test/04/single', 'POST', headers, '{"class":"TestPerson","age":25,"name":"james"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"age":26'))
         assertTrue(response.contentAsString.contains('"name":"semaj"'))
