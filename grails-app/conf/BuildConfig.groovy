@@ -32,7 +32,7 @@ grails.project.dependency.resolution = {
     dependencies {
         compile 'asm:asm:3.3'
 
-        String restletVersion = '2.0.15'
+        String restletVersion = '2.0.0'
         String jerseyVersion = '1.14'
 
         compile "org.restlet.gae:org.restlet:$restletVersion"
