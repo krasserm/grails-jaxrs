@@ -130,7 +130,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         // Configure application-provided resources
         application.resourceClasses.each { rc ->
             "${rc.propertyName}"(rc.clazz) { bean ->
-                bean.scope = this.resourceScope
+                bean.scope = getResourceScope(application)
                 bean.autowire = true
             }
         }
@@ -161,7 +161,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
             def resourceClass = application.addArtefact(ResourceArtefactHandler.TYPE, event.source)
             beans {
                 "${resourceClass.propertyName}"(resourceClass.clazz) { bean ->
-                    bean.scope = this.resourceScope
+                    bean.scope = getResourceScope(application)
                     bean.autowire = true
                 }
             }.registerBeans(event.ctx)
@@ -197,9 +197,9 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         def context = applicationContext.getBean(JAXRS_CONTEXT_NAME)
         def config = context.jaxrsConfig
 
-        context.jaxrsProviderName = this.providerName
-        context.jaxrsProviderExtraPaths = this.providerExtraPaths
-        context.jaxrsProviderInitParameters = this.providerInitParameters
+        context.jaxrsProviderName = getProviderName(application)
+        context.jaxrsProviderExtraPaths = getProviderExtraPaths(application)
+        context.jaxrsProviderInitParameters = getProviderInitParameters(application)
 
         config.reset()
         config.classes << XMLWriter
@@ -217,7 +217,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         }
     }
 
-    private String getResourceScope() {
+    private String getResourceScope(application) {
         def scope = application.config.org.grails.jaxrs.resource.scope
         if (!scope) {
             scope = 'prototype'
@@ -225,7 +225,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         scope
     }
 
-    private String getProviderName() {
+    private String getProviderName(application) {
         def name = application.config.org.grails.jaxrs.provider.name
         if (!name) {
             name = JaxrsContext.JAXRS_PROVIDER_NAME_JERSEY
@@ -233,11 +233,11 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         name
     }
 
-    private String getProviderExtraPaths() {
+    private String getProviderExtraPaths(application) {
         application.config.org.grails.jaxrs.provider.extra.paths
     }
 
-    private Map<String, String> getProviderInitParameters() {
+    private Map<String, String> getProviderInitParameters(application) {
         application.config.org.grails.jaxrs.provider.init.parameters
     }
 }
