@@ -130,7 +130,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
         // Configure application-provided resources
         application.resourceClasses.each { rc ->
             "${rc.propertyName}"(rc.clazz) { bean ->
-                bean.scope = getResourceScope(application)
+                bean.scope = owner.getResourceScope(application)
                 bean.autowire = true
             }
         }
@@ -161,7 +161,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
             def resourceClass = application.addArtefact(ResourceArtefactHandler.TYPE, event.source)
             beans {
                 "${resourceClass.propertyName}"(resourceClass.clazz) { bean ->
-                    bean.scope = getResourceScope(application)
+                    bean.scope = owner.getResourceScope(application)
                     bean.autowire = true
                 }
             }.registerBeans(event.ctx)
