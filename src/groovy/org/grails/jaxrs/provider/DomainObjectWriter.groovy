@@ -19,7 +19,6 @@ import javax.ws.rs.Produces
 import javax.ws.rs.ext.MessageBodyWriter
 import javax.ws.rs.ext.Provider
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.grails.jaxrs.support.DomainObjectWriterSupport
 
 /**
@@ -45,10 +44,10 @@ class DomainObjectWriter extends DomainObjectWriterSupport implements MessageBod
      */
 
     protected boolean isEnabled() {
-        !ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable
+        !grailsApplication.config.org.grails.jaxrs.dowriter.disable
     }
 
     protected boolean isRequireGenericCollection() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections
+        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections
     }
 }

@@ -17,7 +17,6 @@ package org.grails.jaxrs.itest
 
 import static org.junit.Assert.*
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.junit.Test
 
 /**
@@ -102,7 +101,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testGet04XmlCollectionGenericGenericOnly() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = true
         testGet04XmlCollectionGeneric()
     }
 
@@ -118,7 +117,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testGet04XmlCollectionRawGenericOnly() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = true
         sendRequest('/test/04/multi/raw', 'GET', ['Accept':'application/xml'])
         assertEquals(500, response.status)
     }
@@ -135,7 +134,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testGet04XmlCollectionObjectGenericOnly() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = true
+        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = true
         sendRequest('/test/04/multi/object', 'GET', ['Accept':'application/xml'])
         assertEquals(500, response.status)
     }
@@ -151,14 +150,14 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost04ReaderDisabled() {
-        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = true
+        grailsApplication.config.org.grails.jaxrs.doreader.disable = true
         sendRequest('/test/04/single', 'POST', ['Content-Type':'application/xml'], '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(415, response.status)
     }
 
     @Test
     void testPost04WriterDisabled() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = true
+        grailsApplication.config.org.grails.jaxrs.dowriter.disable = true
         def headers = ['Content-Type':'application/xml', 'Accept':'application/xml']
         sendRequest('/test/04/single', 'POST', headers, '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(500, response.status)
