@@ -15,11 +15,10 @@
  */
 package org.grails.jaxrs.provider
 
+import org.grails.jaxrs.support.DomainObjectReaderSupport
+
 import javax.ws.rs.Consumes
 import javax.ws.rs.ext.Provider
-
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import org.grails.jaxrs.support.DomainObjectReaderSupport
 
 /**
  * A concrete domain object reader that provides the same functionality as
@@ -35,9 +34,7 @@ import org.grails.jaxrs.support.DomainObjectReaderSupport
 @Consumes(['text/xml', 'application/xml', 'text/x-json', 'application/json'])
 class DomainObjectReader extends DomainObjectReaderSupport {
 
-    // TODO: cleanup imports
-
     protected boolean isEnabled() {
-        !ConfigurationHolder.config.org.grails.jaxrs.doreader.disable
+        !grailsApplication.config.org.grails.jaxrs.doreader.disable
     }
 }

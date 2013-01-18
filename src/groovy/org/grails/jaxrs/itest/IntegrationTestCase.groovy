@@ -17,7 +17,6 @@
 
 import javax.servlet.http.HttpServletResponse
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.grails.jaxrs.JaxrsController
 import org.grails.jaxrs.web.JaxrsContext
 import org.grails.jaxrs.web.JaxrsUtils
@@ -31,6 +30,8 @@ import org.junit.BeforeClass
  */
 abstract class IntegrationTestCase {
 
+    def grailsApplication
+
     static transactional = false
     static testEnvironment
 
@@ -43,9 +44,9 @@ abstract class IntegrationTestCase {
 
     @Before
     void setUp() {
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.require.generic.collections = false
-        ConfigurationHolder.config.org.grails.jaxrs.doreader.disable = false
-        ConfigurationHolder.config.org.grails.jaxrs.dowriter.disable = false
+        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = false
+        grailsApplication.config.org.grails.jaxrs.doreader.disable = false
+        grailsApplication.config.org.grails.jaxrs.dowriter.disable = false
 
         if (!testEnvironment) {
             testEnvironment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
