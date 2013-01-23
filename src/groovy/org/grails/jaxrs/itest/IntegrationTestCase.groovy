@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package org.grails.jaxrs.itest
-
-import javax.servlet.http.HttpServletResponse
+package org.grails.jaxrs.itest
 
 import org.grails.jaxrs.JaxrsController
-import org.grails.jaxrs.web.JaxrsContext
-import org.grails.jaxrs.web.JaxrsUtils
 import org.junit.Before
 import org.junit.BeforeClass
 
+import javax.servlet.http.HttpServletResponse
+
 /**
- * Base class for integration testing JAX-RS resources and providers.
+ * Base class for JUnit integration testing JAX-RS resources and providers.
  *
  * @author Martin Krasser
  */
-abstract class IntegrationTestCase {
+abstract class IntegrationTestCase implements JaxRsIntegrationTest {
 
     def grailsApplication
 
@@ -36,6 +34,8 @@ abstract class IntegrationTestCase {
     static testEnvironment
 
     def controller
+
+    JaxRsIntegrationTest defaultMixin
 
     @BeforeClass
     static void setUpBeforeClass() {
@@ -48,87 +48,74 @@ abstract class IntegrationTestCase {
         grailsApplication.config.org.grails.jaxrs.doreader.disable = false
         grailsApplication.config.org.grails.jaxrs.dowriter.disable = false
 
+        controller = new JaxrsController()
+        defaultMixin = new JaxRsIntegrationTestMixin(controller)
+
         if (!testEnvironment) {
-            testEnvironment = new IntegrationTestEnvironment(contextLocations, jaxrsImplementation, jaxrsClasses, autoDetectJaxrsClasses)
+            testEnvironment = new IntegrationTestEnvironment(getContextLocations(), getJaxrsImplementation(),
+                    getJaxrsClasses(), isAutoDetectJaxrsClasses())
         }
 
-        controller = new JaxrsController()
         controller.jaxrsContext = testEnvironment.jaxrsContext
     }
 
+    @Override
     void setRequestUrl(String url) {
-        JaxrsUtils.setRequestUriAttribute(controller.request, url)
+        defaultMixin.setRequestUrl(url)
     }
 
+    @Override
     void setRequestMethod(String method) {
-        controller.request.method = method
+        defaultMixin.setRequestMethod(method)
     }
 
+    @Override
     void setRequestContent(byte[] content) {
-        controller.request.content = content
+        defaultMixin.setRequestContent(content)
     }
 
+    @Override
     void addRequestHeader(String key, Object value) {
-        controller.request.addHeader(key, value)
+        defaultMixin.addRequestHeader(key, value)
     }
 
+    @Override
     void resetResponse() {
-        controller.response.committed = false
-        controller.response.reset()
+        defaultMixin.resetResponse()
     }
 
+    @Override
     HttpServletResponse getResponse() {
-        controller.response
+        defaultMixin.response
     }
 
+    @Override
     HttpServletResponse sendRequest(String url, String method, byte[] content = ''.bytes) {
-        sendRequest(url, method, [:], content)
+        defaultMixin.sendRequest(url, method, content)
     }
 
+    @Override
     HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers, byte[] content = ''.bytes) {
-        resetResponse()
-
-        requestUrl = url
-        requestMethod = method
-        requestContent = content
-
-        headers.each { entry ->
-            addRequestHeader(entry.key, entry.value)
-        }
-
-        controller.handle()
-        controller.response
+        defaultMixin.sendRequest(url, method, headers, content)
     }
 
-    /**
-     * Implementors can define additional Spring application context locations.
-     */
-    protected String getContextLocations() {
-        ''
+    @Override
+    String getContextLocations() {
+        defaultMixin.contextLocations
     }
 
-    /**
-     * Returns the JAX-RS implementation to use. Default is 'jersey'.
-     */
-    protected String getJaxrsImplementation() {
-        JaxrsContext.JAXRS_PROVIDER_NAME_JERSEY
+    @Override
+    String getJaxrsImplementation() {
+        defaultMixin.jaxrsImplementation
     }
 
-    /**
-     * Returns the list of JAX-RS classes for testing. Auto-detected classes
-     * will be added to this list later.
-     */
-    protected List getJaxrsClasses() {
-        []
+    @Override
+    List getJaxrsClasses() {
+        defaultMixin.jaxrsClasses
     }
 
-    /**
-     * Determines whether JAX-RS resources or providers are auto-detected in
-     * <code>grails-app/resources</code> or <code>grails-app/providers</code>.
-     *
-     * @return true is JAX-RS classes should be auto-detected.
-     */
-    protected boolean isAutoDetectJaxrsClasses() {
-        true
+    @Override
+    boolean isAutoDetectJaxrsClasses() {
+        defaultMixin.autoDetectJaxrsClasses
     }
 }

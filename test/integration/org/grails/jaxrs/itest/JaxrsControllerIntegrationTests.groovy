@@ -26,7 +26,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     // not in grails-app/resources or grails-app/providers,
     // so jaxrses are added here ...
-    protected List getJaxrsClasses() {
+    List getJaxrsClasses() {
         [TestResource01,
          TestResource02,
          TestResource03,

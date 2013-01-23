@@ -15,8 +15,6 @@ package org.grails.jaxrs.itest
  * limitations under the License.
  */
 
-import static org.grails.jaxrs.itest.JaxrsControllerIntegrationTests.jaxrsClasses
-
 import org.grails.jaxrs.web.JaxrsContext
 
 /**
@@ -24,7 +22,7 @@ import org.grails.jaxrs.web.JaxrsContext
  */
 class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
 
-    protected String getJaxrsImplementation() {
-        return JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
+    String getJaxrsImplementation() {
+        JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
     }
 }
