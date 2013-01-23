@@ -1,5 +1,10 @@
 package org.grails.jaxrs.itest
 
+import org.grails.jaxrs.test.CustomRequestEntityReader
+import org.grails.jaxrs.test.CustomResponseEntityWriter
+import org.grails.jaxrs.test.TestResource01
+import org.grails.jaxrs.test.TestResource02
+
 /**
  * @author Noam Y. Tenne
  */

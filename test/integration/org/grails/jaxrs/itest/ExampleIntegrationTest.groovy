@@ -1,8 +1,11 @@
 package org.grails.jaxrs.itest
 
-import static org.junit.Assert.*
+import org.grails.jaxrs.test.CustomRequestEntityReader
+import org.grails.jaxrs.test.CustomResponseEntityWriter
+import org.grails.jaxrs.test.TestResource01
+import org.grails.jaxrs.test.TestResource02
 
-import javax.servlet.http.HttpServletResponse
+import static org.junit.Assert.*
 
 import org.junit.Test
 

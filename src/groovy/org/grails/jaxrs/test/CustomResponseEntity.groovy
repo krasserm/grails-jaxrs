@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 - 2011 the original author or authors.
+ * Copyright 2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.itest
-
-import grails.converters.XML
-
-import javax.ws.rs.Consumes
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
+package org.grails.jaxrs.test
 
 /**
  * @author Martin Krasser
  */
-@Path('/test/06')
-class TestResource06 {
-
-    @POST
-    @Consumes('application/json')
-    @Produces('application/xml')
-    XML testPerson(Map params) {
-        def person = new TestPerson(params)
-        person.name = person.name.reverse()
-        person.age = person.age + 1
-        return person as XML
-    }
+class CustomResponseEntity {
+    String content
 }

@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.itest
+package org.grails.jaxrs.test
+
+import grails.converters.XML
+
+import javax.ws.rs.Consumes
+import javax.ws.rs.POST
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
 
 /**
  * @author Martin Krasser
  */
-class TestPerson {
+@Path('/test/06')
+class TestResource06 {
 
-    // pretend being a domain class
-    def id
-    def version
-    void setClass(obj) {}
-
-    // test properties
-    String name
-    int age
+    @POST
+    @Consumes('application/json')
+    @Produces('application/xml')
+    XML testPerson(Map params) {
+        def person = new TestPerson(params)
+        person.name = person.name.reverse()
+        person.age = person.age + 1
+        return person as XML
+    }
 }
