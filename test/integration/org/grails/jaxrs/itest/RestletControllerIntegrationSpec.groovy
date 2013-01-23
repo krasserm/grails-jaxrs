@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,14 @@
  */
 package org.grails.jaxrs.itest
 
+import org.grails.jaxrs.web.JaxrsContext
+
 /**
- * @author Martin Krasser
+ * @author Noam Y. Tenne
  */
-class CustomResponseEntity {
-    String content
+class RestletControllerIntegrationSpec extends JaxrsControllerIntegrationSpec {
+
+    String getJaxrsImplementation() {
+        JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
+    }
 }
