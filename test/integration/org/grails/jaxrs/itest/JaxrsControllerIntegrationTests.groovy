@@ -1,4 +1,14 @@
 package org.grails.jaxrs.itest
+
+import org.grails.jaxrs.test.CustomRequestEntityReader
+import org.grails.jaxrs.test.CustomResponseEntityWriter
+import org.grails.jaxrs.test.TestResource01
+import org.grails.jaxrs.test.TestResource02
+import org.grails.jaxrs.test.TestResource03
+import org.grails.jaxrs.test.TestResource04
+import org.grails.jaxrs.test.TestResource05
+import org.grails.jaxrs.test.TestResource06
+
 /*
  * Copyright 2009 - 2011 the original author or authors.
  *
@@ -26,7 +36,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     // not in grails-app/resources or grails-app/providers,
     // so jaxrses are added here ...
-    protected List getJaxrsClasses() {
+    List getJaxrsClasses() {
         [TestResource01,
          TestResource02,
          TestResource03,

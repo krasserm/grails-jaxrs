@@ -1,4 +1,3 @@
-package org.grails.jaxrs.itest
 /*
  * Copyright 2009 - 2011 the original author or authors.
  *
@@ -14,15 +13,19 @@ package org.grails.jaxrs.itest
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.grails.jaxrs.web.JaxrsContext
+package org.grails.jaxrs.test
 
 /**
  * @author Martin Krasser
  */
-class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
+class TestPerson {
 
-    String getJaxrsImplementation() {
-        JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
-    }
+    // pretend being a domain class
+    def id
+    def version
+    void setClass(obj) {}
+
+    // test properties
+    String name
+    int age
 }

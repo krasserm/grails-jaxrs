@@ -1,6 +1,5 @@
-package org.grails.jaxrs.itest
 /*
- * Copyright 2009 - 2011 the original author or authors.
+ * Copyright 2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +13,11 @@ package org.grails.jaxrs.itest
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.grails.jaxrs.web.JaxrsContext
+package org.grails.jaxrs.test
 
 /**
  * @author Martin Krasser
  */
-class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
-
-    String getJaxrsImplementation() {
-        JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
-    }
+class CustomRequestEntity {
+    String content
 }

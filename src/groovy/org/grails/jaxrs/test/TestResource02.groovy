@@ -13,11 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.grails.jaxrs.itest
+package org.grails.jaxrs.test
+
+import org.grails.jaxrs.test.CustomRequestEntity
+import org.grails.jaxrs.test.CustomResponseEntity
+
+import javax.ws.rs.Consumes
+import javax.ws.rs.POST
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
 
 /**
  * @author Martin Krasser
  */
-class CustomRequestEntity {
-    String content
+@Path('/test/02')
+class TestResource02 {
+
+    @POST
+    @Consumes('text/plain')
+    @Produces('text/plain')
+    CustomResponseEntity test(CustomRequestEntity requestEntity) {
+        new CustomResponseEntity(content:'response:' + requestEntity.content)
+    }
 }

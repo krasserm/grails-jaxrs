@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009 - 2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,8 @@
  */
 package org.grails.jaxrs.itest
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-
 /**
- * @author Martin Krasser
+ * @author Noam Y. Tenne
  */
-@Path('/test/01')
-class TestResource01 {
-
-    @GET
-    @Produces('text/plain')
-    String test() {
-        'test01'
-    }
+class JerseyControllerIntegrationSpec extends JaxrsControllerIntegrationSpec {
 }
