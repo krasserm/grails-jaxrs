@@ -16,7 +16,7 @@
 package org.grails.jaxrs.provider;
 
 import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
-import static org.grails.jaxrs.support.ConverterUtils.jsonToMap;
+import static org.grails.jaxrs.support.ConverterUtils.jsonToSimpleModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +37,8 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
  * defines a {@link Map} as parameter and consumes either
  * <code>text/x-json</code> or <code>application/json</code> will be passed a
  * map created from a JSON request entity:
- *
- *
+ * <p/>
+ * <p/>
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/x-json')
@@ -71,20 +71,18 @@ public class JSONReader extends MessageBodyReaderSupport<Map> implements GrailsA
     /**
      * Creates a map from a JSON request entity stream.
      *
-     * @param httpHeaders
-     *            HTTP headers.
-     * @param entityStream
-     *            JSON request entity stream.
+     * @param httpHeaders  HTTP headers.
+     * @param entityStream JSON request entity stream.
      * @return a map representation of the JSON request entity stream.
      */
     @Override
     public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-        throws IOException, WebApplicationException {
+            throws IOException, WebApplicationException {
 
         // TODO: obtain encoding from HTTP header
         String encoding = getDefaultEncoding(grailsApplication);
 
         // Convert JSON to map used for constructing domain objects
-        return jsonToMap(entityStream, encoding);
+        return jsonToSimpleModel(entityStream, encoding);
     }
 }

@@ -40,17 +40,13 @@ import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
  *
  * <pre>
  * &#064;Path('/notes')
- * class NotesResource {
- *
+ * class NotesResource {*
  *      &#064;POST
  *      &#064;Consumes(['application/xml','application/json'])
- *      Response addNote(Note note) {
- *          note.save()
+ *      Response addNote(Note note) {*          note.save()
  *          // ...
- *      }
- *
- * }
- *
+ *}*
+ *}*
  *
  * </pre>
  *
@@ -76,9 +72,9 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * stream.
      */
     Object readFrom(Class type, Type genericType,
-            Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap httpHeaders, InputStream entityStream)
-        throws IOException, WebApplicationException {
+                    Annotation[] annotations, MediaType mediaType,
+                    MultivaluedMap httpHeaders, InputStream entityStream)
+    throws IOException, WebApplicationException {
 
         if (isXmlType(mediaType)) {
             return readFromXml(type, entityStream, getDefaultXMLEncoding(grailsApplication))
@@ -114,7 +110,7 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * Construct domain object from json map obtained from entity stream.
      */
     protected Object readFromJson(Class type, InputStream entityStream, String charset) {
-        def map = jsonToMap(entityStream, charset)
+        def map = jsonToDomainConstructionModel(entityStream, charset)
         def result = type.metaClass.invokeConstructor(map)
 
         // Workaround for http://jira.codehaus.org/browse/GRAILS-1984

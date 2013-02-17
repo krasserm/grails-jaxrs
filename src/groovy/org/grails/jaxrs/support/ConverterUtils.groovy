@@ -15,6 +15,8 @@
  */
 package org.grails.jaxrs.support
 
+import groovy.json.JsonSlurper
+
 import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
 import grails.converters.JSON
 import grails.converters.XML
@@ -92,12 +94,16 @@ class ConverterUtils {
      * @param encoding charset name.
      * @return a map representing the input JSON stream.
      */
-    static Map jsonToMap(InputStream input, String encoding) {
+    static Map jsonToDomainConstructionModel(InputStream input, String encoding) {
         def adapter = newRequestStreamAdapter(input, encoding, 'json')
 
         def params = new GrailsParameterMap(adapter)
         jsonListener.paramsCreated(params)
         params.iterator().next().value
+    }
+
+    static Map jsonToSimpleModel(InputStream input, String encoding) {
+        new JsonSlurper().parse(new InputStreamReader(input, encoding))
     }
 
     /**
@@ -142,15 +148,15 @@ class ConverterUtils {
         pos.index == it.size()
     }
 
-    static newRequestStreamAdapter (InputStream stream, String characterEncoding, String format) {
+    static newRequestStreamAdapter(InputStream stream, String characterEncoding, String format) {
 
         final MockHttpServletRequest req = new MockHttpServletRequest()
 
         req.characterEncoding = characterEncoding
         req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
 
-        return (HttpServletRequest)Proxy.newProxyInstance(getClassLoader(),
-        [HttpServletRequest, EnhancedRequestProps] as Class[], new InvocationHandler() {
+        return (HttpServletRequest) Proxy.newProxyInstance(getClassLoader(),
+                [HttpServletRequest, EnhancedRequestProps] as Class[], new InvocationHandler() {
             Object invoke(Object proxy, Method method, Object[] args) {
 
                 String methodName = method.getName()
@@ -169,7 +175,7 @@ class ConverterUtils {
                     }
                 }
                 return req.getClass().getMethod(
-                    method.getName(), method.getParameterTypes()).invoke(req, args)
+                        method.getName(), method.getParameterTypes()).invoke(req, args)
             }
         })
     }
@@ -179,7 +185,8 @@ class ConverterUtils {
      * Without this some tests would fail.
      */
     interface EnhancedRequestProps {
-        String getFormat ()
-        void setFormat (String)
+        String getFormat()
+
+        void setFormat(String)
     }
 }

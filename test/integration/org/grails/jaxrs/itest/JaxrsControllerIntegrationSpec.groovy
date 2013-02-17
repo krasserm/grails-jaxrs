@@ -64,7 +64,7 @@ abstract class JaxrsControllerIntegrationSpec extends IntegrationTestSpec {
 
     def "Execute a POST request on resource 03"() {
         when:
-        sendRequest('/test/03', 'POST', ['Content-Type': 'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/03', 'POST', ['Content-Type': 'application/json'], '{"age":38,"name":"mike"}'.bytes)
 
         then:
         response.status == 200
@@ -75,7 +75,7 @@ abstract class JaxrsControllerIntegrationSpec extends IntegrationTestSpec {
 
     def "Execute a POST request on resource 06"() {
         when:
-        sendRequest('/test/06', 'POST', ['Content-Type': 'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/06', 'POST', ['Content-Type': 'application/json'], '{"age":38,"name":"mike"}'.bytes)
 
         then:
         response.status == 200
@@ -163,7 +163,7 @@ abstract class JaxrsControllerIntegrationSpec extends IntegrationTestSpec {
     def "Post content to resource 04 while the IO facilities are disabled"() {
         setup:
         def headers = ['Content-Type': 'application/xml', 'Accept': 'application/xml']
-       grailsApplication.config.org.grails.jaxrs.getProperty("do${facilityToDisabled}").disable = true
+        grailsApplication.config.org.grails.jaxrs.getProperty("do${facilityToDisabled}").disable = true
 
         when:
         sendRequest('/test/04/single', 'POST', headers, '<testPerson><name>james</name></testPerson>'.bytes)

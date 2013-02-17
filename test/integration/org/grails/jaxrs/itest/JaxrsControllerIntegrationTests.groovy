@@ -38,13 +38,13 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     // so jaxrses are added here ...
     List getJaxrsClasses() {
         [TestResource01,
-         TestResource02,
-         TestResource03,
-         TestResource04,
-         TestResource05,
-         TestResource06,
-         CustomRequestEntityReader,
-         CustomResponseEntityWriter]
+                TestResource02,
+                TestResource03,
+                TestResource04,
+                TestResource05,
+                TestResource06,
+                CustomRequestEntityReader,
+                CustomResponseEntityWriter]
     }
 
     @Test
@@ -57,7 +57,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost02() {
-        sendRequest('/test/02', 'POST', ['Content-Type':'text/plain'], 'hello'.bytes)
+        sendRequest('/test/02', 'POST', ['Content-Type': 'text/plain'], 'hello'.bytes)
         assertEquals(200, response.status)
         assertEquals('response:hello', response.contentAsString)
         assertTrue(response.getHeader('Content-Type').startsWith('text/plain'))
@@ -65,7 +65,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost03() {
-        sendRequest('/test/03', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/03', 'POST', ['Content-Type': 'application/json'], '{"age":38,"name":"mike"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"age":39'))
         assertTrue(response.contentAsString.contains('"name":"ekim"'))
@@ -74,7 +74,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testPost06() {
-        sendRequest('/test/06', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        sendRequest('/test/06', 'POST', ['Content-Type': 'application/json'], '{"age":38,"name":"mike"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('<age>39</age>'))
         assertTrue(response.contentAsString.contains('<name>ekim</name>'))
@@ -83,7 +83,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testRoundtrip04XmlSingle() {
-        def headers = ['Content-Type':'application/xml', 'Accept':'application/xml']
+        def headers = ['Content-Type': 'application/xml', 'Accept': 'application/xml']
         sendRequest('/test/04/single', 'POST', headers, '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('<name>semaj</name>'))
@@ -92,7 +92,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testRoundtrip04JsonSingle() {
-        def headers = ['Content-Type':'application/json', 'Accept':'application/json']
+        def headers = ['Content-Type': 'application/json', 'Accept': 'application/json']
         sendRequest('/test/04/single', 'POST', headers, '{"class":"TestPerson","age":25,"name":"james"}'.bytes)
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"age":26'))
@@ -102,7 +102,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testGet04XmlCollectionGeneric() {
-        sendRequest('/test/04/multi/generic', 'GET', ['Accept':'application/xml'])
+        sendRequest('/test/04/multi/generic', 'GET', ['Accept': 'application/xml'])
         assertTrue(response.contentAsString.contains('<list>'))
         assertTrue(response.contentAsString.contains('<name>n1</name>'))
         assertTrue(response.contentAsString.contains('<name>n2</name>'))
@@ -117,7 +117,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
 
     @Test
     void testGet04XmlCollectionRaw() {
-        sendRequest('/test/04/multi/raw', 'GET', ['Accept':'application/xml'])
+        sendRequest('/test/04/multi/raw', 'GET', ['Accept': 'application/xml'])
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('<list>'))
         assertTrue(response.contentAsString.contains('<name>n1</name>'))
@@ -128,13 +128,13 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     @Test
     void testGet04XmlCollectionRawGenericOnly() {
         grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = true
-        sendRequest('/test/04/multi/raw', 'GET', ['Accept':'application/xml'])
+        sendRequest('/test/04/multi/raw', 'GET', ['Accept': 'application/xml'])
         assertEquals(500, response.status)
     }
 
     @Test
     void testGet04XmlCollectionObject() {
-        sendRequest('/test/04/multi/object', 'GET', ['Accept':'application/xml'])
+        sendRequest('/test/04/multi/object', 'GET', ['Accept': 'application/xml'])
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('<list>'))
         assertTrue(response.contentAsString.contains('<name>n1</name>'))
@@ -145,13 +145,13 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     @Test
     void testGet04XmlCollectionObjectGenericOnly() {
         grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = true
-        sendRequest('/test/04/multi/object', 'GET', ['Accept':'application/xml'])
+        sendRequest('/test/04/multi/object', 'GET', ['Accept': 'application/xml'])
         assertEquals(500, response.status)
     }
 
     @Test
     void testGet04JsonCollectionGeneric() {
-        sendRequest('/test/04/multi/generic', 'GET', ['Accept':'application/json'])
+        sendRequest('/test/04/multi/generic', 'GET', ['Accept': 'application/json'])
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"name":"n1"'))
         assertTrue(response.contentAsString.contains('"name":"n2"'))
@@ -161,21 +161,21 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     @Test
     void testPost04ReaderDisabled() {
         grailsApplication.config.org.grails.jaxrs.doreader.disable = true
-        sendRequest('/test/04/single', 'POST', ['Content-Type':'application/xml'], '<testPerson><name>james</name></testPerson>'.bytes)
+        sendRequest('/test/04/single', 'POST', ['Content-Type': 'application/xml'], '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(415, response.status)
     }
 
     @Test
     void testPost04WriterDisabled() {
         grailsApplication.config.org.grails.jaxrs.dowriter.disable = true
-        def headers = ['Content-Type':'application/xml', 'Accept':'application/xml']
+        def headers = ['Content-Type': 'application/xml', 'Accept': 'application/xml']
         sendRequest('/test/04/single', 'POST', headers, '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(500, response.status)
     }
 
     @Test
     void testPost04DefaultResponse() {
-        sendRequest('/test/04/single', 'POST', ['Content-Type':'application/xml'], '<testPerson><name>james</name></testPerson>'.bytes)
+        sendRequest('/test/04/single', 'POST', ['Content-Type': 'application/xml'], '<testPerson><name>james</name></testPerson>'.bytes)
         assertEquals(200, response.status)
         println 'default: ' + response.contentAsString
         println 'content: ' + response.getHeader('Content-Type')
