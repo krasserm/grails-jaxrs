@@ -20,15 +20,19 @@ import static org.grails.jaxrs.support.ConverterUtils.jsonToMap;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import org.codehaus.groovy.grails.commons.GrailsApplication;
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
+import org.grails.jaxrs.support.ConverterUtils;
 import org.grails.jaxrs.support.MessageBodyReaderSupport;
 
 /**
@@ -78,14 +82,23 @@ public class JSONReader extends MessageBodyReaderSupport<Map> implements GrailsA
      * @return a map representation of the JSON request entity stream.
      */
     @Override
-    public Map readFrom(MultivaluedMap<String, String> httpHeaders, InputStream entityStream) 
-        throws IOException, WebApplicationException {
-        
-        // TODO: obtain encoding from HTTP header
-        String encoding = getDefaultEncoding(grailsApplication);
+    public Map readFrom(Class<Map> type, Type genericType,
+            Annotation[] annotations, MediaType mediaType,
+            MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+            throws IOException, WebApplicationException {
+    	
+    	String encoding = ConverterUtils.getEncoding(httpHeaders, mediaType, getDefaultEncoding(grailsApplication));
 
         // Convert JSON to map used for constructing domain objects
         return jsonToMap(entityStream, encoding);
     }
+
+	@Override
+	public Map readFrom(MultivaluedMap<String, String> httpHeaders,
+			InputStream entityStream) throws IOException,
+			WebApplicationException {
+		// TODO: Fix MessageBodyReaderSupport abstract method (remove it completely or add empty implementation?)
+		throw new RuntimeException("This should never be called, because we override the readFrom(all-parameters) method.");
+	}
 
 }

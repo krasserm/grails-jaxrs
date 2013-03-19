@@ -86,15 +86,15 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
             Annotation[] annotations, MediaType mediaType,
             MultivaluedMap httpHeaders, InputStream entityStream)
         throws IOException, WebApplicationException {
-        
+
         if (isXmlType(mediaType)) {
-            return readFromXml(type, entityStream, getDefaultXMLEncoding(grailsApplication))
+            return readFromXml(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultXMLEncoding(grailsApplication)))
         } else { // JSON
-            return readFromJson(type, entityStream, getDefaultJSONEncoding(grailsApplication))
+            return readFromJson(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultJSONEncoding(grailsApplication)))
         }
-        
+
     }
-    
+
     /**
      * If <code>false</code> this reader will be skipped. Returns 
      * <code>true</code> by default.
@@ -121,7 +121,7 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      * Construct domain object from json map obtained from entity stream.
      */
     protected Object readFromJson(Class type, InputStream entityStream, String charset) {
-        def map = jsonToMap(entityStream, charset) 
+        def map = jsonToMap(entityStream, charset)
         def result = type.metaClass.invokeConstructor(map)
 
         // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
