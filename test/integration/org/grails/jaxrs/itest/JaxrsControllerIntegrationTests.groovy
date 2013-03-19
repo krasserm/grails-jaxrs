@@ -15,6 +15,7 @@ package org.grails.jaxrs.itest
  * limitations under the License.
  */
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import groovy.util.GroovyTestCase
@@ -58,10 +59,21 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
         assertEquals('response:hello', response.contentAsString)
         assertTrue(response.getHeader('Content-Type').startsWith('text/plain'))
     }
-    
+
     @Test
     void testPost03() {
         sendRequest('/test/03', 'POST', ['Content-Type':'application/json'], '{"class":"TestPerson","age":38,"name":"mike"}'.bytes)
+        assertEquals(200, response.status)
+        assertTrue(response.contentAsString.contains('"age":39'))
+        assertTrue(response.contentAsString.contains('"name":"ekim"'))
+        assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+    }
+
+    @Test
+    void testPost03_CustomCharset() {
+		String CUSTOM_CHARSET = 'UTF-16'
+        sendRequest('/test/03', 'POST', ['Content-Type':"application/json; charset=${CUSTOM_CHARSET}"], '{"class":"TestPerson","age":38,"name":"mike"}'.getBytes(CUSTOM_CHARSET))
+
         assertEquals(200, response.status)
         assertTrue(response.contentAsString.contains('"age":39'))
         assertTrue(response.contentAsString.contains('"name":"ekim"'))
@@ -86,7 +98,36 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
         assertTrue(response.contentAsString.contains('"name":"semaj"'))
         assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
     }
-    
+
+	@Test
+	void testRoundtrip04JsonSingle_CustomCharset() {
+		String CUSTOM_CHARSET = 'UTF-16'
+		def headers = ['Content-Type':"application/json; charset=${CUSTOM_CHARSET}", 'Accept':'application/json']
+		def testPersonWithCustomEncoding = '{"class":"TestPerson","age":45,"name":"james"}'.getBytes(Charset.forName(CUSTOM_CHARSET))
+		
+		sendRequest('/test/04/single', 'POST', headers, testPersonWithCustomEncoding)
+		
+		assertEquals(200, response.status)
+		assertTrue(response.contentAsString.contains('"age":46'))
+		assertTrue(response.contentAsString.contains('"name":"semaj"'))
+		assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+	}
+	
+	@Test
+	void testRoundtrip04XmlSingle_CustomCharset() {
+		String CUSTOM_CHARSET = 'UTF-16'
+		def headers = ['Content-Type':"application/xml; charset=${CUSTOM_CHARSET}", 'Accept':'application/xml']
+		def testPersonWithCustomEncoding = '<testPerson><name>james</name></testPerson>'.getBytes(Charset.forName(CUSTOM_CHARSET))
+		
+		sendRequest('/test/04/single', 'POST', headers, testPersonWithCustomEncoding)
+		
+		assertEquals(200, response.status)
+        // TODO: figure out why adding the age parameter to the request makes groovy throw an Exception
+//		assertTrue(response.contentAsString.contains('<age>29</age>'))
+		assertTrue(response.contentAsString.contains('<name>semaj</name>'))
+		assertTrue(response.getHeader('Content-Type').startsWith('application/xml'))
+	}
+
     @Test
     void testGet04XmlCollectionGeneric() {
         sendRequest('/test/04/multi/generic', 'GET', ['Accept':'application/xml'])
