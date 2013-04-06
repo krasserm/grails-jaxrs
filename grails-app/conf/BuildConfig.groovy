@@ -84,12 +84,21 @@ grails.project.dependency.resolution = {
                      'spring-context', 'spring-core', 'spring-jdbc', 'spring-orm', 'spring-tx',
                      'spring-web', 'spring-webmvc-portlet', 'spring-webmvc', 'testng'
         }
+
+         /*
+          * needed for spocK from grails 2.2
+          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock 
+          */
+         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
         build(':release:2.2.0', ':rest-client-builder:1.0.3') {
             export = false
         }
-        compile(':spock:0.7')
+//        compile(':spock:0.7')
+        coompile(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
     }
 }
