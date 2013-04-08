@@ -38,7 +38,7 @@ grails.project.dependency.resolution = {
         compile "org.restlet.gae:org.restlet:$restletVersion"
 
         compile("org.restlet.gae:org.restlet.ext.servlet:$restletVersion") {
-            excludes 'servlet-api', 'org.restlet'
+            transitive = false
         }
 
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
@@ -47,29 +47,27 @@ grails.project.dependency.resolution = {
 //        compile "org.restlet.gae:org.restlet.ext.jaxrs:$restletVersion"
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
-            excludes 'org.restlet.lib.org.json', 'org.restlet'
+            transitive = false
         }
 
         compile("com.sun.jersey:jersey-core:$jerseyVersion") {
-            excludes 'jsr311-api', 'mail', 'jaxb-api', 'osgi_R4_core', 'junit'
+            transitive = false
         }
 
         compile("com.sun.jersey:jersey-servlet:$jerseyVersion") {
-            excludes 'javax.servlet-api', 'jsp-api', 'javax.ejb', 'weld-osgi-bundle',
-                     'persistence-api', 'ant', 'osgi_R4_core', 'junit', 'commons-io'
+            transitive = false
         }
 
         compile("com.sun.jersey:jersey-server:$jerseyVersion") {
-            excludes 'asm', 'mail', 'jaxb-api', 'jsr250-api', 'osgi_R4_core', 'junit', 'commons-io'
+            transitive = false
         }
 
         compile("com.sun.jersey:jersey-json:$jerseyVersion") {
-            excludes 'jettison', 'jaxb-impl', 'jackson-core-asl', 'jackson-mapper-asl',
-                     'jackson-jaxrs', 'jackson-xc', 'junit'
+            transitive = false
         }
 
         compile("com.sun.jersey.contribs:jersey-spring:$jerseyVersion") {
-            excludes 'servlet-api', 'testng', 'jaxb-impl', 'jsr250-api', 'junit'
+            transitive = false
         }
 
         compile('javax.ws.rs:jsr311-api:1.1.1') {
@@ -78,18 +76,23 @@ grails.project.dependency.resolution = {
 
         // until RequestStreamAdapter is re-implemented ...
         compile('org.springframework:spring-test:3.1.2.RELEASE') {
-            excludes 'activation', 'el-api', 'javax.inject', 'persistence-api', 'portlet-api',
-                     'servlet-api', 'jsp-api', 'geronimo-jta_1.1_spec', 'standard', 'aspectjweaver',
-                     'hibernate-core', 'hibernate-cglib-repack', 'hsqldb', 'junit', 'spring-beans',
-                     'spring-context', 'spring-core', 'spring-jdbc', 'spring-orm', 'spring-tx',
-                     'spring-web', 'spring-webmvc-portlet', 'spring-webmvc', 'testng'
+            transitive = false
         }
+
+         /*
+          * needed for spocK from grails 2.2
+          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock 
+          */
+         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
         build(':release:2.2.0', ':rest-client-builder:1.0.3') {
             export = false
         }
-        compile(':spock:0.7')
+
+        coompile(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
     }
 }
