@@ -38,7 +38,7 @@ grails.project.dependency.resolution = {
         compile "org.restlet.gae:org.restlet:$restletVersion"
 
         compile("org.restlet.gae:org.restlet.ext.servlet:$restletVersion") {
-            transitive = false
+            excludes 'org.restlet', 'servlet-api'
         }
 
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
@@ -47,27 +47,27 @@ grails.project.dependency.resolution = {
 //        compile "org.restlet.gae:org.restlet.ext.jaxrs:$restletVersion"
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
-            transitive = false
+            excludes 'org.restlet', 'org.restlet.lib.org.json'
         }
 
         compile("com.sun.jersey:jersey-core:$jerseyVersion") {
-            transitive = false
+            excludes 'jaxb-api', 'jsr311-api', 'junit', 'mail', 'org.osgi.core'
         }
 
         compile("com.sun.jersey:jersey-servlet:$jerseyVersion") {
-            transitive = false
+            excludes 'ant', 'commons-io', 'javax.ejb', 'javax.servlet-api', 'jsp-api', 'junit', 'osgi_R4_core', 'persistence-api', 'weld-osgi-bundle'
         }
 
         compile("com.sun.jersey:jersey-server:$jerseyVersion") {
-            transitive = false
+            excludes 'asm', 'commons-io', 'jaxb-api', 'jsr250-api', 'junit', 'mail', 'osgi_R4_core'
         }
 
         compile("com.sun.jersey:jersey-json:$jerseyVersion") {
-            transitive = false
+            excludes 'jackson-core-asl', 'jackson-jaxrs', 'jackson-mapper-asl', 'jackson-xc', 'jaxb-impl', 'jettison', 'junit', 'org.eclipse.persistence.moxy'
         }
 
         compile("com.sun.jersey.contribs:jersey-spring:$jerseyVersion") {
-            transitive = false
+            excludes 'jaxb-impl', 'jsr250-api', 'junit', 'servlet-api', 'testng'
         }
 
         compile('javax.ws.rs:jsr311-api:1.1.1') {
@@ -76,7 +76,7 @@ grails.project.dependency.resolution = {
 
         // until RequestStreamAdapter is re-implemented ...
         compile('org.springframework:spring-test:3.1.2.RELEASE') {
-            transitive = false
+            excludes 'junit'
         }
 
          /*
@@ -91,7 +91,7 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        coompile(":spock:0.7") {
+        compile(":spock:0.7") {
             exclude "spock-grails-support"
         }
     }
