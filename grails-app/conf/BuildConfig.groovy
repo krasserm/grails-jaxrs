@@ -21,6 +21,11 @@ grails.project.dependency.resolution = {
 
     inherits "global"
     log "warn"
+    /*
+     * legacyResolve is needed in order to use release plugin 2.2.0 with grails 2.2.1 
+     * see http://www.objectpartners.com/2013/02/13/grails-2-2-publishing-your-plugins-as-maven-artifacts-to-resolve-dependency-resolution-issues/
+     */
+    legacyResolve true
 
     repositories {
         grailsCentral()

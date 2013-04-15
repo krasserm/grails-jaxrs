@@ -15,7 +15,8 @@ import org.grails.jaxrs.web.JaxrsFilter
 import org.grails.jaxrs.web.JaxrsListener
 
 class JaxrsGrailsPlugin {
-    def version = "0.8"
+    def groupId = "org.grails.plugins"
+    def version = "0.8-SNAPSHOT"
     def grailsVersion = "2.2 > *"
     def pluginExcludes = [
             "grails-app/domain/*",
