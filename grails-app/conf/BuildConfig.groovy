@@ -91,7 +91,8 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        compile(":spock:0.7") {
+        //spock has a compile scope in order to avoid compilation failure for IntegrationTestSpec.groovy
+        test(":spock:0.7") {
             exclude "spock-grails-support"
         }
     }
