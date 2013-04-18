@@ -17,6 +17,16 @@
 grails.project.work.dir = 'target'
 grails.project.source.level = 1.6
 
+/*
+ * in order to publish snapshots into the dedicated repo you should add to ~/.grails/settings.groovy the following entries
+ * 
+ * grails.project.repos.jaxrssnapshotsrepo.username = "yourlogin"
+ * grails.project.repos.jaxrssnapshotsrepo.password = "yourpassword"
+ * 
+ */
+grails.project.repos.jaxrssnapshotsrepo.url = "http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots"
+grails.project.repos.jaxrssnapshotsrepo.type = "maven"
+
 grails.project.dependency.resolution = {
 
     inherits "global"
