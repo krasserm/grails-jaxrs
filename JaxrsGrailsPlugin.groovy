@@ -16,7 +16,7 @@ import org.grails.jaxrs.web.JaxrsListener
 
 class JaxrsGrailsPlugin {
     def groupId = "org.grails.plugins"
-    def version = "0.8-SNAPSHOT"
+    def version = "0.8"
     def grailsVersion = "2.2 > *"
     def pluginExcludes = [
             "grails-app/domain/*",
