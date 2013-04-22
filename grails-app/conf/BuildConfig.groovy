@@ -31,6 +31,7 @@ grails.project.dependency.resolution = {
 
     inherits "global"
     log "warn"
+
     /*
      * legacyResolve is needed in order to use release plugin 2.2.0 with grails 2.2.1 
      * see http://www.objectpartners.com/2013/02/13/grails-2-2-publishing-your-plugins-as-maven-artifacts-to-resolve-dependency-resolution-issues/
@@ -95,19 +96,18 @@ grails.project.dependency.resolution = {
         }
 
          /*
-          * needed for spocK from grails 2.2
+          * needed for spock from grails 2.2
           * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock 
           */
-         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+        compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
-        build(':release:2.2.0', ':rest-client-builder:1.0.3') {
+        compile(':release:2.2.0', ':rest-client-builder:1.0.3') {
             export = false
         }
 
-        //spock has a compile scope in order to avoid compilation failure for IntegrationTestSpec.groovy
-        test(":spock:0.7") {
+        compile(":spock:0.7") {
             exclude "spock-grails-support"
         }
     }
