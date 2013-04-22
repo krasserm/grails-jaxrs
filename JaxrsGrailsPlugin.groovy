@@ -58,7 +58,16 @@ on the Google App Engine. Other JAX-RS implementations such as RestEasy or
 Apache Wink are likely to be added in upcoming versions of the plugin.
 """
 
-    def documentation = 'http://code.google.com/p/grails-jaxrs/'
+    def developers = [
+            [name: 'Davide Cavestro', email: 'davide.cavestro@gmail.com'],
+            [name: 'Noam Yenne', email: 'noam@10ne.org']
+    ]
+
+    def documentation = 'https://github.com/krasserm/grails-jaxrs/wiki'
+
+    def issueManagement = [url: 'https://github.com/krasserm/grails-jaxrs/issues']
+
+    def scm = [url: 'https://github.com/krasserm/grails-jaxrs']
 
     /**
      * Adds the JaxrsFilter and JaxrsListener to the web application
