@@ -28,8 +28,9 @@ grails.project.repos.jaxrssnapshotsrepo.url = "http://noams.artifactoryonline.co
 grails.project.repos.jaxrssnapshotsrepo.type = "maven"
 
 grails.project.dependency.resolution = {
-
-    inherits "global"
+    inherits('global') {
+        excludes 'hibernate'
+    }
     log "warn"
 
     /*
@@ -95,10 +96,10 @@ grails.project.dependency.resolution = {
             excludes 'junit'
         }
 
-         /*
-          * needed for spock from grails 2.2
-          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock 
-          */
+        /*
+         * needed for spock from grails 2.2
+         * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock
+         */
         compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
