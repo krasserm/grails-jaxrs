@@ -88,9 +88,9 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
         throws IOException, WebApplicationException {
         
         if (isXmlType(mediaType)) {
-            return readFromXml(type, entityStream, getDefaultXMLEncoding(grailsApplication))
+            return readFromXml(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultXMLEncoding(grailsApplication)))
         } else { // JSON
-            return readFromJson(type, entityStream, getDefaultJSONEncoding(grailsApplication))
+            return readFromJson(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultJSONEncoding(grailsApplication)))
         }
         
     }

@@ -19,11 +19,15 @@ import static org.codehaus.groovy.grails.web.converters.configuration.Converters
 
 import java.util.Map
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+
 import grails.converters.JSON
 import grails.converters.XML
 
 import groovy.util.slurpersupport.GPathResult
-import org.apache.commons.logging.*
+
+import org.apache.commons.logging.*
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener;
@@ -79,6 +83,30 @@ class ConverterUtils {
         encoding
     }
     
+    /** Extracts encoding from HTTP headers or MediaType parameters */
+    static String getEncoding(MultivaluedMap httpHeaders, MediaType mediaType, String defaultEncoding) {
+        println httpHeaders
+        // if HTTP headers specify the charset and this was parsed into the MediaType object, return the charset from MediaType
+        // Jersey parses http headers into MediaType object
+        if (mediaType.parameters['charset']) {
+            String encoding = mediaType.parameters['charset'];
+            return encoding
+        }
+        
+        // Restlet does not parse the headers into MediaType so we need to extract them manually
+        def contentTypeHeaderKey = httpHeaders.keySet().find { key -> key.toLowerCase() == 'content-type' }
+        if (contentTypeHeaderKey) {
+            String contentTypeHeaderValue = httpHeaders.getFirst(contentTypeHeaderKey)
+            if (contentTypeHeaderValue.contains('charset=')) {
+                String encoding = contentTypeHeaderValue.substring(contentTypeHeaderValue.indexOf('charset=') + 'charset='.length())
+                return encoding
+            }
+        }
+        
+        // no encoding specified
+        return defaultEncoding
+    }
+
     /**
      * Reads a JSON stream from <code>input</code> and converts it to a map
      * that can be used to construct a Grails domain objects (passing the map
