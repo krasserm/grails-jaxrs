@@ -21,6 +21,9 @@ import org.junit.Test
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
+import java.nio.charset.Charset;
+
+import java.util.List;
 
 /**
  * @author Martin Krasser
@@ -76,6 +79,16 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
     }
 
     @Test
+    void testPost03_CustomCharset() {
+        String CUSTOM_CHARSET = 'UTF-16'
+        sendRequest('/test/03', 'POST', ['Content-Type':"application/json; charset=${CUSTOM_CHARSET}".toString()], '{"class":"TestPerson","age":38,"name":"mike"}'.getBytes(CUSTOM_CHARSET))
+        assertEquals(200, response.status)
+        assertTrue(response.contentAsString.contains('"age":39'))
+        assertTrue(response.contentAsString.contains('"name":"ekim"'))
+        assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    @Test
     void testRoundtrip04XmlSingle() {
         def headers = ['Content-Type': 'application/xml', 'Accept': 'application/xml']
         sendRequest('/test/04/single', 'POST', headers, '<testPerson><name>james</name></testPerson>'.bytes)
@@ -92,6 +105,33 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
         assertTrue(response.contentAsString.contains('"age":26'))
         assertTrue(response.contentAsString.contains('"name":"semaj"'))
         assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    @Test
+    void testRoundtrip04JsonSingle_CustomCharset() {
+        String CUSTOM_CHARSET = 'UTF-16'
+        def headers = ['Content-Type':"application/json; charset=${CUSTOM_CHARSET}".toString(), 'Accept':'application/json']
+        def testPersonWithCustomEncoding = '{"class":"TestPerson","age":45,"name":"james"}'.getBytes(Charset.forName(CUSTOM_CHARSET))
+        
+        sendRequest('/test/04/single', 'POST', headers, testPersonWithCustomEncoding)
+        
+        assertEquals(200, response.status)
+        assertTrue(response.contentAsString.contains('"age":46'))
+        assertTrue(response.contentAsString.contains('"name":"semaj"'))
+               assertTrue(response.getHeader('Content-Type').startsWith('application/json'))
+    }
+    
+    @Test
+    void testRoundtrip04XmlSingle_CustomCharset() {
+        String CUSTOM_CHARSET = 'UTF-16'
+        def headers = ['Content-Type':"application/xml; charset=${CUSTOM_CHARSET}".toString(), 'Accept':'application/xml']
+        byte[] testPersonWithCustomEncoding = '<testPerson><name>james</name></testPerson>'.getBytes(Charset.forName(CUSTOM_CHARSET))
+        
+        sendRequest('/test/04/single', 'POST', headers, testPersonWithCustomEncoding)
+        
+        assertEquals(200, response.status)
+        assertTrue(response.contentAsString.contains('<name>semaj</name>'))
+        assertTrue(response.getHeader('Content-Type').startsWith('application/xml'))
     }
 
     @Test
