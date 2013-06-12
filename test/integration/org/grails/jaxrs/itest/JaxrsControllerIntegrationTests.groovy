@@ -1,13 +1,7 @@
 package org.grails.jaxrs.itest
 
-import org.grails.jaxrs.test.CustomRequestEntityReader
-import org.grails.jaxrs.test.CustomResponseEntityWriter
-import org.grails.jaxrs.test.TestResource01
-import org.grails.jaxrs.test.TestResource02
-import org.grails.jaxrs.test.TestResource03
-import org.grails.jaxrs.test.TestResource04
-import org.grails.jaxrs.test.TestResource05
-import org.grails.jaxrs.test.TestResource06
+import org.grails.jaxrs.test.*
+import org.junit.Test
 
 /*
  * Copyright 2009 - 2011 the original author or authors.
@@ -25,9 +19,8 @@ import org.grails.jaxrs.test.TestResource06
  * limitations under the License.
  */
 
-import static org.junit.Assert.*
-
-import org.junit.Test
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
 /**
  * @author Martin Krasser
@@ -43,6 +36,7 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
                 TestResource04,
                 TestResource05,
                 TestResource06,
+                TestQueryParamResource,
                 CustomRequestEntityReader,
                 CustomResponseEntityWriter]
     }
@@ -187,5 +181,28 @@ abstract class JaxrsControllerIntegrationTests extends IntegrationTestCase {
         assertEquals(200, response.status)
         assertEquals('<html><body>test05</body></html>', response.contentAsString)
         assertTrue(response.getHeader('Content-Type').startsWith('text/html'))
+    }
+
+    @Test
+    void specifyQueryParamsOnController() {
+        controller.request.queryString = 'value=jim'
+        sendRequest('/test/queryParam', 'GET')
+        assertEquals(200, response.status)
+        assertEquals('jim', response.contentAsString)
+    }
+
+    @Test
+    void specifyQueryParamsInRequestPath() {
+        sendRequest('/test/queryParam?value=jim', 'GET')
+        assertEquals(200, response.status)
+        assertEquals('jim', response.contentAsString)
+    }
+
+    @Test
+    void specifyQueryParamsOnControllerAndInRequestPath() {
+        controller.request.queryString = 'value=bob'
+        sendRequest('/test/queryParam?value=jim', 'GET')
+        assertEquals(200, response.status)
+        assertEquals('jim', response.contentAsString)
     }
 }

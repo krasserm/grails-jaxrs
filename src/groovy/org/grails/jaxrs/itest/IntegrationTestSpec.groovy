@@ -19,7 +19,7 @@ abstract class IntegrationTestSpec extends IntegrationSpec implements JaxRsInteg
     @Shared
     def testEnvironment
 
-    def controller
+    JaxrsController controller
 
     JaxRsIntegrationTest defaultMixin
 

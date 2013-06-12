@@ -1,13 +1,6 @@
 package org.grails.jaxrs.itest
 
-import org.grails.jaxrs.test.CustomRequestEntityReader
-import org.grails.jaxrs.test.CustomResponseEntityWriter
-import org.grails.jaxrs.test.TestResource01
-import org.grails.jaxrs.test.TestResource02
-import org.grails.jaxrs.test.TestResource03
-import org.grails.jaxrs.test.TestResource04
-import org.grails.jaxrs.test.TestResource05
-import org.grails.jaxrs.test.TestResource06
+import org.grails.jaxrs.test.*
 
 /*
  * Copyright 2009 - 2011 the original author or authors.
@@ -38,6 +31,7 @@ abstract class JaxrsControllerIntegrationSpec extends IntegrationTestSpec {
                 TestResource04,
                 TestResource05,
                 TestResource06,
+                TestQueryParamResource,
                 CustomRequestEntityReader,
                 CustomResponseEntityWriter]
     }
@@ -195,5 +189,38 @@ abstract class JaxrsControllerIntegrationSpec extends IntegrationTestSpec {
         response.status == 200
         response.contentAsString == '<html><body>test05</body></html>'
         response.getHeader('Content-Type').startsWith('text/html')
+    }
+
+    def "Specify query params directly on the controller"() {
+        setup:
+        controller.request.queryString = 'value=jim'
+
+        when:
+        sendRequest('/test/queryParam', 'GET')
+
+        then:
+        response.status == 200
+        response.contentAsString == 'jim'
+    }
+
+    def "Specify query params in the request path"() {
+        when:
+        sendRequest('/test/queryParam?value=jim', 'GET')
+
+        then:
+        response.status == 200
+        response.contentAsString == 'jim'
+    }
+
+    def "Specify query params in both the request path and the controller"() {
+        setup:
+        controller.request.queryString = 'value=bob'
+
+        when:
+        sendRequest('/test/queryParam?value=jim', 'GET')
+
+        then:
+        response.status == 200
+        response.contentAsString == 'jim'
     }
 }
