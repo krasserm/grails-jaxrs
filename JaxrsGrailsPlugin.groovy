@@ -1,18 +1,13 @@
-import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME
-
 import org.codehaus.groovy.grails.web.servlet.GrailsDispatcherServlet
 import org.grails.jaxrs.ProviderArtefactHandler
 import org.grails.jaxrs.ResourceArtefactHandler
 import org.grails.jaxrs.generator.CodeGenerator
-import org.grails.jaxrs.provider.DomainObjectReader
-import org.grails.jaxrs.provider.DomainObjectWriter
-import org.grails.jaxrs.provider.JSONReader
-import org.grails.jaxrs.provider.JSONWriter
-import org.grails.jaxrs.provider.XMLReader
-import org.grails.jaxrs.provider.XMLWriter
+import org.grails.jaxrs.provider.*
 import org.grails.jaxrs.web.JaxrsContext
 import org.grails.jaxrs.web.JaxrsFilter
 import org.grails.jaxrs.web.JaxrsListener
+
+import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME
 
 class JaxrsGrailsPlugin {
     def groupId = "org.grails.plugins"
@@ -25,7 +20,7 @@ class JaxrsGrailsPlugin {
             "lib/*-sources.jar"
     ]
 
-    def loadAfter = ['controllers','services','spring-security-core']
+    def loadAfter = ['controllers', 'services', 'spring-security-core']
     def artefacts = [
             new ResourceArtefactHandler(),
             new ProviderArtefactHandler()
@@ -100,24 +95,24 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
             }
         }
 
-		def grailsServlet = xml.servlet.find { servlet ->
+        def grailsServlet = xml.servlet.find { servlet ->
 
-			'grails'.equalsIgnoreCase(servlet.'servlet-name'.text())
+            'grails'.equalsIgnoreCase(servlet.'servlet-name'.text())
 
-		}
+        }
 
-		// reload default GrailsDispatcherServlet adding 'dispatchOptionsRequest':'true'
-		grailsServlet.replaceNode { node ->
-			'servlet' {
-				'servlet-name'('grails')
-				'servlet-class'(GrailsDispatcherServlet.name)
-				'load-on-startup'('1')
-				'init-param'{
-					'param-name'('dispatchOptionsRequest')
-					'param-value'('true')
-				}
-			}
-		}
+        // reload default GrailsDispatcherServlet adding 'dispatchOptionsRequest':'true'
+        grailsServlet.replaceNode { node ->
+            'servlet' {
+                'servlet-name'('grails')
+                'servlet-class'(GrailsDispatcherServlet.name)
+                'init-param' {
+                    'param-name'('dispatchOptionsRequest')
+                    'param-value'('true')
+                }
+                'load-on-startup'('1')
+            }
+        }
     }
 
     /**
