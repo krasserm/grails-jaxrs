@@ -30,12 +30,12 @@ import javax.servlet.http.HttpServletRequest
 
 import org.apache.commons.logging.*
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener
-import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 import org.springframework.mock.web.DelegatingServletInputStream
 import org.springframework.mock.web.MockHttpServletRequest
+
+import grails.util.Holders
 
 /**
  * Utility class for XML to map conversions.
@@ -46,8 +46,9 @@ class ConverterUtils {
 
     static final LOG = LogFactory.getLog(ConverterUtils)
 
-    private static jsonListener = new JSONParsingParameterCreationListener()
-    private static xmlListener = new XMLParsingParameterCreationListener()
+    private static ctx = Holders.applicationContext
+    private static jsonListener = ctx.containsBean('jsonListener') ? ctx.getBean('jsonListener') : null
+    private static xmlListener  = ctx.containsBean('xmlListener')  ? ctx.getBean('xmlListener')  : null
 
     /**
      * Returns character encoding settings for the given Grails application.
@@ -98,7 +99,7 @@ class ConverterUtils {
         def adapter = newRequestStreamAdapter(input, encoding, 'json')
 
         def params = new GrailsParameterMap(adapter)
-        jsonListener.paramsCreated(params)
+        jsonListener?.paramsCreated(params)
         params.iterator().next().value
     }
 
@@ -119,7 +120,7 @@ class ConverterUtils {
         def adapter = newRequestStreamAdapter(input, encoding, 'xml')
 
         def params = new GrailsParameterMap(adapter)
-        xmlListener.paramsCreated(params)
+        xmlListener?.paramsCreated(params)
         params.iterator().next().value
     }
 
