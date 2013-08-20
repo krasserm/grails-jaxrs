@@ -39,8 +39,8 @@ import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationLis
 import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
-import org.springframework.mock.web.DelegatingServletInputStream
-import org.springframework.mock.web.MockHttpServletRequest
+import org.grails.jaxrs.springframework.mock.web.DelegatingServletInputStream
+import org.grails.jaxrs.springframework.mock.web.MockHttpServletRequest
 
 /**
  * Utility class for XML to map conversions.

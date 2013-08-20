@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.Part
 
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.springframework.mock.web.DelegatingServletInputStream
-import org.springframework.mock.web.MockHttpServletRequest
+import org.grails.jaxrs.springframework.mock.web.DelegatingServletInputStream
+import org.grails.jaxrs.springframework.mock.web.MockHttpServletRequest
 
 class RequestStreamAdapter extends MockHttpServletRequest {
 
