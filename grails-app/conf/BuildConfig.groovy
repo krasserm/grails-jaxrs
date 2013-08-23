@@ -95,11 +95,6 @@ grails.project.dependency.resolution = {
             excludes 'junit'
         }
 
-        // until RequestStreamAdapter is re-implemented ...
-        compile('org.springframework:spring-test:3.1.2.RELEASE') {
-            excludes 'junit'
-        }
-
         /*
          * needed for spock from grails 2.2
          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock

@@ -1,7 +1,6 @@
 /*
- * WARNING: THIS FILE WAS COPIED AS-IS FROM SPRINGFRAMEWORK 3.0.5 DISTRIBUTION.
- * ACTUALLY THE FILE WAS MERELY COPIED WITHOUT ANY OTHER CHANGES THAN THIS WARNING MESSAGE.
- *
+ * WARNING: THIS FILE WAS COPIED AS-IS FROM SPRINGFRAMEWORK 3.1.2 DISTRIBUTION.
+ *  
  * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +16,10 @@
  * limitations under the License.
  */
 
-package org.springframework.mock.web;
+package org.grails.jaxrs.springframework.mock.web;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.servlet.ServletInputStream;
 
 import org.springframework.util.Assert;
@@ -40,6 +38,7 @@ public class DelegatingServletInputStream extends ServletInputStream {
 
 	private final InputStream sourceStream;
 
+
 	/**
 	 * Create a DelegatingServletInputStream for the given source stream.
 	 * @param sourceStream the source stream (never <code>null</code>)
@@ -53,15 +52,17 @@ public class DelegatingServletInputStream extends ServletInputStream {
 	 * Return the underlying source stream (never <code>null</code>).
 	 */
 	public final InputStream getSourceStream() {
-		return sourceStream;
+		return this.sourceStream;
 	}
 
+
 	public int read() throws IOException {
-		return sourceStream.read();
+		return this.sourceStream.read();
 	}
 
 	public void close() throws IOException {
 		super.close();
-		sourceStream.close();
+		this.sourceStream.close();
 	}
+
 }
