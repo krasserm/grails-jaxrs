@@ -15,7 +15,8 @@
  */
 
 grails.project.work.dir = 'target'
-grails.project.source.level = 1.6
+grails.project.target.level = 1.7
+grails.project.source.level = 1.7
 
 /*
  * in order to publish snapshots into the dedicated repo you should add to ~/.grails/settings.groovy the following entries
@@ -37,16 +38,12 @@ grails.project.dependency.resolution = {
     }
     log 'warn'
 
-    /*
-     * legacyResolve is needed in order to use release plugin 2.2.0 with grails 2.2.1 
-     * see http://www.objectpartners.com/2013/02/13/grails-2-2-publishing-your-plugins-as-maven-artifacts-to-resolve-dependency-resolution-issues/
-     */
-    legacyResolve true
+    resolver = "maven"
 
     repositories {
+        mavenRepo 'http://jcenter.bintray.com'
         grailsCentral()
         mavenLocal()
-        mavenCentral()
         mavenRepo 'http://maven.restlet.org'
     }
 
@@ -100,15 +97,21 @@ grails.project.dependency.resolution = {
          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock
          */
         compile 'org.spockframework:spock-grails-support:0.7-groovy-2.0'
+
+        //These aren't resolved from Grails' lib
+        // need to check why
+        compile 'org.apache.ant:ant:1.8.4'
+        compile 'junit:junit:4.11'
+        compile 'org.hamcrest:hamcrest-core:1.3'
     }
 
     plugins {
-        compile(':release:2.2.0', ':rest-client-builder:1.0.3') {
+        compile(':release:3.0.1', ':rest-client-builder:1.0.3') {
             export = false
         }
 
         compile(':spock:0.7') {
-            exclude 'spock-grails-support'
+            excludes 'spock-grails-support'
         }
     }
 }
