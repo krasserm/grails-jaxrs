@@ -11,7 +11,7 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME
 
 class JaxrsGrailsPlugin {
     def groupId = "org.grails.plugins"
-    def version = "0.9-SNAPSHOT"
+    def version = "0.10-SNAPSHOT"
     def grailsVersion = "2.3 > *"
     def pluginExcludes = [
             "grails-app/domain/*",
