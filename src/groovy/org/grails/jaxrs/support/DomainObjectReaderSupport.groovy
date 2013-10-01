@@ -15,19 +15,19 @@
  */
 package org.grails.jaxrs.support
 
-import static org.grails.jaxrs.support.ConverterUtils.*
-import static org.grails.jaxrs.support.ProviderUtils.*
-
-import java.lang.annotation.Annotation
-import java.lang.reflect.Type
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.MessageBodyReader
+import java.lang.annotation.Annotation
+import java.lang.reflect.Type
 
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import static org.grails.jaxrs.support.ProviderUtils.isJsonType
+import static org.grails.jaxrs.support.ProviderUtils.isXmlType
 
 /**
  * A message body reader that converts an XML or JSON entity streams to a domain
@@ -74,14 +74,18 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
     Object readFrom(Class type, Type genericType,
                     Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap httpHeaders, InputStream entityStream)
-    throws IOException, WebApplicationException {
+            throws IOException, WebApplicationException {
+        Object domainInstance = type.newInstance()
 
+        String defaultEncoding
         if (isXmlType(mediaType)) {
-            return readFromXml(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultXMLEncoding(grailsApplication)))
-        } else { // JSON
-            return readFromJson(type, entityStream, getEncoding(httpHeaders, mediaType, getDefaultJSONEncoding(grailsApplication)))
+            defaultEncoding = ConverterUtils.getDefaultXMLEncoding(grailsApplication)
+        } else {
+            defaultEncoding = ConverterUtils.getDefaultJSONEncoding(grailsApplication)
         }
-
+        String resolvedEncoding = ConverterUtils.getEncoding(httpHeaders, mediaType, defaultEncoding)
+        DataBindingUtils.bindObjectToInstance(domainInstance, new InputStreamReader(entityStream, resolvedEncoding))
+        domainInstance
     }
 
     /**
@@ -90,33 +94,5 @@ abstract class DomainObjectReaderSupport implements MessageBodyReader<Object>, G
      */
     protected boolean isEnabled() {
         true
-    }
-
-    /**
-     * Construct domain object from xml map obtained from entity stream.
-     */
-    protected Object readFromXml(Class type, InputStream entityStream, String charset) {
-        def map = xmlToMap(entityStream, charset)
-        def result = type.metaClass.invokeConstructor(map)
-
-        // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
-        if (!result.id) {
-            result.id = idFromMap(map)
-        }
-        result
-    }
-
-    /**
-     * Construct domain object from json map obtained from entity stream.
-     */
-    protected Object readFromJson(Class type, InputStream entityStream, String charset) {
-        def map = jsonToDomainConstructionModel(entityStream, charset)
-        def result = type.metaClass.invokeConstructor(map)
-
-        // Workaround for http://jira.codehaus.org/browse/GRAILS-1984
-        if (!result.id) {
-            result.id = idFromMap(map)
-        }
-        result
     }
 }
