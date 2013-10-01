@@ -15,12 +15,7 @@
  */
 package org.grails.jaxrs.test
 
-import javax.ws.rs.Consumes
-import javax.ws.rs.GET
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-
+import javax.ws.rs.*
 /**
  * @author Martin Krasser
  */
@@ -32,9 +27,9 @@ class TestResource04 {
     @Consumes(['application/json', 'application/xml'])
     @Produces(['application/json', 'application/xml'])
     TestPerson testPostPersonSingle(TestPerson person) {
-        person.name  = person.name.reverse()
+        person.name = person.name.reverse()
         person.age = person.age + 1
-        return person
+        person
     }
 
     @GET
@@ -59,7 +54,7 @@ class TestResource04 {
     }
 
     private createPersonList() {
-        [new TestPerson(name:'n1', age:1),
-         new TestPerson(name:'n2', age:2)]
+        [new TestPerson(name: 'n1', age: 1),
+                new TestPerson(name: 'n2', age: 2)]
     }
 }
