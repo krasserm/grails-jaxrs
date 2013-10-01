@@ -14,34 +14,25 @@
  * limitations under the License.
  */
 
-grails.project.work.dir = 'target'
+grails.project.class.dir = 'target/classes'
+grails.project.test.class.dir = 'target/test-classes'
+grails.project.test.reports.dir = 'target/test-reports'
+grails.project.work.dir = 'target/work'
 grails.project.target.level = 1.7
 grails.project.source.level = 1.7
 
-/*
- * in order to publish snapshots into the dedicated repo you should add to ~/.grails/settings.groovy the following entries
- * 
- * grails.project.repos.jaxrssnapshotsrepo.username = "yourlogin"
- * grails.project.repos.jaxrssnapshotsrepo.password = "yourpassword"
- * 
- */
-grails.project.repos.jaxrssnapshotsrepo.url = 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots'
-grails.project.repos.jaxrssnapshotsrepo.type = 'maven'
-if (!grails.project.repos.jaxrssnapshotsrepo.username) {
-    grails.project.repos.jaxrssnapshotsrepo.username = System.getProperty('snapshots.repo.username')
-    grails.project.repos.jaxrssnapshotsrepo.password = System.getProperty('snapshots.repo.password')
+grails.project.dependency.distribution = {
+    remoteRepository(id: 'snapshots-repo', url: 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots') {
+        authentication username: System.getProperty('DEPLOYER_USERNAME'), password: System.getProperty('DEPLOYER_PASSWORD')
+    }
 }
-
+grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
-
-    defaultDependenciesProvided true
 
     inherits('global') {
         excludes 'hibernate'
     }
     log 'warn'
-
-    resolver = "maven"
 
     repositories {
         mavenRepo 'http://jcenter.bintray.com'
@@ -64,9 +55,9 @@ grails.project.dependency.resolution = {
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
         // is contained in project's custom lib repository. This is needed because of a bug described
         // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
-        compile group: 'org.restlet.gae',
-                name: 'org.restlet.ext.jaxrs-noruntimedel',
-                version: restletVersion
+//        compile group: 'org.restlet.gae',
+//                name: 'org.restlet.ext.jaxrs',
+//                version: restletVersion
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
             excludes 'org.restlet'
