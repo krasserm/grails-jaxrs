@@ -1,10 +1,12 @@
 package org.grails.jaxrs.itest
 
+import org.apache.commons.lang.StringUtils
 import org.grails.jaxrs.JaxrsController
 import org.grails.jaxrs.web.JaxrsContext
 import org.grails.jaxrs.web.JaxrsUtils
 
 import javax.servlet.http.HttpServletResponse
+import javax.ws.rs.core.HttpHeaders
 
 /**
  * Default and common implementation of the typical integration test functionality
@@ -63,6 +65,13 @@ class JaxRsIntegrationTestMixin implements JaxRsIntegrationTest {
 
         headers.each { entry ->
             addRequestHeader(entry.key, entry.value)
+        }
+
+        if (content.length != 0) {
+            String existingContentLength = controller.request.getHeader(HttpHeaders.CONTENT_LENGTH)
+            if (StringUtils.isBlank(existingContentLength)) {
+                addRequestHeader(HttpHeaders.CONTENT_LENGTH, content.length)
+            }
         }
 
         controller.handle()
