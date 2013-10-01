@@ -15,12 +15,13 @@
  */
 package org.grails.jaxrs.itest
 
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+import org.codehaus.groovy.grails.test.support.GrailsTestAutowirer
 import org.grails.jaxrs.JaxrsController
 import org.junit.Before
 import org.junit.BeforeClass
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  * Base class for JUnit integration testing JAX-RS resources and providers.
  *
@@ -28,9 +29,11 @@ import javax.servlet.http.HttpServletResponse
  */
 abstract class IntegrationTestCase implements JaxRsIntegrationTest {
 
+    private applicationContext = ApplicationHolder.application.mainContext
+    private autowirer = new GrailsTestAutowirer(applicationContext)
+
     def grailsApplication
 
-    static transactional = false
     static testEnvironment
 
     def controller
@@ -44,6 +47,7 @@ abstract class IntegrationTestCase implements JaxRsIntegrationTest {
 
     @Before
     void setUp() {
+        autowirer.autowire(this)
         grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = false
         grailsApplication.config.org.grails.jaxrs.doreader.disable = false
         grailsApplication.config.org.grails.jaxrs.dowriter.disable = false
