@@ -25,7 +25,7 @@ grails.project.source.level = 1.7
  * grails.project.repos.jaxrssnapshotsrepo.password = "yourpassword"
  * 
  */
-grails.project.repos.jaxrssnapshotsrepo.url = "http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots"
+grails.project.repos.jaxrssnapshotsrepo.url = 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots'
 grails.project.repos.jaxrssnapshotsrepo.type = 'maven'
 if (!grails.project.repos.jaxrssnapshotsrepo.username) {
     grails.project.repos.jaxrssnapshotsrepo.username = System.getProperty('snapshots.repo.username')
@@ -33,6 +33,9 @@ if (!grails.project.repos.jaxrssnapshotsrepo.username) {
 }
 
 grails.project.dependency.resolution = {
+
+    defaultDependenciesProvided true
+
     inherits('global') {
         excludes 'hibernate'
     }
@@ -45,13 +48,12 @@ grails.project.dependency.resolution = {
         grailsCentral()
         mavenLocal()
         mavenRepo 'http://maven.restlet.org'
+        mavenRepo 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-libs'
     }
 
     dependencies {
-        compile 'asm:asm:3.3'
-
-        String restletVersion = '2.0.0'
-        String jerseyVersion = '1.14'
+        String restletVersion = '2.1.4'
+        String jerseyVersion = '1.17'
 
         compile "org.restlet.gae:org.restlet:$restletVersion"
 
@@ -60,12 +62,14 @@ grails.project.dependency.resolution = {
         }
 
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
-        // is contained in the project's lib folder. This is needed because of a bug described
+        // is contained in project's custom lib repository. This is needed because of a bug described
         // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
-//        compile "org.restlet.gae:org.restlet.ext.jaxrs:$restletVersion"
+        compile group: 'org.restlet.gae',
+                name: 'org.restlet.ext.jaxrs-noruntimedel',
+                version: restletVersion
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
-            excludes 'org.restlet', 'org.restlet.lib.org.json'
+            excludes 'org.restlet'
         }
 
         compile("com.sun.jersey:jersey-core:$jerseyVersion") {
@@ -100,9 +104,10 @@ grails.project.dependency.resolution = {
 
         //These aren't resolved from Grails' lib
         // need to check why
+        compile 'asm:asm:3.3.1'
         compile 'org.apache.ant:ant:1.8.4'
-        compile 'junit:junit:4.11'
-        compile 'org.hamcrest:hamcrest-core:1.3'
+        test 'junit:junit:4.11'
+        test 'org.hamcrest:hamcrest-core:1.3'
     }
 
     plugins {
