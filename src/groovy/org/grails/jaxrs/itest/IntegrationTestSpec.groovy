@@ -1,6 +1,6 @@
 package org.grails.jaxrs.itest
 
-import grails.plugin.spock.IntegrationSpec
+import grails.test.spock.IntegrationSpec
 import org.grails.jaxrs.JaxrsController
 import spock.lang.Shared
 
@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse
  * @author Noam Y. Tenne
  */
 abstract class IntegrationTestSpec extends IntegrationSpec implements JaxRsIntegrationTest {
-
-    static transactional = false
 
     @Shared
     def grailsApplication
