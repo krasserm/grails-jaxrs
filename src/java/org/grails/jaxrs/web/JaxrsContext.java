@@ -15,11 +15,8 @@
  */
 package org.grails.jaxrs.web;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -27,9 +24,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import javax.ws.rs.ext.RuntimeDelegate;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * The JAX-RS context used by applications to interact with a JAX-RS
@@ -152,6 +152,7 @@ public class JaxrsContext {
     }
 
     void init() throws ServletException {
+        RuntimeDelegate.setInstance(null);
         if (jaxrsProviderName.equals(JAXRS_PROVIDER_NAME_RESTLET)) {
             System.setProperty(
                     "javax.ws.rs.ext.RuntimeDelegate",
