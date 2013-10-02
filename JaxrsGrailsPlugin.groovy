@@ -16,7 +16,9 @@ class JaxrsGrailsPlugin {
     def pluginExcludes = [
             "grails-app/domain/**/*",
             "grails-app/providers/*",
-            "grails-app/resources/*"
+            "grails-app/resources/*",
+            "src/groovy/org/grails/jaxrs/itest/**/*",
+            "src/groovy/org/grails/jaxrs/test/**/*"
     ]
 
     def loadAfter = ['controllers', 'services', 'spring-security-core']
