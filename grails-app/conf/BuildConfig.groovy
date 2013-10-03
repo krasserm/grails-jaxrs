@@ -53,11 +53,11 @@ grails.project.dependency.resolution = {
         }
 
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
-        // is contained in project's custom lib repository. This is needed because of a bug described
+        // is contained in project's custom lib directory and repository. This is needed because of a bug described
         // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
-//        compile group: 'org.restlet.gae',
-//                name: 'org.restlet.ext.jaxrs',
-//                version: restletVersion
+        provided group: 'org.restlet.gae',
+                name: 'org.restlet.ext.jaxrs-noruntimedel',
+                version: restletVersion
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
             excludes 'org.restlet'
@@ -68,7 +68,8 @@ grails.project.dependency.resolution = {
         }
 
         compile("com.sun.jersey:jersey-servlet:$jerseyVersion") {
-            excludes 'ant', 'commons-io', 'javax.ejb', 'javax.servlet-api', 'jsp-api', 'junit', 'osgi_R4_core', 'persistence-api', 'weld-osgi-bundle'
+            excludes 'ant', 'commons-io', 'javax.ejb', 'javax.servlet-api', 'jsp-api', 'junit', 'osgi_R4_core',
+                    'persistence-api', 'weld-osgi-bundle'
         }
 
         compile("com.sun.jersey:jersey-server:$jerseyVersion") {
@@ -80,7 +81,8 @@ grails.project.dependency.resolution = {
         }
 
         compile("com.sun.jersey.contribs:jersey-spring:$jerseyVersion") {
-            excludes 'jaxb-impl', 'jsr250-api', 'junit', 'servlet-api', 'testng'
+            excludes 'jaxb-impl', 'jsr250-api', 'junit', 'servlet-api', 'testng', 'spring-core', 'spring-beans',
+                    'spring-context', 'spring-web', 'spring-aop'
         }
 
         compile('javax.ws.rs:jsr311-api:1.1.1') {
@@ -92,17 +94,10 @@ grails.project.dependency.resolution = {
          * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock
          */
         compile 'org.spockframework:spock-grails-support:0.7-groovy-2.0'
-
-        //These aren't resolved from Grails' lib
-        // need to check why
-        compile 'asm:asm:3.3.1'
-        compile 'org.apache.ant:ant:1.8.4'
-        test 'junit:junit:4.11'
-        test 'org.hamcrest:hamcrest-core:1.3'
     }
 
     plugins {
-        compile(':release:3.0.1', ':rest-client-builder:1.0.3') {
+        build(':release:3.0.1', ':rest-client-builder:1.0.3') {
             export = false
         }
 
