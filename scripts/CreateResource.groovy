@@ -28,9 +28,11 @@ target(createResource: "Creates a new JAX-RS resource class") {
     def type = "Resource"
     promptForName(type: type)
 
-    def name = argsMap["params"][0]
-    createArtifact(name: name, suffix: type, type: type, path: "grails-app/resources")
-    createUnitTest(name: name, suffix: type)
+    for (name in argsMap["params"]) {
+        name = purgeRedundantArtifactSuffix(name, type)
+        createArtifact(name: name, suffix: type, type: type, path: "grails-app/resources")
+        createUnitTest(name: name, suffix: type)
+    }
 }
 
 setDefaultTarget createResource
