@@ -15,7 +15,6 @@
  */
 
 grails.project.work.dir = 'target'
-grails.project.source.level = 1.6
 
 /*
  * in order to publish snapshots into the dedicated repo you should add to ~/.grails/settings.groovy the following entries
@@ -103,12 +102,13 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile(':release:2.2.0', ':rest-client-builder:1.0.3') {
+        compile(':release:2.2.1', ':rest-client-builder:1.0.3') {
             export = false
         }
 
         compile(':spock:0.7') {
             exclude 'spock-grails-support'
+            export = false
         }
     }
 }
