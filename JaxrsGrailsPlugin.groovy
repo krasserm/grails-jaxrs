@@ -17,6 +17,7 @@ class JaxrsGrailsPlugin {
             "grails-app/domain/*",
             "grails-app/providers/*",
             "grails-app/resources/*",
+            "src/groovy/org/grails/jaxrs/test/*",
             "lib/*-sources.jar"
     ]
 
