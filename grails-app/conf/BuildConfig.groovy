@@ -24,11 +24,11 @@ grails.project.source.level = 1.6
  * grails.project.repos.jaxrssnapshotsrepo.password = "yourpassword"
  * 
  */
-grails.project.repos.jaxrssnapshotsrepo.url = "http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots"
-grails.project.repos.jaxrssnapshotsrepo.type = 'maven'
-if (!grails.project.repos.jaxrssnapshotsrepo.username) {
-    grails.project.repos.jaxrssnapshotsrepo.username = System.getProperty('snapshots.repo.username')
-    grails.project.repos.jaxrssnapshotsrepo.password = System.getProperty('snapshots.repo.password')
+
+grails.project.dependency.distribution = {
+    remoteRepository(id: 'snapshots-repo', url: 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots') {
+        authentication username: System.getProperty('DEPLOYER_USERNAME'), password: System.getProperty('DEPLOYER_PASSWORD')
+    }
 }
 
 grails.project.dependency.resolution = {
@@ -36,12 +36,6 @@ grails.project.dependency.resolution = {
         excludes 'hibernate'
     }
     log 'warn'
-
-    /*
-     * legacyResolve is needed in order to use release plugin 2.2.0 with grails 2.2.1 
-     * see http://www.objectpartners.com/2013/02/13/grails-2-2-publishing-your-plugins-as-maven-artifacts-to-resolve-dependency-resolution-issues/
-     */
-    legacyResolve true
 
     repositories {
         grailsCentral()
@@ -94,21 +88,11 @@ grails.project.dependency.resolution = {
         compile('javax.ws.rs:jsr311-api:1.1.1') {
             excludes 'junit'
         }
-
-        /*
-         * needed for spock from grails 2.2
-         * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock
-         */
-        compile 'org.spockframework:spock-grails-support:0.7-groovy-2.0'
     }
 
     plugins {
-        compile(':release:2.2.0', ':rest-client-builder:1.0.3') {
+        build(':release:2.2.1', ':rest-client-builder:1.0.3') {
             export = false
-        }
-
-        compile(':spock:0.7') {
-            exclude 'spock-grails-support'
         }
     }
 }
