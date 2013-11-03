@@ -17,7 +17,6 @@ class JaxrsGrailsPlugin {
             "grails-app/domain/**/*",
             "grails-app/providers/*",
             "grails-app/resources/*",
-            "src/groovy/org/grails/jaxrs/itest/**/*",
             "src/groovy/org/grails/jaxrs/test/**/*"
     ]
 
@@ -56,7 +55,7 @@ Apache Wink are likely to be added in upcoming versions of the plugin.
 
     def developers = [
             [name: 'Davide Cavestro', email: 'davide.cavestro@gmail.com'],
-            [name: 'Noam Yenne', email: 'noam@10ne.org']
+            [name: 'Noam Y. Tenne', email: 'noam@10ne.org']
     ]
 
     def documentation = 'https://github.com/krasserm/grails-jaxrs/wiki'
