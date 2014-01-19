@@ -88,21 +88,11 @@ grails.project.dependency.resolution = {
         compile('javax.ws.rs:jsr311-api:1.1.1') {
             excludes 'junit'
         }
-
-        /*
-         * needed for spock from grails 2.2
-         * see http://code.google.com/p/grails-jaxrs/issues/detail?id=74 and http://grails.org/plugin/spock
-         */
-        compile 'org.spockframework:spock-grails-support:0.7-groovy-2.0'
     }
 
     plugins {
         build(':release:3.0.1', ':rest-client-builder:1.0.3') {
             export = false
-        }
-
-        compile(':spock:0.7') {
-            excludes 'spock-grails-support'
         }
     }
 }
