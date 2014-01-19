@@ -14,10 +14,11 @@ class JaxrsGrailsPlugin {
     def version = "0.10-SNAPSHOT"
     def grailsVersion = "2.3 > *"
     def pluginExcludes = [
-            "grails-app/domain/**/*",
+            "grails-app/domain/*",
             "grails-app/providers/*",
             "grails-app/resources/*",
-            "src/groovy/org/grails/jaxrs/test/**/*"
+            "src/groovy/org/grails/jaxrs/test/*",
+            "lib/*-sources.jar"
     ]
 
     def loadAfter = ['controllers', 'services', 'spring-security-core']
