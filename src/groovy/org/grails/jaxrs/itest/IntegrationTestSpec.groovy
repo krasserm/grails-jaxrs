@@ -72,13 +72,21 @@ abstract class IntegrationTestSpec extends IntegrationSpec implements JaxRsInteg
     }
 
     @Override
-    HttpServletResponse sendRequest(String url, String method, byte[] content = ''.bytes) {
+    HttpServletResponse sendRequest(String url, String method, byte[] content) {
         defaultMixin.sendRequest(url, method, content)
     }
 
+    HttpServletResponse sendRequest(String url, String method) {
+        defaultMixin.sendRequest(url, method, ''.bytes)
+    }
+
     @Override
-    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers, byte[] content = ''.bytes) {
+    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers, byte[] content) {
         defaultMixin.sendRequest(url, method, headers, content)
+    }
+
+    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers) {
+        defaultMixin.sendRequest(url, method, headers, ''.bytes)
     }
 
     @Override

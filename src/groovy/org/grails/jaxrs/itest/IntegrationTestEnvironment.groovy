@@ -20,7 +20,7 @@ import grails.spring.BeanBuilder
 import javax.servlet.ServletContextEvent
 import javax.servlet.ServletContextListener
 
-import org.codehaus.groovy.grails.commons.ApplicationHolder
+import grails.util.Holders
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
 import org.grails.jaxrs.ProviderArtefactHandler
@@ -56,7 +56,7 @@ class IntegrationTestEnvironment {
 
     synchronized JaxrsContext getJaxrsContext() {
         if (!jaxrsContext) {
-            GrailsApplication application = ApplicationHolder.application
+            GrailsApplication application = Holders.grailsApplication
             GrailsWebApplicationContext applicationContext = application.mainContext
 
             BeanBuilder beanBuilder = new BeanBuilder(applicationContext)

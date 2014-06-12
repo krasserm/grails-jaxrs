@@ -15,7 +15,7 @@
  */
 package org.grails.jaxrs.itest
 
-import org.codehaus.groovy.grails.commons.ApplicationHolder
+import grails.util.Holders
 import org.codehaus.groovy.grails.test.support.GrailsTestAutowirer
 import org.grails.jaxrs.JaxrsController
 import org.junit.Before
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
  */
 abstract class IntegrationTestCase implements JaxRsIntegrationTest {
 
-    private applicationContext = ApplicationHolder.application.mainContext
+    private applicationContext = Holders.grailsApplication.mainContext
     private autowirer = new GrailsTestAutowirer(applicationContext)
 
     def grailsApplication
@@ -94,13 +94,29 @@ abstract class IntegrationTestCase implements JaxRsIntegrationTest {
     }
 
     @Override
-    HttpServletResponse sendRequest(String url, String method, byte[] content = ''.bytes) {
+    HttpServletResponse sendRequest(String url, String method, byte[] content) {
         defaultMixin.sendRequest(url, method, content)
     }
 
+    /*
+     * overloaded version of sendRequest: since default params are not always compatible with Override, 
+     * the method must be redeclared explicitly, see https://jira.codehaus.org/browse/GROOVY-5413
+     */
+    HttpServletResponse sendRequest(String url, String method) {
+        defaultMixin.sendRequest(url, method, ''.bytes)
+    }
+
     @Override
-    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers, byte[] content = ''.bytes) {
+    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers, byte[] content) {
         defaultMixin.sendRequest(url, method, headers, content)
+    }
+
+    /*
+     * overloaded version of sendRequest: since default params are not always compatible with Override, 
+     * the method must be redeclared explicitly, see https://jira.codehaus.org/browse/GROOVY-5413
+     */
+    HttpServletResponse sendRequest(String url, String method, Map<String, Object> headers) {
+        defaultMixin.sendRequest(url, method, headers, ''.bytes)
     }
 
     @Override
