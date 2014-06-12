@@ -20,7 +20,7 @@ import org.grails.jaxrs.web.JaxrsContext
 /**
  * @author Martin Krasser
  */
-class RestletControllerIntegrationTests extends JaxrsControllerIntegrationTests {
+class RestletControllerIntegrationTest extends JaxrsControllerIntegrationTest {
 
     String getJaxrsImplementation() {
         JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET

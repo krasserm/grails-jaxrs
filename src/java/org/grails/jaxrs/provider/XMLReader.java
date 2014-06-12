@@ -15,25 +15,24 @@
  */
 package org.grails.jaxrs.provider;
 
-import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
-import static org.grails.jaxrs.support.ConverterUtils.xmlToMap;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Map;
+import org.codehaus.groovy.grails.commons.GrailsApplication;
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
+import org.grails.jaxrs.support.ConverterUtils;
+import org.grails.jaxrs.support.MessageBodyReaderSupport;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Map;
 
-import org.codehaus.groovy.grails.commons.GrailsApplication;
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
-import org.grails.jaxrs.support.ConverterUtils;
-import org.grails.jaxrs.support.MessageBodyReaderSupport;
+import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
+import static org.grails.jaxrs.support.ConverterUtils.xmlToMap;
 
 /**
  * A message body reader that converts an XML entity stream to a map than can be
@@ -41,8 +40,8 @@ import org.grails.jaxrs.support.MessageBodyReaderSupport;
  * defines a {@link Map} as parameter and consumes either <code>text/xml</code>
  * or <code>application/xml</code> will be passed a map created from an XML
  * request entity:
- *
- *
+ * <p/>
+ * <p/>
  * <pre>
  * &#064;Path('/notes')
  * &#064;Produces('text/xml')
@@ -74,10 +73,10 @@ public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsAp
 
     @Override
     public Map readFrom(Class<Map> type, Type genericType,
-            Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+                        Annotation[] annotations, MediaType mediaType,
+                        MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
             throws IOException, WebApplicationException {
-        
+
         String encoding = ConverterUtils.getEncoding(httpHeaders, mediaType, getDefaultEncoding(grailsApplication));
 
         // Convert XML to map used for constructing domain objects
@@ -86,7 +85,7 @@ public class XMLReader extends MessageBodyReaderSupport<Map> implements GrailsAp
 
     @Override
     public Map readFrom(MultivaluedMap<String, String> httpHeaders,
-            InputStream entityStream) throws IOException,
+                        InputStream entityStream) throws IOException,
             WebApplicationException {
         // TODO: Fix MessageBodyReaderSupport abstract method
         throw new RuntimeException("This should never be called, because we override the readFrom(all-parameters) method.");

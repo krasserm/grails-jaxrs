@@ -23,6 +23,7 @@ class TestPerson {
     // pretend being a domain class
     def id
     def version
+
     void setClass(obj) {}
 
     // test properties

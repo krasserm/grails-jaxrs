@@ -14,41 +14,37 @@
  * limitations under the License.
  */
 
-grails.project.work.dir = 'target'
-grails.project.source.level = 1.6
-
-/*
- * in order to publish snapshots into the dedicated repo you should add to ~/.grails/settings.groovy the following entries
- * 
- * grails.project.repos.jaxrssnapshotsrepo.username = "yourlogin"
- * grails.project.repos.jaxrssnapshotsrepo.password = "yourpassword"
- * 
- */
+grails.project.class.dir = 'target/classes'
+grails.project.test.class.dir = 'target/test-classes'
+grails.project.test.reports.dir = 'target/test-reports'
+grails.project.work.dir = 'target/work'
+grails.project.target.level = 1.7
+grails.project.source.level = 1.7
 
 grails.project.dependency.distribution = {
     remoteRepository(id: 'snapshots-repo', url: 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-snapshots') {
         authentication username: System.getProperty('DEPLOYER_USERNAME'), password: System.getProperty('DEPLOYER_PASSWORD')
     }
 }
-
+grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
+
     inherits('global') {
         excludes 'hibernate'
     }
     log 'warn'
 
     repositories {
+        mavenRepo 'http://jcenter.bintray.com'
         grailsCentral()
         mavenLocal()
-        mavenCentral()
         mavenRepo 'http://maven.restlet.org'
+        mavenRepo 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-libs'
     }
 
     dependencies {
-        compile 'asm:asm:3.3'
-
-        String restletVersion = '2.0.0'
-        String jerseyVersion = '1.14'
+        String restletVersion = '2.1.4'
+        String jerseyVersion = '1.17'
 
         compile "org.restlet.gae:org.restlet:$restletVersion"
 
@@ -57,12 +53,14 @@ grails.project.dependency.resolution = {
         }
 
         // A modified version (with removed META-INF/services/javax.ws.rs.ext.RuntimeDelegate)
-        // is contained in the project's lib folder. This is needed because of a bug described
+        // is contained in project's custom lib directory and repository. This is needed because of a bug described
         // at http://restlet.tigris.org/issues/show_bug.cgi?id=1251
-//        compile "org.restlet.gae:org.restlet.ext.jaxrs:$restletVersion"
+        provided group: 'org.restlet.gae',
+                name: 'org.restlet.ext.jaxrs-noruntimedel',
+                version: restletVersion
 
         compile("org.restlet.gae:org.restlet.ext.json:$restletVersion") {
-            excludes 'org.restlet', 'org.restlet.lib.org.json'
+            excludes 'org.restlet'
         }
 
         compile("com.sun.jersey:jersey-core:$jerseyVersion") {
@@ -70,7 +68,8 @@ grails.project.dependency.resolution = {
         }
 
         compile("com.sun.jersey:jersey-servlet:$jerseyVersion") {
-            excludes 'ant', 'commons-io', 'javax.ejb', 'javax.servlet-api', 'jsp-api', 'junit', 'osgi_R4_core', 'persistence-api', 'weld-osgi-bundle'
+            excludes 'ant', 'commons-io', 'javax.ejb', 'javax.servlet-api', 'jsp-api', 'junit', 'osgi_R4_core',
+                    'persistence-api', 'weld-osgi-bundle'
         }
 
         compile("com.sun.jersey:jersey-server:$jerseyVersion") {
@@ -82,7 +81,8 @@ grails.project.dependency.resolution = {
         }
 
         compile("com.sun.jersey.contribs:jersey-spring:$jerseyVersion") {
-            excludes 'jaxb-impl', 'jsr250-api', 'junit', 'servlet-api', 'testng'
+            excludes 'jaxb-impl', 'jsr250-api', 'junit', 'servlet-api', 'testng', 'spring-core', 'spring-beans',
+                    'spring-context', 'spring-web', 'spring-aop'
         }
 
         compile('javax.ws.rs:jsr311-api:1.1.1') {
@@ -91,7 +91,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build(':release:2.2.1', ':rest-client-builder:1.0.3') {
+        build(':release:3.0.1', ':rest-client-builder:2.0.1') {
             export = false
         }
     }

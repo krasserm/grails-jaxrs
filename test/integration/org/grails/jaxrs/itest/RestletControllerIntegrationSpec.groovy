@@ -15,8 +15,14 @@
  */
 package org.grails.jaxrs.itest
 
+import org.grails.jaxrs.web.JaxrsContext
+
 /**
- * @author Martin Krasser
+ * @author Noam Y. Tenne
  */
-class JerseyControllerIntegrationTests extends JaxrsControllerIntegrationTests {
+class RestletControllerIntegrationSpec extends JaxrsControllerIntegrationSpec {
+
+    String getJaxrsImplementation() {
+        JaxrsContext.JAXRS_PROVIDER_NAME_RESTLET
+    }
 }

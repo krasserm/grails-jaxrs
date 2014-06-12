@@ -15,32 +15,17 @@
  */
 package org.grails.jaxrs.support
 
-import groovy.json.JsonSlurper
-
-import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
-import java.util.Map
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-
 import grails.converters.JSON
 import grails.converters.XML
-
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
-
-import javax.servlet.ServletInputStream
-import javax.servlet.http.HttpServletRequest
-
-import org.apache.commons.logging.*
+import groovy.json.JsonSlurper
+import org.apache.commons.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.converters.JSONParsingParameterCreationListener
-import org.codehaus.groovy.grails.web.converters.XMLParsingParameterCreationListener
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
-import org.grails.jaxrs.springframework.mock.web.DelegatingServletInputStream
-import org.grails.jaxrs.springframework.mock.web.MockHttpServletRequest
+import org.grails.databinding.xml.GPathResultMap
+
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.MultivaluedMap
+
+import static org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder.getConverterConfiguration
 
 /**
  * Utility class for XML to map conversions.
@@ -50,9 +35,6 @@ import org.grails.jaxrs.springframework.mock.web.MockHttpServletRequest
 class ConverterUtils {
 
     static final LOG = LogFactory.getLog(ConverterUtils)
-
-    private static jsonListener = new JSONParsingParameterCreationListener()
-    private static xmlListener = new XMLParsingParameterCreationListener()
 
     /**
      * Returns character encoding settings for the given Grails application.
@@ -89,7 +71,7 @@ class ConverterUtils {
         }
         encoding
     }
-    
+
     /** Extracts encoding from HTTP headers or MediaType parameters */
     static String getEncoding(MultivaluedMap httpHeaders, MediaType mediaType, String defaultEncoding) {
         // if HTTP headers specify the charset and this was parsed into the MediaType object, return the charset from MediaType
@@ -98,7 +80,7 @@ class ConverterUtils {
             String encoding = mediaType.parameters['charset'];
             return encoding
         }
-        
+
         // Restlet does not parse the headers into MediaType so we need to extract them manually
         def contentTypeHeaderKey = httpHeaders.keySet().find { key -> key.toLowerCase() == 'content-type' }
         if (contentTypeHeaderKey) {
@@ -108,29 +90,12 @@ class ConverterUtils {
                 return encoding
             }
         }
-        
+
         // no encoding specified
         return defaultEncoding
     }
 
-    /**
-     * Reads a JSON stream from <code>input</code> and converts it to a map
-     * that can be used to construct a Grails domain objects (passing the map
-     * to the domain object constructor).
-     *
-     * @param input JSON input stream.
-     * @param encoding charset name.
-     * @return a map representing the input JSON stream.
-     */
-    static Map jsonToDomainConstructionModel(InputStream input, String encoding) {
-        def adapter = newRequestStreamAdapter(input, encoding, 'json')
-
-        def params = new GrailsParameterMap(adapter)
-        jsonListener.paramsCreated(params)
-        params.iterator().next().value
-    }
-
-    static Map jsonToSimpleModel(InputStream input, String encoding) {
+    static Map jsonToMap(InputStream input, String encoding) {
         new JsonSlurper().parse(new InputStreamReader(input, encoding))
     }
 
@@ -144,77 +109,6 @@ class ConverterUtils {
      * @return a map representing the input XML stream.
      */
     static Map xmlToMap(InputStream input, String encoding) {
-        def adapter = newRequestStreamAdapter(input, encoding, 'xml')
-
-        def params = new GrailsParameterMap(adapter)
-        xmlListener.paramsCreated(params)
-        params.iterator().next().value
-    }
-
-    /**
-     * Returns the mapped value for <code>id</code> in <code>map</code>
-     * or <code>null</code> if there's no mapped value for <code>id</code>.
-     */
-    static idFromMap(Map map) {
-        if (!map.id) {
-            return null
-        } else if (map.id instanceof Number) {
-            return map.id.toLong()
-        } else if (isNumeric(map.id)) {
-            return Long.parseLong(map.id)
-        }
-        return map.id
-    }
-
-    static isNumeric = {
-        def formatter = java.text.NumberFormat.instance
-        def pos = [0] as java.text.ParsePosition
-        formatter.parse(it, pos)
-
-        // if parse position index has moved to end of string
-        // them the whole string was numeric
-        pos.index == it.size()
-    }
-
-    static newRequestStreamAdapter(InputStream stream, String characterEncoding, String format) {
-
-        final MockHttpServletRequest req = new MockHttpServletRequest()
-
-        req.characterEncoding = characterEncoding
-        req.setAttribute(GrailsApplicationAttributes.CONTENT_FORMAT, format)
-
-        return (HttpServletRequest) Proxy.newProxyInstance(getClassLoader(),
-                [HttpServletRequest, EnhancedRequestProps] as Class[], new InvocationHandler() {
-            Object invoke(Object proxy, Method method, Object[] args) {
-
-                String methodName = method.getName()
-
-                if ("getFormat".equals(methodName)) {
-                    return req.getAttribute(GrailsApplicationAttributes.CONTENT_FORMAT)
-                }
-
-                if ("getInputStream".equals(methodName)) {
-                    if (stream instanceof ServletInputStream) {
-                        return stream
-                    } else if (stream) {
-                        return new DelegatingServletInputStream(stream)
-                    } else {
-                        return req.getInputStream()
-                    }
-                }
-                return req.getClass().getMethod(
-                        method.getName(), method.getParameterTypes()).invoke(req, args)
-            }
-        })
-    }
-
-    /**
-     * Interface used in order to expose properties dinamically added by grails (i.e. 'format added by RequestMimeTypesApi)
-     * Without this some tests would fail.
-     */
-    interface EnhancedRequestProps {
-        String getFormat()
-
-        void setFormat(String)
+        new GPathResultMap(new XmlSlurper(false, false).parse(new InputStreamReader(input, encoding)))
     }
 }

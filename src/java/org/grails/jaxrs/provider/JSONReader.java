@@ -15,25 +15,24 @@
  */
 package org.grails.jaxrs.provider;
 
-import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
-import static org.grails.jaxrs.support.ConverterUtils.jsonToSimpleModel;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Map;
+import org.codehaus.groovy.grails.commons.GrailsApplication;
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
+import org.grails.jaxrs.support.ConverterUtils;
+import org.grails.jaxrs.support.MessageBodyReaderSupport;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Map;
 
-import org.codehaus.groovy.grails.commons.GrailsApplication;
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
-import org.grails.jaxrs.support.ConverterUtils;
-import org.grails.jaxrs.support.MessageBodyReaderSupport;
+import static org.grails.jaxrs.support.ConverterUtils.getDefaultEncoding;
+import static org.grails.jaxrs.support.ConverterUtils.jsonToMap;
 
 /**
  * A message body reader that converts a JSON entity stream to a map than can be
@@ -74,19 +73,19 @@ public class JSONReader extends MessageBodyReaderSupport<Map> implements GrailsA
 
     @Override
     public Map readFrom(Class<Map> type, Type genericType,
-            Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+                        Annotation[] annotations, MediaType mediaType,
+                        MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
             throws IOException, WebApplicationException {
-        
+
         String encoding = ConverterUtils.getEncoding(httpHeaders, mediaType, getDefaultEncoding(grailsApplication));
 
         // Convert JSON to map used for constructing domain objects
-        return jsonToSimpleModel(entityStream, encoding);
+        return jsonToMap(entityStream, encoding);
     }
 
     @Override
     public Map readFrom(MultivaluedMap<String, String> httpHeaders,
-            InputStream entityStream) throws IOException,
+                        InputStream entityStream) throws IOException,
             WebApplicationException {
         // TODO: Fix MessageBodyReaderSupport abstract method (remove it completely or add empty implementation?)
         throw new RuntimeException("This should never be called, because we override the readFrom(all-parameters) method.");

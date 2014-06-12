@@ -21,7 +21,6 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
-
 /**
  * @author Martin Krasser
  */
@@ -35,6 +34,6 @@ class TestResource03 {
         def person = new TestPerson(params)
         person.name = person.name.reverse()
         person.age = person.age + 1
-        return person as JSON
+        person as JSON
     }
 }
