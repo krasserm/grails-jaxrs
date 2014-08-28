@@ -35,8 +35,9 @@ grails.project.dependency.resolution = {
     log 'warn'
 
     repositories {
-        mavenRepo 'http://jcenter.bintray.com'
+        grailsPlugins()
         grailsCentral()
+        mavenRepo 'http://jcenter.bintray.com'
         mavenLocal()
         mavenRepo 'http://maven.restlet.org'
         mavenRepo 'http://noams.artifactoryonline.com/noams/grails-jaxrs-plugin-libs'
@@ -91,7 +92,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build(':release:3.0.1', ':rest-client-builder:2.0.1') {
+        build(':release:3.0.1', ':rest-client-builder:2.0.3') {
             export = false
         }
     }
