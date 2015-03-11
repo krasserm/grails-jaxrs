@@ -12,3 +12,7 @@ plugin.xml
 *~
 
 .settings
+
+#Intellij
+.idea
+*.iml
