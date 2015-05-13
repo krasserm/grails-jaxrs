@@ -11,14 +11,15 @@ import static org.grails.jaxrs.web.JaxrsUtils.JAXRS_CONTEXT_NAME
 
 class JaxrsGrailsPlugin {
     def groupId = "org.grails.plugins"
-    def version = "0.11"
+    def version = "0.12"
     def grailsVersion = "2.4 > *"
     def pluginExcludes = [
             "grails-app/domain/*",
             "grails-app/providers/*",
             "grails-app/resources/*",
             "src/groovy/org/grails/jaxrs/test/*",
-            "lib/*-sources.jar"
+            "lib/*-sources.jar",
+            "web-app/**"
     ]
 
     def loadAfter = ['controllers', 'services', 'spring-security-core']
