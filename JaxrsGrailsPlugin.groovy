@@ -18,7 +18,8 @@ class JaxrsGrailsPlugin {
             "grails-app/providers/*",
             "grails-app/resources/*",
             "src/groovy/org/grails/jaxrs/test/*",
-            "lib/*-sources.jar"
+            "lib/*-sources.jar",
+            "web-app/**"
     ]
 
     def loadAfter = ['controllers', 'services', 'spring-security-core']
