@@ -48,9 +48,9 @@ abstract class IntegrationTestCase implements JaxRsIntegrationTest {
     @Before
     void setUp() {
         autowirer.autowire(this)
-        grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = false
-        grailsApplication.config.org.grails.jaxrs.doreader.disable = false
-        grailsApplication.config.org.grails.jaxrs.dowriter.disable = false
+        Holders.grailsApplication.config.org.grails.jaxrs.dowriter.require.generic.collections = false
+        Holders.grailsApplication.config.org.grails.jaxrs.doreader.disable = false
+        Holders.grailsApplication.config.org.grails.jaxrs.dowriter.disable = false
 
         controller = new JaxrsController()
         defaultMixin = new JaxRsIntegrationTestMixin(controller)
